@@ -1,0 +1,3 @@
+[submodule "Source/NomadFramework"]
+	path = Source/NomadFramework
+	url = https://github.com/SIGAAMDAD/NomadFramework.git

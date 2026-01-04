@@ -7,10 +7,24 @@ public partial class MainMenu : Control
     private Timer _showPressedTextureTimer;
     private Action _buttonCallback;
 
+    /// <summary>
+    ///
+    /// </summary>
     public override void _Ready()
     {
         base._Ready();
 
+        InitButtonPressedActivity();
+        InitGPUParticles();
+        InitAmbiencePlayer();
+        HookButtons();
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    private void InitButtonPressedActivity()
+    {
         _buttonPressedTexture = GetNode<TextureRect>("%ButtonPressed");
         _showPressedTextureTimer = new Timer()
         {
@@ -25,10 +39,6 @@ public partial class MainMenu : Control
             }
         ));
         AddChild(_showPressedTextureTimer);
-
-        InitGPUParticles();
-        InitAmbiencePlayer();
-        HookButtons();
     }
 
     /// <summary>
