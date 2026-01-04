@@ -1,6 +1,44 @@
-[gd_scene load_steps=2 format=3 uid="uid://b10xxn0ar6ssx"]
+[gd_scene load_steps=9 format=3 uid="uid://b10xxn0ar6ssx"]
 
 [ext_resource type="Script" uid="uid://dn10c2obr7hsn" path="res://Source/Menus/MainMenu.cs" id="1_v3fht"]
+[ext_resource type="Texture2D" uid="uid://b7bch6q8npnjy" path="res://Assets/Textures/StartGame.webp" id="2_43rut"]
+[ext_resource type="AudioStream" uid="uid://buqxyrp3x6nrm" path="res://Assets/Audio/SoundEffects/5 Minutes of Rain and Thunderstorm Sounds For Focus, Relaxing and Sleep ⛈️ Epidemic ASMR.wav" id="3_avssa"]
+
+[sub_resource type="Gradient" id="Gradient_avssa"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lgjx7"]
+gradient = SubResource("Gradient_avssa")
+width = 3
+height = 3
+
+[sub_resource type="Curve" id="Curve_rufj5"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, -133.4831), 0.0, 0.0, 0, 0, Vector2(0.5, 222.47192), 0.0, 0.0, 0, 0, Vector2(1, -149.6629), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_43rut"]
+curve = SubResource("Curve_rufj5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rufj5"]
+lifetime_randomness = 1.0
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(640, 0, 0)
+emission_shape = 3
+emission_box_extents = Vector3(640, 1, 1)
+angle_min = -523.8
+angle_max = 523.80005
+angle_curve = SubResource("CurveTexture_43rut")
+inherit_velocity_ratio = 0.155
+direction = Vector3(1, 60, 0)
+initial_velocity_min = 217.64
+initial_velocity_max = 282.35
+angular_velocity_min = 259.75998
+angular_velocity_max = 719.99994
+gravity = Vector3(0, 2000, 0)
+linear_accel_min = 1.1699977
+linear_accel_max = 65.88
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -11,3 +49,82 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_v3fht")
 metadata/_edit_use_anchors_ = true
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="ButtonPressed" type="TextureRect" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_43rut")
+expand_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 375
+texture = SubResource("GradientTexture2D_lgjx7")
+visibility_rect = Rect2(0, -100, 1280, 200)
+trail_lifetime = 0.05
+trail_sections = 2
+trail_section_subdivisions = 1
+process_material = SubResource("ParticleProcessMaterial_rufj5")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_avssa")
+volume_db = -6.0
+autoplay = true
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 64
+text = "MAIN MENU"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -20.0
+offset_right = 48.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="StartGame" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "NEW GAME"
+
+[node name="Credits" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CREDITS"
+
+[node name="QuitGame" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "QUIT"
