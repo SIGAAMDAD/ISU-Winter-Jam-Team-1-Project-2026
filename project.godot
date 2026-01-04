@@ -11,8 +11,19 @@ config_version=5
 [application]
 
 config/name="ISU Winter Jam team 1 Project 2026"
+run/main_scene="uid://b10xxn0ar6ssx"
 config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
+run/max_fps=60
 config/icon="res://icon.svg"
+
+[autoload]
+
+NomadBootstrapper="*res://Source/Systems/NomadBootstrapper.cs"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
 
 [dotnet]
 
