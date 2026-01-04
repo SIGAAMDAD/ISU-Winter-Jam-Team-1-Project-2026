@@ -1,5 +1,7 @@
 using System;
+using Game.Systems;
 using Godot;
+using Steamworks;
 
 namespace Game.Menus {
 	/*
@@ -161,7 +163,7 @@ namespace Game.Menus {
 		/// Loads the world scene and starts a new game.
 		/// </summary>
 		private void OnStartGame() {
-			GetTree().ChangeSceneToFile( "res://Assets/Prefabs/World/World.tscn" );
+			GameStateManager.Instance.ActivateLevel();
 		}
 
 		/*

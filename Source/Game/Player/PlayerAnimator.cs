@@ -25,6 +25,8 @@ namespace Game.Player {
 		public IGameEvent<EmptyEventArgs> PlayerStopMoving => _playerStopMoving;
 		private readonly IGameEvent<EmptyEventArgs> _playerStopMoving;
 
+		private bool _playerIsMoving = false;
+
 		/*
 		===============
 		PlayerAnimator
@@ -96,6 +98,13 @@ namespace Game.Player {
 				}
 			}
 			_foamParticles.Emitting = inputWasActive;
+			if ( inputWasActive && !_playerIsMoving ) {
+				_playerIsMoving = true;
+				_playerStartMoving.Publish( new EmptyEventArgs() );
+			} else {
+				_playerStopMoving.Publish( new EmptyEventArgs() );
+				_playerIsMoving = false;
+			}
 		}
 	};
 };
