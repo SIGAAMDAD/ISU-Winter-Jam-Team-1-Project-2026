@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3 uid="uid://b1luavxt1vbwu"]
+
+[ext_resource type="Script" uid="uid://dneewf3h02j1r" path="res://Source/Menus/PauseMenu.cs" id="1_eluw3"]
+[ext_resource type="Shader" uid="uid://clpmiq0rf1yoh" path="res://Assets/Shaders/GaussianBlur.gdshader" id="2_2ffs4"]
+[ext_resource type="Texture2D" uid="uid://duua4mt3rv2nd" path="res://icon.svg" id="2_d5nev"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d5nev"]
+shader = ExtResource("2_2ffs4")
+shader_parameter/samples = 16
+shader_parameter/blur_amount = 0.3
+
+[node name="PauseMenu" type="CanvasLayer"]
+script = ExtResource("1_eluw3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(407, 218)
+texture = ExtResource("2_d5nev")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(1066, 304)
+texture = ExtResource("2_d5nev")
+
+[node name="Blur" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_d5nev")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.43300003
+anchor_top = 0.45400003
+anchor_right = 0.56700003
+anchor_bottom = 0.546
+offset_left = 81.75995
+offset_top = 29.119995
+offset_right = -81.76001
+offset_bottom = -29.119995
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ResumeGame" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "RESUME GAME"
+
+[node name="ExitGame" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "QUIT TO MAIN MENU"
