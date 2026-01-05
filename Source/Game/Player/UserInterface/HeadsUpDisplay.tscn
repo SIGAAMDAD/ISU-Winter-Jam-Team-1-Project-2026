@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://ci45mqkirclcs"]
+
+[ext_resource type="Script" uid="uid://c1oaidojbjp3t" path="res://Source/Game/Player/UserInterface/HeadsUpDisplay.cs" id="1_ggood"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ggood"]
+bg_color = Color(0, 1, 0, 1)
+
+[node name="HeadsUpDisplay" type="CanvasLayer"]
+script = ExtResource("1_ggood")
+
+[node name="WaveCounter" type="Label" parent="."]
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.032
+offset_bottom = -0.040000916
+grow_horizontal = 2
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(0, 20)
+anchors_preset = -1
+anchor_top = 0.97200006
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 16.159973
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_ggood")
+value = 100.0
+show_percentage = false

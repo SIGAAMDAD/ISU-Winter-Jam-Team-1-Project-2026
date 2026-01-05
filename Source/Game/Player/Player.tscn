@@ -1,8 +1,7 @@
-[gd_scene load_steps=21 format=3 uid="uid://dkml08sjkleg4"]
+[gd_scene load_steps=20 format=3 uid="uid://dkml08sjkleg4"]
 
-[ext_resource type="Script" uid="uid://c2yt2ul15b3gh" path="res://Source/Game/Player/Player.cs" id="1_43ce2"]
+[ext_resource type="Script" uid="uid://dgvw5sls61mdb" path="res://Source/Game/Player/PlayerManager.cs" id="1_43ce2"]
 [ext_resource type="Texture2D" uid="uid://cuju45rl2efen" path="res://Assets/Textures/Boat.png" id="2_278ex"]
-[ext_resource type="Script" uid="uid://crctciwtr8lx8" path="res://Source/Game/Player/PlayerStats.cs" id="3_278ex"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1u5oe"]
 atlas = ExtResource("2_278ex")
@@ -165,9 +164,6 @@ position = Vector2(33, 6)
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_278ex")
-
-[node name="Stats" type="Node" parent="."]
-script = ExtResource("3_278ex")
 
 [node name="AudioListener2D" type="AudioListener2D" parent="."]
 current = true

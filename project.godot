@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 NomadBootstrapper="*res://Source/Game/Systems/NomadBootstrapper.cs"
+SceneManager="*res://Source/Game/Systems/SceneManager.cs"
 
 [display]
 

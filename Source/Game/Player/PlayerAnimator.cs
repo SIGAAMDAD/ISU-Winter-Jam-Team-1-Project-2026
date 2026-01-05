@@ -9,7 +9,7 @@ namespace Game.Player {
 		private readonly StringName @DownAnimation = "down";
 		private readonly StringName @HorizontalAnimation = "horizontal";
 
-		private readonly Player _owner;
+		private readonly PlayerManager _owner;
 		private readonly AnimatedSprite2D _animations;
 
 		private readonly GpuParticles2D _foamParticles;
@@ -32,7 +32,7 @@ namespace Game.Player {
 		PlayerAnimator
 		===============
 		*/
-		public PlayerAnimator( Player owner ) {
+		public PlayerAnimator( PlayerManager owner ) {
 			_owner = owner;
 			_animations = owner.GetNode<AnimatedSprite2D>( "AnimatedSprite2D" );
 

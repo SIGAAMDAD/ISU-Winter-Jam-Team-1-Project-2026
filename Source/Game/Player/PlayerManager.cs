@@ -1,10 +1,13 @@
+using Game.Common;
+using Game.Systems;
 using Godot;
+using Nomad.Core.Events;
 
 namespace Game.Player {
 	/*
 	===================================================================================
 	
-	Player
+	PlayerManager
 	
 	===================================================================================
 	*/
@@ -12,10 +15,22 @@ namespace Game.Player {
 	/// 
 	/// </summary>
 	
-	public partial class Player : CharacterBody2D {
+	public partial class PlayerManager : CharacterBody2D {
+		public IGameEvent<EntityTakeDamageEventArgs> TakeDamage => _stats.TakeDamage;
+		public IGameEvent<StatChangedEventArgs> StatChanged => _stats.StatChanged;
+
 		private PlayerStats _stats;
 		private PlayerController _controller;
 		private PlayerAnimator _animator;
+
+		/*
+		===============
+		Damage
+		===============
+		*/
+		public void Damage( float damage ) {
+			_stats.Damage( damage / _stats.DamageResistance );
+		}
 
 		/*
 		===============
@@ -28,7 +43,7 @@ namespace Game.Player {
 		public override void _Ready() {
 			base._Ready();
 
-			_stats = GetNode<PlayerStats>( "Stats" );
+			_stats = new PlayerStats( this, GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>() );
 			_controller = new PlayerController( this, _stats );
 			_animator = new PlayerAnimator( this );
 		}

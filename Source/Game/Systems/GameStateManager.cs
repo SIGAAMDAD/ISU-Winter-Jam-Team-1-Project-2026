@@ -39,7 +39,7 @@ namespace Game.Systems {
 				// create the instance if we haven't already
 				lock ( _instanceLock ) {
 					_instance ??= new GameStateManager();
-					( (Node)Engine.GetMainLoop().Get( SceneTree.PropertyName.Root ) ).AddChild( _instance );
+					( (Node)Engine.GetMainLoop().Get( SceneTree.PropertyName.Root ) ).CallDeferred( Node.MethodName.AddChild, _instance );
 					return _instance;
 				}
 			}
@@ -53,7 +53,7 @@ namespace Game.Systems {
 		/// </remarks>
 		public GameState GameState { get; private set; } = GameState.TitleScreen;
 
-		public static IGameEvent<GameStateChangedEventArgs> GameStateChanged => _instance._stateChanged;
+		public static IGameEvent<GameStateChangedEventArgs> GameStateChanged => Instance._stateChanged;
 		private readonly IGameEvent<GameStateChangedEventArgs> _stateChanged;
 
 		private readonly ILoggerCategory _category;

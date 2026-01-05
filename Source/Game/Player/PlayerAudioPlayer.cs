@@ -14,7 +14,7 @@ namespace Game.Player {
 	/// </summary>
 	
 	public sealed class PlayerAudioPlayer {
-		private readonly Player _owner;
+		private readonly PlayerManager _owner;
 		private readonly AudioStreamPlayer2D _streamPlayer;
 
 		/*
@@ -27,7 +27,7 @@ namespace Game.Player {
 		/// </summary>
 		/// <param name="owner"></param>
 		/// <param name="animator"></param>
-		public PlayerAudioPlayer( Player owner, PlayerAnimator animator ) {
+		public PlayerAudioPlayer( PlayerManager owner, PlayerAnimator animator ) {
 			animator.PlayerStartMoving.Subscribe( this, OnStartMoveSound );
 			animator.PlayerStopMoving.Subscribe( this, OnStopMoveSound );
 		}

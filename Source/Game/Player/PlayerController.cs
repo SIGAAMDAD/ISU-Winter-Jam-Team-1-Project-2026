@@ -16,7 +16,7 @@ namespace Game.Player {
 	public sealed class PlayerController {
 //		private readonly Dictionary<Key, Action> _bindings = new Dictionary<Key, Action>();
 		private readonly PlayerStats _stats;
-		private readonly Player _owner;
+		private readonly PlayerManager _owner;
 
 		private Vector2 _frameVelocity = Vector2.Zero;
 
@@ -25,7 +25,7 @@ namespace Game.Player {
 		PlayerController
 		===============
 		*/
-		public PlayerController( Player owner, PlayerStats stats ) {
+		public PlayerController( PlayerManager owner, PlayerStats stats ) {
 			_stats = stats;
 			_owner = owner;
 		}
