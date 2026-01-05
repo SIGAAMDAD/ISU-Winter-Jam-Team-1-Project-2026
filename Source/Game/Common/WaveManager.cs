@@ -5,7 +5,7 @@ using Nomad.Core.Events;
 namespace Game.Common {
 	public partial class WaveManager : Node {
 		public int CurrentWave => _currentWave;
-		private int _currentWave = 0;
+		private int _currentWave = 1;
 
 		private IGameEvent<WaveChangedEventArgs> _waveChanged;
 
@@ -14,7 +14,9 @@ namespace Game.Common {
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_waveChanged = eventFactory.GetEvent<WaveChangedEventArgs>( "WaveChanged" );
-			_waveChanged.Publish( new WaveChangedEventArgs( 0, 0 ) );
+
+			// start the wave
+			_waveChanged.Publish( new WaveChangedEventArgs( _currentWave, _currentWave ) );
 		}
 	};
 };

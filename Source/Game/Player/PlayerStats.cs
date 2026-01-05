@@ -27,16 +27,16 @@ namespace Game.Player {
 		private readonly Dictionary<InternString, float> _statCache = new Dictionary<InternString, float> {
 			[ new( nameof( Speed ) ) ] = 100.0f,
 			[ new( nameof( Health ) ) ] = 100.0f,
-			[ new( nameof( DamageResistance ) ) ] = 10.0f
+			[ new( nameof( DamageResistance ) ) ] = 0.95f
 		};
 
 		private readonly int _entityId = player.GetPath().GetHashCode();
 
 		public IGameEvent<EntityTakeDamageEventArgs> TakeDamage => _takeDamage;
-		private readonly IGameEvent<EntityTakeDamageEventArgs> _takeDamage = eventFactory.GetEvent<EntityTakeDamageEventArgs>( nameof( EntityTakeDamageEventArgs ) );
+		private readonly IGameEvent<EntityTakeDamageEventArgs> _takeDamage = eventFactory.GetEvent<EntityTakeDamageEventArgs>( nameof( TakeDamage ) );
 
 		public IGameEvent<StatChangedEventArgs> StatChanged => _statChanged;
-		private readonly IGameEvent<StatChangedEventArgs> _statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( StatChangedEventArgs ) );
+		private readonly IGameEvent<StatChangedEventArgs> _statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( StatChanged ) );
 
 		/*
 		===============

@@ -39,7 +39,6 @@ namespace Game.Systems {
 				// create the instance if we haven't already
 				lock ( _instanceLock ) {
 					_instance ??= new GameStateManager();
-					( (Node)Engine.GetMainLoop().Get( SceneTree.PropertyName.Root ) ).CallDeferred( Node.MethodName.AddChild, _instance );
 					return _instance;
 				}
 			}
@@ -74,6 +73,8 @@ namespace Game.Systems {
 		/// 
 		/// </summary>
 		private GameStateManager() {
+			Name = nameof( GameStateManager );
+
 			var serviceLocator = ( (Node)Engine.GetMainLoop().Get( SceneTree.PropertyName.Root ) ).GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator;
 
 			var eventFactory = serviceLocator.GetService<IGameEventRegistryService>();

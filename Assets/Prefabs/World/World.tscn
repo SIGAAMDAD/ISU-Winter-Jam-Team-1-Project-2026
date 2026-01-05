@@ -45,8 +45,10 @@ script = ExtResource("2_oturc")
 [node name="TideSpawner" type="Node2D" parent="."]
 script = ExtResource("6_623ao")
 
-[node name="Marker2D" type="Marker2D" parent="TideSpawner"]
-position = Vector2(185, -37)
+[node name="SpawnTimer" type="Timer" parent="TideSpawner"]
+wait_time = 8.5
+autostart = true
 
-[node name="Marker2D2" type="Marker2D" parent="TideSpawner"]
-position = Vector2(942, -27)
+[node name="SpawnLine" type="Line2D" parent="TideSpawner"]
+position = Vector2(29, -36)
+points = PackedVector2Array(0, 1, 1219, 2)

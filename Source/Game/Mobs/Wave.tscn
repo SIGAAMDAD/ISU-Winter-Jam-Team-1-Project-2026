@@ -44,8 +44,8 @@ size = Vector2(63, 22)
 
 [node name="Wave" type="AnimatedSprite2D"]
 sprite_frames = SubResource("SpriteFrames_jewxo")
-frame = 2
-frame_progress = 0.05179479
+autoplay = "default"
+frame_progress = 0.6244421
 script = ExtResource("2_haroh")
 
 [node name="CollisionBody" type="Area2D" parent="."]

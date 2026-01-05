@@ -9,11 +9,12 @@ using Systems.Caching;
 
 namespace Game.Mobs {
 	public partial class TideSpawner : Node2D {
-		private float _spawnInterval = 30.5f;
+		private float _spawnInterval = 10.5f;
 		private WaveManager _waveManager;
+		private Timer _spawnTimer;
+		private Line2D _spawnLine;
 
 		private readonly ICacheEntry<PackedScene, FilePath> _tidePrefab = SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Source/Game/Mobs/Wave.tscn" ) );
-		private readonly Timer _spawnTimer = new Timer();
 
 		public override void _Ready() {
 			base._Ready();
@@ -22,12 +23,12 @@ namespace Game.Mobs {
 			var waveChanged = eventFactory.GetEvent<WaveChangedEventArgs>( "WaveChanged" );
 			waveChanged.Subscribe( this, OnWaveChanged );
 
-			_waveManager = GetNode<WaveManager>( "WaveManager" );
+			_waveManager = GetNode<WaveManager>( "../WaveManager" );
 
-			_spawnTimer.Name = "SpawnTimer";
-			_spawnTimer.WaitTime = _spawnInterval;
+			_spawnLine = GetNode<Line2D>( "SpawnLine" );
+
+			_spawnTimer = GetNode<Timer>( "SpawnTimer" );
 			_spawnTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnSpawnTides ) );
-			AddChild( _spawnTimer );
 		}
 
 		/*
@@ -55,6 +56,12 @@ namespace Game.Mobs {
 				_tidePrefab.Get( out var scene );
 				Tide tide = scene.Instantiate<Tide>();
 				AddChild( tide );
+
+				Vector2 spawnPoint = new Vector2(
+					_spawnLine.Points[ 0 ].X,
+					Random.Shared.Next( (int)_spawnLine.Points[ 0 ].Y, (int)_spawnLine.Points[ 1 ].Y )
+				);
+				tide.GlobalPosition = spawnPoint;
 			}
 		}
 	};

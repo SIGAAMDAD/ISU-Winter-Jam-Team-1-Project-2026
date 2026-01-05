@@ -22,6 +22,7 @@ namespace Game.Player {
 		private PlayerStats _stats;
 		private PlayerController _controller;
 		private PlayerAnimator _animator;
+		private PlayerAudioPlayer _audioPlayer;
 
 		/*
 		===============
@@ -29,7 +30,7 @@ namespace Game.Player {
 		===============
 		*/
 		public void Damage( float damage ) {
-			_stats.Damage( damage / _stats.DamageResistance );
+			_stats.Damage( damage * _stats.DamageResistance );
 		}
 
 		/*
@@ -46,6 +47,7 @@ namespace Game.Player {
 			_stats = new PlayerStats( this, GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>() );
 			_controller = new PlayerController( this, _stats );
 			_animator = new PlayerAnimator( this );
+			_audioPlayer = new PlayerAudioPlayer( this, _animator );
 		}
 
 		/*

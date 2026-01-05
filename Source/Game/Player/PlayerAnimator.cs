@@ -101,7 +101,7 @@ namespace Game.Player {
 			if ( inputWasActive && !_playerIsMoving ) {
 				_playerIsMoving = true;
 				_playerStartMoving.Publish( new EmptyEventArgs() );
-			} else {
+			} else if ( !inputWasActive && _playerIsMoving ) {
 				_playerStopMoving.Publish( new EmptyEventArgs() );
 				_playerIsMoving = false;
 			}
