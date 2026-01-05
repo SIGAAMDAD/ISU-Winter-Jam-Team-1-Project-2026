@@ -6,6 +6,7 @@ namespace Game.Player.UserInterface {
 	public partial class HeadsUpDisplay : CanvasLayer {
 		private HealthBar _healthBar;
 		private WaveCounter _waveCounter;
+		private AnnouncementLabel _announcementLabel;
 
 		private ProgressBar _weaponCooldownMeter;
 
@@ -58,6 +59,7 @@ namespace Game.Player.UserInterface {
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_healthBar = new HealthBar( GetNode<ProgressBar>( "HealthBar" ), eventFactory );
 			_waveCounter = new WaveCounter( GetNode<Label>( "WaveCounter" ), eventFactory );
+			_announcementLabel = new AnnouncementLabel( GetNode<Label>( "AnnouncementLabel" ), eventFactory );
 
 			_weaponCooldownMeter = GetNode<ProgressBar>( "WeaponCooldownMeter" );
 

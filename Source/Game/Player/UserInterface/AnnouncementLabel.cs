@@ -60,6 +60,7 @@ namespace Game.Player.UserInterface {
 		private void ShowLabel( string text ) {
 			_label.Text = text;
 			_label.Modulate = Colors.White;
+			_showTimer.Start();
 		}
 
 		/*
