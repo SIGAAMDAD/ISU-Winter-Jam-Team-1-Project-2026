@@ -58,8 +58,8 @@ namespace Game.Mobs {
 				AddChild( tide );
 
 				Vector2 spawnPoint = new Vector2(
-					_spawnLine.Points[ 0 ].X,
-					Random.Shared.Next( (int)_spawnLine.Points[ 0 ].Y, (int)_spawnLine.Points[ 1 ].Y )
+					Random.Shared.Next( (int)_spawnLine.Points[ 0 ].X, (int)_spawnLine.Points[ 1 ].X ),
+					_spawnLine.Points[ 0 ].Y
 				);
 				tide.GlobalPosition = spawnPoint;
 			}

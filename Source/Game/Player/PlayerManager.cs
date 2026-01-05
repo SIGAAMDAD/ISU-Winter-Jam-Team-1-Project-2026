@@ -45,9 +45,9 @@ namespace Game.Player {
 			base._Ready();
 
 			_stats = new PlayerStats( this, GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>() );
-			_controller = new PlayerController( this, _stats );
 			_animator = new PlayerAnimator( this );
-			_audioPlayer = new PlayerAudioPlayer( this, _animator );
+			_controller = new PlayerController( this, _animator, _stats );
+			_audioPlayer = new PlayerAudioPlayer( this, _controller, _animator );
 		}
 
 		/*

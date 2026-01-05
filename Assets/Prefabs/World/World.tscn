@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://q3d8f588rgns"]
+[gd_scene load_steps=10 format=3 uid="uid://q3d8f588rgns"]
 
 [ext_resource type="Script" uid="uid://c0j83efpa6svk" path="res://Assets/Prefabs/World/World.cs" id="1_yd2wk"]
 [ext_resource type="Script" uid="uid://c43nx6mgcq070" path="res://Source/Game/Common/WaveManager.cs" id="2_oturc"]
@@ -8,34 +8,49 @@
 [ext_resource type="Script" uid="uid://cwio4re8cg5yy" path="res://Source/Game/Mobs/TideSpawner.cs" id="6_623ao"]
 
 [sub_resource type="Gradient" id="Gradient_623ao"]
-offsets = PackedFloat32Array(0)
+offsets = PackedFloat32Array(0.013333334)
 colors = PackedColorArray(0, 0, 1, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_nap3e"]
 gradient = SubResource("Gradient_623ao")
 
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_623ao"]
+vertices = PackedVector2Array(1270, 711, 10, 711, 10, 10, 1270, 10)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 1280, 0, 1280, 721, 0, 721)])
+
 [node name="World" type="Node2D"]
 script = ExtResource("1_yd2wk")
 
-[node name="Water" type="Sprite2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -10
+
+[node name="Water" type="TextureRect" parent="CanvasLayer"]
 unique_name_in_owner = true
 material = ExtResource("2_xtsie")
-position = Vector2(640, 360.49997)
-scale = Vector2(5, 721.00006)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = SubResource("GradientTexture1D_nap3e")
+metadata/_edit_use_anchors_ = true
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
-position = Vector2(6.1035156e-05, 3.0517578e-05)
-scale = Vector2(0.99999994, 0.99999994)
+[node name="WorldBounds" type="StaticBody2D" parent="."]
 
-[node name="Player" parent="." instance=ExtResource("4_623ao")]
-position = Vector2(628, 615)
-
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="WorldBounds"]
 build_mode = 1
 polygon = PackedVector2Array(1280, 0, 0, 0, 0, 721, 1280, 721)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_623ao")
+
+[node name="Player" parent="." instance=ExtResource("4_623ao")]
+y_sort_enabled = true
+position = Vector2(640, 360)
 
 [node name="HeadsUpDisplay" parent="." instance=ExtResource("4_e7xia")]
 

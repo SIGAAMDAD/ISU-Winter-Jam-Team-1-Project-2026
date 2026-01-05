@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://3lva0atxtv8f"]
+
+[ext_resource type="Texture2D" uid="uid://b433agw4ipi0t" path="res://Assets/Textures/Harpoon.png" id="1_sxq8e"]
+[ext_resource type="Script" uid="uid://dvjcye8p3u1s5" path="res://Assets/Prefabs/Harpoon/Harpoon.cs" id="2_8ioax"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gvynp"]
+radius = 5.0
+height = 20.0
+
+[node name="HarpoonUp" type="Sprite2D"]
+texture = ExtResource("1_sxq8e")
+region_enabled = true
+region_rect = Rect2(0, 0, 10.087564, 18.799503)
+script = ExtResource("2_8ioax")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CapsuleShape2D_gvynp")

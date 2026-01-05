@@ -7,16 +7,22 @@ namespace Game.Common {
 		public int CurrentWave => _currentWave;
 		private int _currentWave = 1;
 
-		private IGameEvent<WaveChangedEventArgs> _waveChanged;
+		public IGameEvent<WaveChangedEventArgs> WaveStarted => _waveStarted;
+		private IGameEvent<WaveChangedEventArgs> _waveStarted;
+
+		public IGameEvent<WaveChangedEventArgs> WaveCompleted => _waveCompleted;
+		private IGameEvent<WaveChangedEventArgs> _waveCompleted;
 
 		public override void _Ready() {
 			base._Ready();
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
-			_waveChanged = eventFactory.GetEvent<WaveChangedEventArgs>( "WaveChanged" );
+			_waveStarted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveStarted ) );
 
 			// start the wave
-			_waveChanged.Publish( new WaveChangedEventArgs( _currentWave, _currentWave ) );
+			_waveStarted.Publish( new WaveChangedEventArgs( _currentWave, _currentWave ) );
+
+			_waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveCompleted ) );
 		}
 	};
 };

@@ -1,9 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://ci45mqkirclcs"]
+[gd_scene load_steps=5 format=3 uid="uid://ci45mqkirclcs"]
 
 [ext_resource type="Script" uid="uid://c1oaidojbjp3t" path="res://Source/Game/Player/UserInterface/HeadsUpDisplay.cs" id="1_ggood"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ggood"]
 bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qifin"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qa41n"]
+bg_color = Color(0, 0, 1, 1)
 
 [node name="HeadsUpDisplay" type="CanvasLayer"]
 script = ExtResource("1_ggood")
@@ -30,3 +36,35 @@ size_flags_vertical = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_ggood")
 value = 100.0
 show_percentage = false
+metadata/_edit_use_anchors_ = true
+
+[node name="WeaponCooldownMeter" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(100, 0)
+anchors_preset = -1
+anchor_top = 0.93500006
+anchor_right = 0.078
+anchor_bottom = 0.97200006
+offset_top = -0.20007324
+offset_right = 0.15999603
+offset_bottom = 0.15997314
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_qifin")
+theme_override_styles/fill = SubResource("StyleBoxFlat_qa41n")
+show_percentage = false
+metadata/_edit_use_anchors_ = true
+
+[node name="AnnouncementLabel" type="Label" parent="."]
+visible = false
+anchors_preset = -1
+anchor_top = 0.476
+anchor_right = 1.0
+anchor_bottom = 0.52400005
+offset_top = 5.779999
+offset_bottom = -5.7800293
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "WAVE DONE"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true

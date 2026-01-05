@@ -14,10 +14,12 @@ namespace Game.Player {
 	/// <summary>
 	/// 
 	/// </summary>
-	
+
 	public sealed class PlayerAudioPlayer {
 		private readonly AudioStreamPlayer2D _moveStream;
 		private readonly AudioStreamPlayer2D _actionStream;
+
+		private readonly AudioStream _useWeapon;
 
 		private bool _isMoving = false;
 
@@ -31,11 +33,13 @@ namespace Game.Player {
 		/// </summary>
 		/// <param name="owner"></param>
 		/// <param name="animator"></param>
-		public PlayerAudioPlayer( PlayerManager owner, PlayerAnimator animator ) {
+		public PlayerAudioPlayer( PlayerManager owner, PlayerController controller, PlayerAnimator animator ) {
 			animator.PlayerStartMoving.Subscribe( this, OnStartMoveSound );
 			animator.PlayerStopMoving.Subscribe( this, OnStopMoveSound );
+			controller.UseWeapon.Subscribe( this, OnWeaponUsed );
 
 			AudioCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Audio/SoundEffects/jetski.wav" ) ).Get( out var moveSound );
+			AudioCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Audio/SoundEffects/harpoon.wav" ) ).Get( out _useWeapon );
 
 			_moveStream = owner.GetNode<AudioStreamPlayer2D>( "MoveStream" );
 			_moveStream.Stream = moveSound;
@@ -84,6 +88,16 @@ namespace Game.Player {
 		private void OnStopMoveSound( in EmptyEventArgs args ) {
 			_moveStream.Stop();
 			_isMoving = false;
+		}
+
+		/*
+		===============
+		OnWeaponUsed
+		===============
+		*/
+		private void OnWeaponUsed( in EmptyEventArgs args ) {
+			_actionStream.Stream = _useWeapon;
+			_actionStream.Play();
 		}
 	};
 };

@@ -5,9 +5,15 @@ using System;
 
 namespace Game.Player {
 	public sealed class PlayerAnimator {
-		private readonly StringName @UpAnimation = "up";
-		private readonly StringName @DownAnimation = "down";
-		private readonly StringName @HorizontalAnimation = "horizontal";
+		private static readonly StringName @UpHarpoonAnimation = "up_harpoon";
+		private static readonly StringName @UpNoHarpoonAnimation = "up_noharpoon";
+		private static readonly StringName @DownHarpoonAnimation = "down_harpoon";
+		private static readonly StringName @DownNoHarpoonAnimation = "down_noharpoon";
+		private static readonly StringName @HorizontalHarpoonAnimation = "horizontal_harpoon";
+		private static readonly StringName @HorizontalNoHarpoonAnimation = "horizontal_noharpoon";
+
+		public PlayerDirection Direction => _direction;
+		private PlayerDirection _direction;
 
 		private readonly PlayerManager _owner;
 		private readonly AnimatedSprite2D _animations;
@@ -26,6 +32,7 @@ namespace Game.Player {
 		private readonly IGameEvent<EmptyEventArgs> _playerStopMoving;
 
 		private bool _playerIsMoving = false;
+		private bool _isPlayerAttacking = false;
 
 		/*
 		===============
@@ -45,18 +52,15 @@ namespace Game.Player {
 			_currentFoamPosition = _upFoamPosition;
 
 			var eventFactory = owner.GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
+
+			var useWeapon = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerController.UseWeapon ) );
+			useWeapon.Subscribe( this, OnUseWeapon );
+
+			var weaponCooldownFinished = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerController.WeaponCooldownFinished ) );
+			weaponCooldownFinished.Subscribe( this, OnWeaponCooldownFinished );
+
 			_playerStartMoving = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerStartMoving ) );
 			_playerStopMoving = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerStopMoving ));
-		}
-
-		private void SetFoamPosition( float rotation, Marker2D newPosition ) {
-			if ( _currentFoamPosition == newPosition ) {
-				return;
-			}
-			_currentFoamPosition.RemoveChild( _foamParticles );
-			newPosition.AddChild( _foamParticles );
-			_currentFoamPosition = newPosition;
-			_foamParticles.GlobalRotation = rotation;
 		}
 
 		/*
@@ -74,27 +78,31 @@ namespace Game.Player {
 
 			if ( Math.Abs( velocity.X ) > Math.Abs( velocity.Y ) ) {
 				if ( velocity.X > 0.0f ) {
-					_animations.Play( HorizontalAnimation );
+					_animations.Play( _isPlayerAttacking ? HorizontalNoHarpoonAnimation : HorizontalHarpoonAnimation );
 					_animations.FlipH = false;
 
 					SetFoamPosition( 90.0f, _rightFoamPosition );
+					_direction = PlayerDirection.East;
 				}
 				if ( velocity.X < 0.0f ) {
-					_animations.Play( HorizontalAnimation );
+					_animations.Play( _isPlayerAttacking ? HorizontalNoHarpoonAnimation : HorizontalHarpoonAnimation );
 					_animations.FlipH = true;
 
 					SetFoamPosition( -90.0f, _leftFoamPosition );
+					_direction = PlayerDirection.West;
 				}
 			} else {
 				if ( velocity.Y > 0.0f ) {
-					_animations.Play( DownAnimation );
+					_animations.Play( _isPlayerAttacking ? DownNoHarpoonAnimation : DownHarpoonAnimation );
 
 					SetFoamPosition( 180.0f, _downFoamPosition );
+					_direction = PlayerDirection.South;
 				}
 				if ( velocity.Y < 0.0f ) {
-					_animations.Play( UpAnimation );
+					_animations.Play( _isPlayerAttacking ? UpNoHarpoonAnimation : UpHarpoonAnimation );
 
 					SetFoamPosition( 0.0f, _upFoamPosition );
+					_direction = PlayerDirection.North;
 				}
 			}
 			_foamParticles.Emitting = inputWasActive;
@@ -105,6 +113,48 @@ namespace Game.Player {
 				_playerStopMoving.Publish( new EmptyEventArgs() );
 				_playerIsMoving = false;
 			}
+		}
+
+		/*
+		===============
+		OnWeaponCooldownFinished
+		===============
+		*/
+		private void OnWeaponCooldownFinished( in EmptyEventArgs args ) {
+			_isPlayerAttacking = false;
+		}
+
+		/*
+		===============
+		OnUseWeapon
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnUseWeapon( in EmptyEventArgs args ) {
+			_isPlayerAttacking = true;
+		}
+
+		/*
+		===============
+		SetFoamPosition
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="rotation"></param>
+		/// <param name="newPosition"></param>
+		private void SetFoamPosition( float rotation, Marker2D newPosition ) {
+			if ( _currentFoamPosition == newPosition ) {
+				return;
+			}
+			_currentFoamPosition.RemoveChild( _foamParticles );
+			newPosition.AddChild( _foamParticles );
+			_currentFoamPosition = newPosition;
+			_foamParticles.GlobalRotation = rotation;
 		}
 	};
 };
