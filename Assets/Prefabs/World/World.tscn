@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://q3d8f588rgns"]
+[gd_scene load_steps=15 format=3 uid="uid://q3d8f588rgns"]
 
 [ext_resource type="Script" uid="uid://c0j83efpa6svk" path="res://Assets/Prefabs/World/World.cs" id="1_yd2wk"]
 [ext_resource type="Script" uid="uid://c43nx6mgcq070" path="res://Source/Game/Common/WaveManager.cs" id="2_oturc"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cwio4re8cg5yy" path="res://Source/Game/Mobs/TideSpawner.cs" id="6_623ao"]
 [ext_resource type="Script" uid="uid://ckum0efkn2yxu" path="res://Source/Game/Mobs/MobSpawner.cs" id="7_nap3e"]
 [ext_resource type="Script" uid="uid://dj6due7fgidad" path="res://Source/Game/Common/EntityManager.cs" id="8_e662y"]
+[ext_resource type="Script" uid="uid://bvsjkqk8ngfhl" path="res://Source/Game/Player/Upgrades/UpgradeManager.cs" id="10_7ey30"]
 
 [sub_resource type="Gradient" id="Gradient_623ao"]
 offsets = PackedFloat32Array(0.013333334)
@@ -89,3 +90,4 @@ script = ExtResource("8_e662y")
 _player = NodePath("../Player")
 
 [node name="UpgradeManager" type="CanvasLayer" parent="."]
+script = ExtResource("10_7ey30")
