@@ -68,10 +68,10 @@ namespace Game.Player {
 			_weaponCooldown.Connect( Timer.SignalName.Timeout, Callable.From( OnWeaponCooldownFinished ) );
 			owner.AddChild( _weaponCooldown );
 
-			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Harpoon/UpHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.North ] );
-			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Harpoon/RightHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.East ] );
-			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Harpoon/DownHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.South ] );
-			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Harpoon/LeftHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.West ] );
+			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/UpHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.North ] );
+			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/RightHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.East ] );
+			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/DownHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.South ] );
+			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/LeftHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.West ] );
 		}
 
 		/*
