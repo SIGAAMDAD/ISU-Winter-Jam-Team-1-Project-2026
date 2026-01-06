@@ -42,16 +42,14 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eppw5"]
 size = Vector2(52, 44)
 
-[node name="Shark" type="CharacterBody2D" node_paths=PackedStringArray("_navigationAgent")]
+[node name="Shark" type="CharacterBody2D"]
 script = ExtResource("1_byjlf")
-_navigationAgent = NodePath("NavigationAgent2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_dpq8m")
 frame_progress = 0.2533281
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(-2, -3)
 shape = SubResource("RectangleShape2D_eppw5")
 

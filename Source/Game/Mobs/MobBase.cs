@@ -11,9 +11,16 @@ namespace Game.Mobs {
 		private float _damageAmount = 0.0f;
 		[Export]
 		private float _health = 100.0f;
+		[Export]
+		private float _speed = 10.0f;
+
+		public IGameEvent<MobDieEventArgs> Die => _die;
+		private IGameEvent<MobDieEventArgs> _die;
 
 		public IGameEvent<EntityTakeDamageEventArgs> TakeDamage => _takeDamage;
 		private IGameEvent<EntityTakeDamageEventArgs> _takeDamage;
+		
+		private Vector2 _frameVelocity;
 
 		private NavigationAgent2D _navigationAgent;
 		private AnimatedSprite2D _animation;
@@ -77,6 +84,7 @@ namespace Game.Mobs {
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_takeDamage  = eventFactory.GetEvent<EntityTakeDamageEventArgs>( nameof( TakeDamage ) );
+			_die = eventFactory.GetEvent<MobDieEventArgs>( nameof( Die ) );
 
 			_navigationAgent = GetNode<NavigationAgent2D>( "NavigationAgent2D" );
 			_navigationAgent.Connect( NavigationAgent2D.SignalName.TargetReached, Callable.From( OnTargetReached ) );
@@ -107,6 +115,24 @@ namespace Game.Mobs {
 			}
 
 			_navigationAgent.TargetPosition = _entityManager.TargetPosition;
+		}
+
+		/*
+		===============
+		_PhysicsProcess
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="delta"></param>
+		public override void _PhysicsProcess( double delta ) {
+			base._PhysicsProcess( delta );
+
+			Vector2 position = GlobalPosition;
+			EntityUtils.CalcSpeed( ref _frameVelocity, _speed, (float)delta, position.DirectionTo( _navigationAgent.TargetPosition ) );
+			position += _frameVelocity;
+			SetDeferred( PropertyName.GlobalPosition, position );
 		}
 	};
 };
