@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://6ymw0rj6k43c"]
 
 [ext_resource type="Texture2D" uid="uid://b433agw4ipi0t" path="res://Assets/Textures/Harpoon.png" id="1_gw8v1"]
-[ext_resource type="Script" uid="uid://dvjcye8p3u1s5" path="res://Assets/Prefabs/Harpoon/Harpoon.cs" id="2_wcnxu"]
+[ext_resource type="Script" uid="uid://dvjcye8p3u1s5" path="res://Assets/Prefabs/Weapons/Harpoon/Harpoon.cs" id="2_wcnxu"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gvynp"]
 radius = 6.0

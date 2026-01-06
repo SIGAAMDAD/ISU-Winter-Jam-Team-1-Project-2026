@@ -2,7 +2,6 @@ using Game.Common;
 using Game.Mobs;
 using Game.Player;
 using Godot;
-using System.Collections;
 
 namespace Prefabs {
 	/*

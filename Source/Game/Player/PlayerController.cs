@@ -4,6 +4,7 @@ using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Util;
 using Prefabs;
+using System.Runtime.CompilerServices;
 using Systems.Caching;
 
 namespace Game.Player {
@@ -24,6 +25,8 @@ namespace Game.Player {
 		private static readonly StringName @MoveNorthBind = "move_north";
 		private static readonly StringName @MoveSouthBind = "move_south";
 		private static readonly StringName @UseWeaponBind = "use_weapon";
+
+		private static readonly Vector2I MIDDLE_SCREEN_POSITION = new Vector2I( 1280 / 2, 720 / 2 );
 
 		public IGameEvent<EmptyEventArgs> UseWeapon => _useWeapon;
 		private readonly IGameEvent<EmptyEventArgs> _useWeapon;
@@ -60,8 +63,7 @@ namespace Game.Player {
 			_weaponCooldownTimeChanged = eventFactory.GetEvent<WeaponCooldownTimeChangedEventArgs>( nameof( WeaponCooldownTimeChanged ) );
 
 			_weaponCooldown = new Timer() {
-				WaitTime = 1.5f,
-				OneShot = true
+				WaitTime = 1.5f
 			};
 			_weaponCooldown.Connect( Timer.SignalName.Timeout, Callable.From( OnWeaponCooldownFinished ) );
 			owner.AddChild( _weaponCooldown );
@@ -92,13 +94,25 @@ namespace Game.Player {
 			_owner.MoveAndSlide();
 			_frameVelocity = _owner.Velocity;
 
-			if ( Input.IsActionJustPressed( UseWeaponBind ) && _canAttack ) {
-				OnUseWeapon();
+			if ( _canAttack ) {
+				float angle = GetMouseAngle();
+
+				OnUseWeapon( angle );
 				_canAttack = false;
 				_weaponCooldown.Start();
 			} else if ( !_canAttack ) {
 				_weaponCooldownTimeChanged.Publish( new WeaponCooldownTimeChangedEventArgs( 100.0f / (float)_weaponCooldown.TimeLeft ) );
 			}
+		}
+
+		/*
+		===============
+		GetMouseAngle
+		===============
+		*/
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		private float GetMouseAngle() {
+			return _owner.GetLocalMousePosition().AngleTo( MIDDLE_SCREEN_POSITION );
 		}
 
 		/*
@@ -122,10 +136,11 @@ namespace Game.Player {
 		/// <summary>
 		/// 
 		/// </summary>
-		private void OnUseWeapon() {
+		private void OnUseWeapon( float angle ) {
 			Harpoon harpoon = _harpoonPrefabs[ (int)_animator.Direction ].Instantiate<Harpoon>();
 			harpoon.Direction = _animator.Direction;
 			harpoon.GlobalPosition = _owner.GlobalPosition;
+			harpoon.GlobalRotation = angle;
 			_owner.GetTree().Root.AddChild( harpoon );
 
 			_useWeapon.Publish( new EmptyEventArgs() );

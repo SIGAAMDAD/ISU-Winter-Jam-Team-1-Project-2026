@@ -50,11 +50,11 @@ polygon = PackedVector2Array(1280, 0, 0, 0, 0, 721, 1280, 721)
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 navigation_polygon = SubResource("NavigationPolygon_623ao")
 
+[node name="HeadsUpDisplay" parent="." instance=ExtResource("4_e7xia")]
+
 [node name="Player" parent="." instance=ExtResource("4_623ao")]
 y_sort_enabled = true
 position = Vector2(640, 360)
-
-[node name="HeadsUpDisplay" parent="." instance=ExtResource("4_e7xia")]
 
 [node name="WaveManager" type="Node" parent="."]
 script = ExtResource("2_oturc")
@@ -76,3 +76,5 @@ script = ExtResource("7_nap3e")
 [node name="EntityManager" type="Node" parent="." node_paths=PackedStringArray("_player")]
 script = ExtResource("8_e662y")
 _player = NodePath("../Player")
+
+[node name="UpgradeManager" type="CanvasLayer" parent="."]

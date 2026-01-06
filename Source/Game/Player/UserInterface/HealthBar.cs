@@ -15,6 +15,8 @@ namespace Game.Player.UserInterface {
 	
 	public sealed class HealthBar {
 		private readonly ProgressBar _node;
+		private readonly Label _currentHealth;
+		private readonly Label _maxHealth;
 
 		/*
 		===============
@@ -31,6 +33,8 @@ namespace Game.Player.UserInterface {
 			statChanged.Subscribe( this, OnStatChanged );
 
 			_node = node;
+			_currentHealth = _node.GetNode<Label>( "%CurrentHealth" );
+			_maxHealth = _node.GetNode<Label>( "%MaxHealth" );
 		}
 
 		/*
@@ -45,6 +49,10 @@ namespace Game.Player.UserInterface {
 		private void OnStatChanged( in StatChangedEventArgs args ) {
 			if ( args.StatId == PlayerStats.HEALTH_ID ) {
 				_node.Value = args.Value;
+				_currentHealth.Text = args.Value.ToString();
+			} else if ( args.StatId == PlayerStats.MAX_HEALTH_ID ) {
+				_node.MaxValue = args.Value;
+				_maxHealth.Text = $"/{args.Value}";
 			}
 		}
 	};
