@@ -1,4 +1,5 @@
 using Game.Common;
+using Game.Player.Upgrades;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
@@ -44,7 +45,7 @@ namespace Game.Player {
 		public override void _Ready() {
 			base._Ready();
 
-			_stats = new PlayerStats( this, GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>() );
+			_stats = new PlayerStats( this, GetNode<UpgradeManager>( "/root/World/UpgradeManager" ), GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>() );
 			_animator = new PlayerAnimator( this );
 			_controller = new PlayerController( this, _animator, _stats );
 			_audioPlayer = new PlayerAudioPlayer( this, _controller, _animator );

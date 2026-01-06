@@ -84,7 +84,7 @@ namespace Game.Player.Upgrades {
 			}
 
 			_upgrades[ type ] = tier;
-			_upgradeBought.Publish( new UpgradeBoughtEventArgs( type, tier ) );
+			_upgradeBought.Publish( new UpgradeBoughtEventArgs( type, tier, 10.0f ) );
 		}
 	};
 };

@@ -47,10 +47,10 @@ namespace Game.Player.UserInterface {
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnStatChanged( in StatChangedEventArgs args ) {
-			if ( args.StatId == PlayerStats.HEALTH_ID ) {
+			if ( args.StatId == PlayerStats.HEALTH ) {
 				_node.Value = args.Value;
 				_currentHealth.Text = args.Value.ToString();
-			} else if ( args.StatId == PlayerStats.MAX_HEALTH_ID ) {
+			} else if ( args.StatId == PlayerStats.MAX_HEALTH ) {
 				_node.MaxValue = args.Value;
 				_maxHealth.Text = $"/{args.Value}";
 			}

@@ -149,6 +149,7 @@ size = Vector2(66, 67)
 [node name="Player" type="CharacterBody2D"]
 motion_mode = 1
 script = ExtResource("1_43ce2")
+metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_b2bpv")
@@ -187,7 +188,6 @@ position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_278ex")
 
 [node name="AudioListener2D" type="AudioListener2D" parent="."]
-current = true
 
 [node name="MoveStream" type="AudioStreamPlayer2D" parent="."]
 

@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://du7figp5hhtgb"]
+
+[ext_resource type="Texture2D" uid="uid://b182sto545vax" path="res://Assets/Textures/BigTide.png" id="1_geb60"]
+[ext_resource type="Script" uid="uid://dcwler0s3q4cy" path="res://Assets/Prefabs/Mobs/BigTide/BigTide.cs" id="2_f3s3g"]
+[ext_resource type="Script" uid="uid://cburu6b4ckehs" path="res://addons/godot-rapier2d/custom_nodes/rapier_area_2d.gd" id="3_60hxd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f3s3g"]
+atlas = ExtResource("1_geb60")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_60hxd"]
+atlas = ExtResource("1_geb60")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5pqf4"]
+atlas = ExtResource("1_geb60")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s8nfb"]
+atlas = ExtResource("1_geb60")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wbj0a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f3s3g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_60hxd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5pqf4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s8nfb")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5pqf4"]
+size = Vector2(68.056335, 31)
+
+[node name="BigTide" type="AnimatedSprite2D"]
+scale = Vector2(2.21875, 1)
+sprite_frames = SubResource("SpriteFrames_wbj0a")
+autoplay = "default"
+frame_progress = 0.9412276
+script = ExtResource("2_f3s3g")
+
+[node name="RapierArea2D" type="Area2D" parent="."]
+script = ExtResource("3_60hxd")
+metadata/_custom_type_script = "uid://cburu6b4ckehs"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RapierArea2D"]
+shape = SubResource("RectangleShape2D_5pqf4")

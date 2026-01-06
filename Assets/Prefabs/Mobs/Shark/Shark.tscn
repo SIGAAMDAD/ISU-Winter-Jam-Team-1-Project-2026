@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://by5pr3oyf568c"]
+
+[ext_resource type="Script" uid="uid://c5qpdmvd63ugb" path="res://addons/godot-rapier2d/custom_nodes/rapier_character_body_2d.gd" id="1_byjlf"]
+
+[node name="Shark" type="CharacterBody2D"]
+script = ExtResource("1_byjlf")
+metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
