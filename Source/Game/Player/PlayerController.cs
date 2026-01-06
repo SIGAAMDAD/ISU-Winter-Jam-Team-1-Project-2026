@@ -32,7 +32,6 @@ namespace Game.Player {
 		private static readonly StringName @MoveWestBind = "move_west";
 		private static readonly StringName @MoveNorthBind = "move_north";
 		private static readonly StringName @MoveSouthBind = "move_south";
-		private static readonly StringName @UseWeaponBind = "use_weapon";
 
 		private readonly PackedScene[] _harpoonPrefabs = new PackedScene[ (int)PlayerDirection.Count ];
 
