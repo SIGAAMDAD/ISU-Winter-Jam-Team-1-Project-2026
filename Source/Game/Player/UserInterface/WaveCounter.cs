@@ -7,7 +7,7 @@ namespace Game.Player.UserInterface {
 		private readonly Label _countLabel;
 
 		public WaveCounter( Label label, IGameEventRegistryService eventFactory ) {
-			var waveChanged = eventFactory.GetEvent<WaveChangedEventArgs>( "WaveChanged" );
+			var waveChanged = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveStarted ) );
 			waveChanged.Subscribe( this, OnWaveChanged );
 
 			_countLabel = label;

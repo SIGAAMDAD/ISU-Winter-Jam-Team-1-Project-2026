@@ -1,4 +1,3 @@
-using Game.Player;
 using Game.Player.Weapons;
 using Godot;
 
@@ -17,7 +16,7 @@ namespace Prefabs {
 		/// <param name="areaShapeIndex"></param>
 		/// <param name="localShapeIndex"></param>
 		private void OnAreaShapeExited( Rid areaRid, Area2D area, int areaShapeIndex, int localShapeIndex ) {
-			if ( area.GetParent() is Projectile projectile ) {
+			if ( area is not null && area.GetParent() is Projectile projectile ) {
 				// make sure we don't have any memory leaks
 				projectile.QueueFree();
 			}

@@ -2,28 +2,26 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b433agw4ipi0t"
-path.bptc="res://.godot/imported/Harpoon.png-736e55b79f1979d5849bb12da17b1e78.bptc.ctex"
-path.astc="res://.godot/imported/Harpoon.png-736e55b79f1979d5849bb12da17b1e78.astc.ctex"
+uid="uid://bqu3afytkq6mj"
+path="res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/Harpoon.png"
-dest_files=["res://.godot/imported/Harpoon.png-736e55b79f1979d5849bb12da17b1e78.bptc.ctex", "res://.godot/imported/Harpoon.png-736e55b79f1979d5849bb12da17b1e78.astc.ctex"]
+source_file="res://Assets/Textures/SpriteSheets/Shark2.png"
+dest_files=["res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.ctex"]
 
 [params]
 
-compress/mode=2
-compress/high_quality=true
+compress/mode=0
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
-compress/hdr_compression=2
-compress/normal_map=2
+compress/hdr_compression=1
+compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=false
 mipmaps/limit=-1

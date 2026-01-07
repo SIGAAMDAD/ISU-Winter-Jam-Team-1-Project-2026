@@ -63,17 +63,12 @@ namespace Game.Player.Weapons {
 		/// 
 		/// </summary>
 		/// <param name="delta"></param>
-		public override void _Process( double delta ) {
-			base._Process( delta );
+		public override void _PhysicsProcess( double delta ) {
+			base._PhysicsProcess( delta );
 
-			Vector2 inputVelocity = Direction switch {
-				PlayerDirection.North => Vector2.Up,
-				PlayerDirection.East => Vector2.Right,
-				PlayerDirection.West => Vector2.Left,
-				PlayerDirection.South => Vector2.Down
-			};
+			Vector2 inputVelocity = Vector2.Right.Rotated( GlobalRotation );
 
-			EntityUtils.CalcSpeed( ref _frameVelocity, Speed, (float)delta, inputVelocity );
+			EntityUtils.CalcSpeed( ref _frameVelocity, Speed,(float)delta, inputVelocity );
 			GlobalPosition += _frameVelocity;
 		}
 	};

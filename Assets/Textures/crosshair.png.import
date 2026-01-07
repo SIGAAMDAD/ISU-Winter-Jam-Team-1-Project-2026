@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ccmqoxl3r05um"
-path="res://.godot/imported/Wave.png-5fabfd054ae80dc73b825d9de677f79d.ctex"
+uid="uid://cljhw71klj1j8"
+path="res://.godot/imported/crosshair.png-c5fc4b061aab0e53d43a2e64ec40573a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/Wave.png"
-dest_files=["res://.godot/imported/Wave.png-5fabfd054ae80dc73b825d9de677f79d.ctex"]
+source_file="res://Assets/Textures/crosshair.png"
+dest_files=["res://.godot/imported/crosshair.png-c5fc4b061aab0e53d43a2e64ec40573a.ctex"]
 
 [params]
 

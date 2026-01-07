@@ -22,8 +22,8 @@ namespace Game.Mobs {
 		/// 
 		/// </summary>
 		/// <param name="delta"></param>
-		public override void _Process( double delta ) {
-			base._Process( delta );
+		public override void _PhysicsProcess( double delta ) {
+			base._PhysicsProcess( delta );
 
 			Vector2 targetVelocity = Vector2.Down * 2.15f;
 			_velocity += ( targetVelocity - _velocity ) * (float)( 1.0f - Math.Exp( -8.0f * delta ) );

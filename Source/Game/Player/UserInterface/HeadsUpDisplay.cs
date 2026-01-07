@@ -3,9 +3,22 @@ using Godot;
 using Nomad.Core.Events;
 
 namespace Game.Player.UserInterface {
+	/*
+	===================================================================================
+	
+	HeadsUpDisplay
+	
+	Description
+	
+	===================================================================================
+	*/
+	/// <summary>
+	/// 
+	/// </summary>
+	
 	public partial class HeadsUpDisplay : CanvasLayer {
 		private HealthBar _healthBar;
-		private WaveCounter _waveCounter;
+		private WaveUI _waveUI;
 		private AnnouncementLabel _announcementLabel;
 
 		/*
@@ -18,7 +31,7 @@ namespace Game.Player.UserInterface {
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_healthBar = new HealthBar( GetNode<ProgressBar>( "HealthBar" ), eventFactory );
-			_waveCounter = new WaveCounter( GetNode<Label>( "WaveCounter" ), eventFactory );
+			_waveUI = new WaveUI( GetNode<VBoxContainer>( "WaveDataContainer" ), eventFactory );
 			_announcementLabel = new AnnouncementLabel( GetNode<Label>( "AnnouncementLabel" ), eventFactory );
 		}
 	};

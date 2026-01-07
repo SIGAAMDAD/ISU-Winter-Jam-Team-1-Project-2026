@@ -1,0 +1,62 @@
+[gd_scene load_steps=9 format=3 uid="uid://bxxge54kolwnt"]
+
+[ext_resource type="Script" uid="uid://d211pk2ykops5" path="res://Assets/Prefabs/Mobs/Orca/Orca.cs" id="1_8xrhf"]
+[ext_resource type="Texture2D" uid="uid://cbnmjb4680knt" path="res://Assets/Textures/Orca.png" id="2_lj82f"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yui5s"]
+atlas = ExtResource("2_lj82f")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7a8lv"]
+atlas = ExtResource("2_lj82f")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_43f65"]
+atlas = ExtResource("2_lj82f")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f8fd5"]
+atlas = ExtResource("2_lj82f")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8fuud"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yui5s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7a8lv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_43f65")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f8fd5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eppw5"]
+size = Vector2(64, 53)
+
+[node name="Orca" type="CharacterBody2D"]
+scale = Vector2(1.15, 1.15)
+script = ExtResource("1_8xrhf")
+_health = 20.0
+_speed = 0.4
+metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_8fuud")
+autoplay = "default"
+frame_progress = 0.037535284
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -7.5)
+shape = SubResource("RectangleShape2D_eppw5")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_max_distance = 1000.0

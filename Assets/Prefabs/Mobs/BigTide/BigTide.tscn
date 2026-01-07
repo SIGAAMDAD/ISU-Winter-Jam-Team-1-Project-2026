@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://du7figp5hhtgb"]
 
-[ext_resource type="Texture2D" uid="uid://b182sto545vax" path="res://Assets/Textures/BigTide.png" id="1_geb60"]
+[ext_resource type="Texture2D" uid="uid://b182sto545vax" path="res://Assets/Textures/SpriteSheets/BigTide.png" id="1_geb60"]
 [ext_resource type="Script" uid="uid://dcwler0s3q4cy" path="res://Assets/Prefabs/Mobs/BigTide/BigTide.cs" id="2_f3s3g"]
 [ext_resource type="Script" uid="uid://cburu6b4ckehs" path="res://addons/godot-rapier2d/custom_nodes/rapier_area_2d.gd" id="3_60hxd"]
 
@@ -47,7 +47,7 @@ size = Vector2(68.056335, 31)
 scale = Vector2(2.21875, 1)
 sprite_frames = SubResource("SpriteFrames_wbj0a")
 autoplay = "default"
-frame_progress = 0.9412276
+frame_progress = 0.33826977
 script = ExtResource("2_f3s3g")
 
 [node name="RapierArea2D" type="Area2D" parent="."]

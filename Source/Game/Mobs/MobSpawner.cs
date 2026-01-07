@@ -3,6 +3,7 @@ using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
 using System;
+using System.Collections.Generic;
 
 namespace Game.Mobs {
 	/*
@@ -15,19 +16,26 @@ namespace Game.Mobs {
 	/// <summary>
 	/// 
 	/// </summary>
-	
+
 	public sealed partial class MobSpawner : Node2D {
+		private const int FIRST_WAVE_ENEMY_COUNT = 5;
+
 		[Export]
-		private EntityManager _entityManager;
+		private CollisionShape2D _worldBounds;
 		[Export]
 		private PackedScene[] _enemyTypes;
 
-		private const int FIRST_WAVE_ENEMY_COUNT = 3;
+		private int _waveNumber = 0;
 
+		private int _spawnMinX;
+		private int _spawnMinY;
+		private int _spawnMaxX;
+		private int _spawnMaxY;
 		private int _enemyCount = FIRST_WAVE_ENEMY_COUNT;
 
-		public IGameEvent<EmptyEventArgs> MobsCleared => _mobsCleared;
-		private IGameEvent<EmptyEventArgs> _mobsCleared;
+		private Timer _spawnTimer;
+		private NavigationRegion2D _navRegion;
+		private readonly Dictionary<int, MobBase> _mobCache = new();
 
 		/*
 		===============
@@ -40,14 +48,75 @@ namespace Game.Mobs {
 		public override void _Ready() {
 			base._Ready();
 
+			if ( _worldBounds.Shape is RectangleShape2D shape ) {
+				float sizeX = shape.Size.X * 0.5f;
+				float sizeY = shape.Size.Y * 0.5f;
+				Vector2 position = _worldBounds.GlobalPosition;
+
+				_spawnMinX = (int)( position.X - sizeX );
+				_spawnMinY = (int)( position.Y - sizeY );
+				_spawnMaxX = (int)( position.X + sizeX );
+				_spawnMaxY = (int)( position.Y + sizeY );
+			} else {
+				throw new InvalidOperationException( "WorldBounds contain a RectangleShape2D!" );
+			}
+
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
-			var _waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
-			_waveCompleted.Subscribe( this, OnWaveCompleted );
 
-			var _waveStarted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveStarted ) );
-			_waveStarted.Subscribe( this, OnWaveStarted );
+			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
+			waveCompleted.Subscribe( this, OnWaveCompleted );
 
-			_mobsCleared = eventFactory.GetEvent<EmptyEventArgs>( nameof( MobsCleared ) );
+			var waveStarted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveStarted ) );
+			waveStarted.Subscribe( this, OnWaveStarted );
+
+			_spawnTimer = GetNode<Timer>( "SpawnInterval" );
+			_spawnTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnSpawnEnemies ) );
+
+			_navRegion = GetNode<NavigationRegion2D>( "NavigationRegion2D" );
+		}
+
+		/*
+		===============
+		OnSpawnEnemies
+		===============
+		*/
+		private void OnSpawnEnemies() {
+			SpawnBatch( _waveNumber );
+		}
+
+		/*
+		===============
+		SpawnBatch
+		===============
+		*/
+		private void SpawnBatch( int waveNumber ) {
+			int mobTier = 1;
+			if ( waveNumber >= 3 ) {
+				mobTier++;
+			}
+			if ( waveNumber >= 7 ) {
+				mobTier++;
+			}
+			if ( waveNumber >= 15 ) {
+				mobTier++;
+			}
+
+			_enemyCount += (int)( waveNumber * 0.0625f * _enemyCount );
+
+			for ( int t = 0; t < mobTier; t++ ) {
+				// NOTE: this might need adjusting...
+				int count = _enemyCount / mobTier;
+				PackedScene mob = _enemyTypes[ t ];
+				for ( int i = 0; i < count; i++ ) {
+					MobBase node = mob.Instantiate<MobBase>();
+					node.GlobalPosition = new Vector2(
+						Random.Shared.Next( _spawnMinX, _spawnMaxX ),
+						Random.Shared.Next( _spawnMinY, _spawnMinY )
+					);
+					_navRegion.AddChild( node );
+					_mobCache[ mob.GetPath().GetHashCode() ] = node;
+				}
+			}
 		}
 
 		/*
@@ -60,28 +129,8 @@ namespace Game.Mobs {
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnWaveStarted( in WaveChangedEventArgs args ) {
-			// only spawn a beefcake every 5 waves
-			bool shouldSpawnBoss = args.NewWave % 5 == 0;
-
-			_enemyCount += (int)( args.NewWave * 0.0625f * _enemyCount );
-			GD.Print( $"Spawning {_enemyCount} enemies..." );
-
-			for ( int i = 0; i < _enemyCount; i++ ) {
-				MobBase mob = _enemyTypes[ Random.Shared.Next( 0, _enemyTypes.Length - 1 ) ].Instantiate<MobBase>();
-				mob.Die.Subscribe( this, OnMobDie );
-				_entityManager.RegisterEntity( mob );
-			}
-		}
-
-		/*
-		===============
-		OnMobDie
-		===============
-		*/
-		private void OnMobDie( in MobDieEventArgs args ) {
-			if ( _enemyCount-- <= 0 ) {
-				_mobsCleared.Publish( new EmptyEventArgs() );
-			}
+			_waveNumber = args.NewWave;
+			_spawnTimer.Start();
 		}
 
 		/*
@@ -94,6 +143,12 @@ namespace Game.Mobs {
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
+			foreach ( var mob in _mobCache ) {
+				_navRegion.RemoveChild( mob.Value );
+				mob.Value.QueueFree();
+			}
+			_mobCache.Clear();
+			_spawnTimer.Stop();
 		}
 	};
 };

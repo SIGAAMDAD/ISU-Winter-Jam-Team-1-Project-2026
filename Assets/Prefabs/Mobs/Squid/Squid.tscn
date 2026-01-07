@@ -1,0 +1,61 @@
+[gd_scene load_steps=9 format=3 uid="uid://bxx2uro5uusm8"]
+
+[ext_resource type="Script" uid="uid://b43snt0sswaqk" path="res://Assets/Prefabs/Mobs/Squid/Squid.cs" id="1_bgroo"]
+[ext_resource type="Texture2D" uid="uid://6t5bau38yd33" path="res://Assets/Textures/Squid.png" id="2_eyq8v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r31au"]
+atlas = ExtResource("2_eyq8v")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_prob2"]
+atlas = ExtResource("2_eyq8v")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gffxe"]
+atlas = ExtResource("2_eyq8v")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8i47l"]
+atlas = ExtResource("2_eyq8v")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qlj56"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r31au")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_prob2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gffxe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8i47l")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eppw5"]
+size = Vector2(64, 53)
+
+[node name="Squid" type="CharacterBody2D"]
+scale = Vector2(5, 4.847)
+script = ExtResource("1_bgroo")
+_speed = 0.1
+metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_qlj56")
+autoplay = "default"
+frame_progress = 0.14172514
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2.5)
+shape = SubResource("RectangleShape2D_eppw5")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_max_distance = 1000.0

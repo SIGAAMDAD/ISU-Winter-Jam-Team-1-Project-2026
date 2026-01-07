@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://djyxbr83svaxk"]
 
-[ext_resource type="Texture2D" uid="uid://ccmqoxl3r05um" path="res://Assets/Textures/Wave.png" id="1_osrt7"]
+[ext_resource type="Texture2D" uid="uid://ccmqoxl3r05um" path="res://Assets/Textures/SpriteSheets/Wave.png" id="1_osrt7"]
 [ext_resource type="Script" uid="uid://de8swqdbg7fh8" path="res://Source/Game/Mobs/Tide.cs" id="2_haroh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xffe2"]

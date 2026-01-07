@@ -2,16 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b182sto545vax"
-path="res://.godot/imported/BigTide.png-abb48af6e7471832257d0b92a11837f5.ctex"
+uid="uid://dj0ovl2e65oy1"
+path="res://.godot/imported/dynamic_water_2d.svg-b9cd5300b6b73b0bd8d2e21de8ccddd1.ctex"
 metadata={
+"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/BigTide.png"
-dest_files=["res://.godot/imported/BigTide.png-abb48af6e7471832257d0b92a11837f5.ctex"]
+source_file="res://addons/dynamic_water_2d/dynamic_water_2d.svg"
+dest_files=["res://.godot/imported/dynamic_water_2d.svg-b9cd5300b6b73b0bd8d2e21de8ccddd1.ctex"]
 
 [params]
 
@@ -38,3 +39,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=true
+editor/convert_colors_with_editor_theme=true

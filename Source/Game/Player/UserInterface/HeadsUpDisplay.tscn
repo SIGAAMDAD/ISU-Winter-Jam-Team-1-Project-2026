@@ -13,14 +13,20 @@ border_color = Color(0, 0, 0, 1)
 [node name="HeadsUpDisplay" type="CanvasLayer"]
 script = ExtResource("1_ggood")
 
-[node name="WaveCounter" type="Label" parent="."]
-anchors_preset = -1
+[node name="WaveDataContainer" type="VBoxContainer" parent="."]
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 0.032
-offset_bottom = -0.040000916
 grow_horizontal = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="WaveCounter" type="Label" parent="WaveDataContainer"]
+layout_mode = 2
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="WaveTimer" type="Label" parent="WaveDataContainer"]
+layout_mode = 2
+horizontal_alignment = 1
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(120, 20)
@@ -55,6 +61,7 @@ metadata/_edit_use_anchors_ = true
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+text = "100"
 horizontal_alignment = 1
 
 [node name="MaxHealth" type="Label" parent="HealthBar/HBoxContainer"]

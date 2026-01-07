@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://dvpo7welfd08k"]
 
-[ext_resource type="Script" uid="uid://b433madd5qwgb" path="res://Assets/Prefabs/Mobs/Shark/FlyingFish.cs" id="1_5vjvo"]
-[ext_resource type="Texture2D" uid="uid://bqu3afytkq6mj" path="res://Assets/Textures/Shark2.png" id="2_yggtg"]
+[ext_resource type="Script" uid="uid://b433madd5qwgb" path="res://Assets/Prefabs/Mobs/FlyingFish/FlyingFish.cs" id="1_5vjvo"]
+[ext_resource type="Texture2D" uid="uid://bqu3afytkq6mj" path="res://Assets/Textures/SpriteSheets/Shark2.png" id="2_yggtg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2x1uq"]
 atlas = ExtResource("2_yggtg")
@@ -40,14 +40,17 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eppw5"]
-size = Vector2(52, 44)
+size = Vector2(64, 53)
 
 [node name="FlyingFish" type="CharacterBody2D"]
 script = ExtResource("1_5vjvo")
+_health = 1.0
+_speed = 0.8
 metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_dpq8m")
+autoplay = "default"
 frame_progress = 0.2533281
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
