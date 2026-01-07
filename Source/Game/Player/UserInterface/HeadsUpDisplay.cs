@@ -19,7 +19,6 @@ namespace Game.Player.UserInterface {
 	public partial class HeadsUpDisplay : CanvasLayer {
 		private HealthBar _healthBar;
 		private WaveUI _waveUI;
-		private AnnouncementLabel _announcementLabel;
 
 		/*
 		===============
@@ -32,7 +31,6 @@ namespace Game.Player.UserInterface {
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_healthBar = new HealthBar( GetNode<ProgressBar>( "HealthBar" ), eventFactory );
 			_waveUI = new WaveUI( GetNode<VBoxContainer>( "WaveDataContainer" ), eventFactory );
-			_announcementLabel = new AnnouncementLabel( GetNode<Label>( "AnnouncementLabel" ), eventFactory );
 		}
 	};
 };

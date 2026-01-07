@@ -1,6 +1,5 @@
 using Game.Systems;
 using Godot;
-using Nomad.Core.Events;
 
 namespace Game.Menus {
 	/*
@@ -15,11 +14,7 @@ namespace Game.Menus {
 	/// </summary>
 
 	public partial class PauseMenu : CanvasLayer {
-		public IGameEvent<EmptyEventArgs> PauseGame => _pauseGame;
-		private IGameEvent<EmptyEventArgs> _pauseGame;
-
-		public IGameEvent<EmptyEventArgs> UnpauseGame => _unpauseGame;
-		private IGameEvent<EmptyEventArgs> _unpauseGame;
+		private GameState _prevState;
 
 		/*
 		===============
@@ -46,8 +41,7 @@ namespace Game.Menus {
 		///
 		/// </summary>
 		private void OnResumeGame() {
-			GetTree().Paused = false;
-			_unpauseGame.Publish( new EmptyEventArgs() );
+			GameStateManager.Instance.SetGameState( _prevState );
 		}
 
 		/*
@@ -59,8 +53,26 @@ namespace Game.Menus {
 		///
 		/// </summary>
 		private void OnQuitGame() {
-			OnResumeGame();
-			GameStateManager.Instance.ActivateTitleScreen();
+			GameStateManager.Instance.SetGameState( GameState.TitleScreen );
+		}
+
+		/*
+		===============
+		OnGameStateChanged
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnGameStateChanged( in GameStateChangedEventArgs args ) {
+			if ( args.NewState == GameState.Paused ) {
+				_prevState = args.OldState;
+				GetTree().Paused = true;
+			} else if ( args.OldState == GameState.Paused ) {
+				GetTree().Paused = false;
+			}
+			Visible = GetTree().Paused;
 		}
 
 		/*
@@ -74,14 +86,12 @@ namespace Game.Menus {
 		public override void _Ready() {
 			base._Ready();
 
-			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
-			_pauseGame = eventFactory.GetEvent<EmptyEventArgs>( nameof( PauseGame ) );
-			_unpauseGame = eventFactory.GetEvent<EmptyEventArgs>( nameof( UnpauseGame ) );
-
 			SetProcessUnhandledInput( true );
 			SetProcess( false );
 			SetPhysicsProcess( false );
 			SetProcessInput( false );
+
+			GameStateManager.GameStateChanged.Subscribe( this, OnGameStateChanged );
 
 			HookButtons();
 		}
@@ -98,8 +108,8 @@ namespace Game.Menus {
 		public override void _UnhandledInput( InputEvent @event ) {
 			base._UnhandledInput( @event );
 
-			if ( Input.IsActionJustPressed( "pause" ) ) {
-				
+			if ( Input.IsActionJustPressed( "pause" ) && GameStateManager.Instance.GameState != GameState.Paused ) {
+				GameStateManager.Instance.SetGameState( GameState.Paused );
 			}
 		}
 	};

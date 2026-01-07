@@ -70,7 +70,11 @@ namespace Game.Mobs {
 			_health -= amount;
 			if ( _health <= 0.0f ) {
 				_flags |= FlagBits.Dead;
+				_die.Publish( new MobDieEventArgs( _mobId ) );
+				QueueFree();
+				return;
 			}
+			_animation.SpeedScale = 0.0f;
 			_animation.Modulate = Colors.Red;
 			_damageEffectTimer.Start();
 			_flags |= FlagBits.Hurt;
@@ -87,11 +91,8 @@ namespace Game.Mobs {
 		/// </summary>
 		private void OnResetColor() {
 			_animation.Modulate = Colors.White;
+			_animation.SpeedScale = 1.0f;
 			_flags &= ~FlagBits.Hurt;
-			if ( ( _flags & FlagBits.Dead ) != 0 ) {
-				_die.Publish( new MobDieEventArgs( _mobId ) );
-				QueueFree();
-			}
 		}
 
 		/*

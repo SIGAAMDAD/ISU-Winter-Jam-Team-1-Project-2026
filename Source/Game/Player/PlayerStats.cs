@@ -27,6 +27,7 @@ namespace Game.Player {
 		public static readonly InternString ATTACK_DAMAGE = new( nameof( AttackDamage ) );
 		public static readonly InternString ARMOR = new( nameof( Armor ) );
 		public static readonly InternString MAX_HEALTH = new( nameof( MaxHealth ) );
+		public static readonly InternString MONEY = new( nameof( Money ) );
 
 		public float Speed => _statCache[ SPEED ];
 		public float Health => _statCache[ HEALTH ];
@@ -34,6 +35,7 @@ namespace Game.Player {
 		public float AttackDamage => _statCache[ ATTACK_DAMAGE ];
 		public float Armor => _statCache[ ARMOR ];
 		public float MaxHealth => _statCache[ MAX_HEALTH ];
+		public float Money => _statCache[ MONEY ];
 
 		public WeaponSlot[] Slots => _slots;
 		private readonly WeaponSlot[] _slots = new WeaponSlot[ MAX_WEAPON_SLOTS ];
@@ -44,7 +46,8 @@ namespace Game.Player {
 			[ DAMAGE_RESISTANCE ] = 0.95f,
 			[ ARMOR ] = 100.0f,
 			[ ATTACK_DAMAGE ] = 10.0f,
-			[ MAX_HEALTH ] = 100.0f
+			[ MAX_HEALTH ] = 100.0f,
+			[ MONEY ] = 0.0f,
 		};
 		private readonly ImmutableDictionary<UpgradeType, InternString> _upgradeToStatId;
 
@@ -56,6 +59,17 @@ namespace Game.Player {
 		public IGameEvent<StatChangedEventArgs> StatChanged => _statChanged;
 		private readonly IGameEvent<StatChangedEventArgs> _statChanged;
 
+		/*
+		===============
+		PlayerStats
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="player"></param>
+		/// <param name="upgradeManager"></param>
+		/// <param name="eventFactory"></param>
 		public PlayerStats( PlayerManager player, UpgradeManager upgradeManager, IGameEventRegistryService eventFactory ) {
 			_entityId = player.GetPath().GetHashCode();
 

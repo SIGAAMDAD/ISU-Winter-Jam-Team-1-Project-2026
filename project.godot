@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 NomadBootstrapper="*res://Source/Game/Systems/NomadBootstrapper.cs"
+GameStateManager="*res://Source/Game/Systems/GameStateManager.cs"
 SceneManager="*res://Source/Game/Systems/SceneManager.cs"
 
 [display]
@@ -25,6 +26,7 @@ SceneManager="*res://Source/Game/Systems/SceneManager.cs"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/size/mode=3
+window/stretch/mode="canvas_items"
 window/vsync/vsync_mode=0
 mouse_cursor/custom_image="uid://cljhw71klj1j8"
 

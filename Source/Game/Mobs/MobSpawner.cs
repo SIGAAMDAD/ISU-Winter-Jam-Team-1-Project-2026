@@ -2,6 +2,7 @@ using Game.Common;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
+using Nomad.Core.Logger;
 using System;
 using System.Collections.Generic;
 
@@ -33,9 +34,11 @@ namespace Game.Mobs {
 		private int _spawnMaxY;
 		private int _enemyCount = FIRST_WAVE_ENEMY_COUNT;
 
+		private ILoggerCategory _category;
+		private ILoggerService _logger;
+
 		private Timer _spawnTimer;
 		private NavigationRegion2D _navRegion;
-		private readonly Dictionary<int, MobBase> _mobCache = new();
 
 		/*
 		===============
@@ -61,12 +64,15 @@ namespace Game.Mobs {
 				throw new InvalidOperationException( "WorldBounds contain a RectangleShape2D!" );
 			}
 
+			_logger = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<ILoggerService>();
+			_category = _logger.CreateCategory( nameof( MobSpawner ), LogLevel.Info, true );
+
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 
 			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
 			waveCompleted.Subscribe( this, OnWaveCompleted );
 
-			var waveStarted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveStarted ) );
+			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
 			waveStarted.Subscribe( this, OnWaveStarted );
 
 			_spawnTimer = GetNode<Timer>( "SpawnInterval" );
@@ -102,6 +108,7 @@ namespace Game.Mobs {
 			}
 
 			_enemyCount += (int)( waveNumber * 0.0625f * _enemyCount );
+			_logger.PrintLine( in _category, $"Spawning {_enemyCount} enemies in wave {waveNumber}..."  );
 
 			for ( int t = 0; t < mobTier; t++ ) {
 				// NOTE: this might need adjusting...
@@ -114,7 +121,6 @@ namespace Game.Mobs {
 						Random.Shared.Next( _spawnMinY, _spawnMinY )
 					);
 					_navRegion.AddChild( node );
-					_mobCache[ mob.GetPath().GetHashCode() ] = node;
 				}
 			}
 		}
@@ -128,8 +134,7 @@ namespace Game.Mobs {
 		/// 
 		/// </summary>
 		/// <param name="args"></param>
-		private void OnWaveStarted( in WaveChangedEventArgs args ) {
-			_waveNumber = args.NewWave;
+		private void OnWaveStarted( in EmptyEventArgs args ) {
 			_spawnTimer.Start();
 		}
 
@@ -143,12 +148,16 @@ namespace Game.Mobs {
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
-			foreach ( var mob in _mobCache ) {
-				_navRegion.RemoveChild( mob.Value );
-				mob.Value.QueueFree();
+			_logger.PrintLine( in _category, $"Clearing mob cache..." );
+
+			Godot.Collections.Array<Node> children = _navRegion.GetChildren();
+			for ( int i = 0; i < children.Count; i++ ) {
+				_navRegion.RemoveChild( children[ i ] );
+				children[ i ].QueueFree();
 			}
-			_mobCache.Clear();
 			_spawnTimer.Stop();
+
+			_waveNumber = args.NewWave;
 		}
 	};
 };

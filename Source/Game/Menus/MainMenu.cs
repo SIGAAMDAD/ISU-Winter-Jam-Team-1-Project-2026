@@ -1,7 +1,6 @@
 using System;
 using Game.Systems;
 using Godot;
-using Steamworks;
 
 namespace Game.Menus {
 	/*

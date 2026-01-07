@@ -61,7 +61,7 @@ namespace Game.Mobs {
 			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
 			waveCompleted.Subscribe( this, OnWaveCompleted );
 
-			var waveStarted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveStarted ) );
+			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
 			waveStarted.Subscribe( this, OnWaveStarted );
 
 			_spawnTimer = GetNode<Timer>( "SpawnTimer" );
@@ -93,7 +93,11 @@ namespace Game.Mobs {
 		OnWaveStarted
 		===============
 		*/
-		private void OnWaveStarted( in WaveChangedEventArgs args ) {
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnWaveStarted( in EmptyEventArgs args ) {
 			_spawnTimer.Start();
 		}
 

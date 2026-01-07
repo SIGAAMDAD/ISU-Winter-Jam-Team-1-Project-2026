@@ -38,7 +38,7 @@ namespace Game.Systems {
 			get {
 				// create the instance if we haven't already
 				lock ( _instanceLock ) {
-					_instance ??= new GameStateManager();
+					_instance ??= ( (Node)Engine.GetMainLoop().Get( SceneTree.PropertyName.Root ) ).GetNode<GameStateManager>( "/root/GameStateManager" );
 					return _instance;
 				}
 			}
@@ -50,13 +50,14 @@ namespace Game.Systems {
 		/// <remarks>
 		/// The <see cref="GameStateChanged"/> event is fire whenever this variable is changed
 		/// </remarks>
+		[Export]
 		public GameState GameState { get; private set; } = GameState.TitleScreen;
 
 		public static IGameEvent<GameStateChangedEventArgs> GameStateChanged => Instance._stateChanged;
-		private readonly IGameEvent<GameStateChangedEventArgs> _stateChanged;
+		private IGameEvent<GameStateChangedEventArgs> _stateChanged;
 
-		private readonly ILoggerCategory _category;
-		private readonly ILoggerService _logger;
+		private ILoggerCategory _category;
+		private ILoggerService _logger;
 
 		/// <summary>
 		/// The internal singleton handle.
@@ -72,7 +73,9 @@ namespace Game.Systems {
 		/// <summary>
 		/// 
 		/// </summary>
-		private GameStateManager() {
+		public override void _Ready() {
+			base._Ready();
+
 			Name = nameof( GameStateManager );
 
 			var serviceLocator = ( (Node)Engine.GetMainLoop().Get( SceneTree.PropertyName.Root ) ).GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator;
@@ -217,14 +220,14 @@ namespace Game.Systems {
 		/// </remarks>
 		/// <param name="state">The new <see cref="GameState"/>, should ideally be different from the current gamestate.</param>
 		/// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="state"/> isn't a valid <see cref="GameState"/>.</exception>
-		private void SetGameState( GameState state ) {
+		public void SetGameState( GameState state ) {
 			if ( state < GameState.TitleScreen || state >= GameState.Count ) {
-				throw new ArgumentOutOfRangeException( $"Provided state '{Enum.GetName( typeof( GameState ), state )}' is not a valid GameState" );
+				throw new ArgumentOutOfRangeException( $"Provided state '{state}' is not a valid GameState" );
 			} else if ( GameState == state ) {
 				_logger.PrintWarning( in _category, $"GameStateManager.SetGameState: same game state." );
 			}
 
-			_logger.PrintLine( in _category, $"GameStateManager.SetState: changing state to '{Enum.GetName( typeof( GameState ), state )}'..." );
+			_logger.PrintLine( in _category, $"GameStateManager.SetState: changing state to '{state}' from '{GameState}..." );
 
 			// notify the system
 			TriggerGameStateChange( state );

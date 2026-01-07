@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://b1luavxt1vbwu"]
+[gd_scene load_steps=4 format=3 uid="uid://b1luavxt1vbwu"]
 
-[ext_resource type="Script" uid="uid://dneewf3h02j1r" path="res://Source/Menus/PauseMenu.cs" id="1_eluw3"]
+[ext_resource type="Script" uid="uid://dneewf3h02j1r" path="res://Source/Game/Menus/PauseMenu.cs" id="1_eluw3"]
 [ext_resource type="Shader" uid="uid://clpmiq0rf1yoh" path="res://Assets/Shaders/GaussianBlur.gdshader" id="2_2ffs4"]
-[ext_resource type="Texture2D" uid="uid://duua4mt3rv2nd" path="res://icon.svg" id="2_d5nev"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d5nev"]
 shader = ExtResource("2_2ffs4")
@@ -11,14 +10,6 @@ shader_parameter/blur_amount = 0.3
 
 [node name="PauseMenu" type="CanvasLayer"]
 script = ExtResource("1_eluw3")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(407, 218)
-texture = ExtResource("2_d5nev")
-
-[node name="Sprite2D2" type="Sprite2D" parent="."]
-position = Vector2(1066, 304)
-texture = ExtResource("2_d5nev")
 
 [node name="Blur" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_d5nev")

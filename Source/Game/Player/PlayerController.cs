@@ -40,7 +40,7 @@ namespace Game.Player {
 		private readonly PlayerAnimator _animator;
 		private readonly Timer _weaponCooldown;
 
-		private FlagBits _flags;
+		private FlagBits _flags = FlagBits.CanAttack | FlagBits.CanMove | FlagBits.WaveActive;
 		private Vector2 _frameVelocity = Vector2.Zero;
 
 		public IGameEvent<EmptyEventArgs> UseWeapon => _useWeapon;
@@ -66,7 +66,7 @@ namespace Game.Player {
 			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
 			waveCompleted.Subscribe( this, OnWaveCompleted );
 
-			var waveStarted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveStarted ) );
+			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
 			waveStarted.Subscribe( this, OnWaveStarted );
 
 			_weaponCooldown = new Timer() {
@@ -153,7 +153,7 @@ namespace Game.Player {
 		OnWaveStarted
 		===============
 		*/
-		private void OnWaveStarted( in WaveChangedEventArgs args ) {
+		private void OnWaveStarted( in EmptyEventArgs args ) {
 			_flags |= FlagBits.CanAttack | FlagBits.CanMove | FlagBits.WaveActive;
 		}
 

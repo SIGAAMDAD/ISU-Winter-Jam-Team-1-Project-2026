@@ -1,6 +1,8 @@
+using Game.Player.Upgrades;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
+using Nomad.Core.Logger;
 
 namespace Game.Common {
 	/*
@@ -13,18 +15,21 @@ namespace Game.Common {
 	/// <summary>
 	/// 
 	/// </summary>
-	
+
 	public partial class WaveManager : Node {
 		public int CurrentWave => _currentWave;
 		private int _currentWave = 1;
 
 		private Timer _waveTimer;
 
-		public IGameEvent<WaveChangedEventArgs> WaveStarted => _waveStarted;
-		private IGameEvent<WaveChangedEventArgs> _waveStarted;
+		private ILoggerCategory _category;
+		private ILoggerService _logger;
 
 		public IGameEvent<WaveChangedEventArgs> WaveCompleted => _waveCompleted;
 		private IGameEvent<WaveChangedEventArgs> _waveCompleted;
+
+		public IGameEvent<EmptyEventArgs> WaveStarted => _waveStarted;
+		private IGameEvent<EmptyEventArgs> _waveStarted;
 
 		public IGameEvent<WaveTimeChangedEventArgs> WaveTimeChanged => _waveTimeChanged;
 		private IGameEvent<WaveTimeChangedEventArgs> _waveTimeChanged;
@@ -39,10 +44,30 @@ namespace Game.Common {
 		/// </summary>
 		private void OnWaveTimerTimeout() {
 			_waveTimer.Stop();
-			
+
 			int oldWave = _currentWave;
 			_currentWave++;
 			_waveCompleted.Publish( new WaveChangedEventArgs( oldWave, _currentWave ) );
+			SetProcess( false );
+
+			_logger.PrintLine( $"Wave completed, showing upgrade menu..." );
+		}
+
+		/*
+		===============
+		OnUpgradeMenuHide
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnUpgradeMenuHide( in EmptyEventArgs args ) {
+			_waveTimer.Start();
+			_waveStarted.Publish( new EmptyEventArgs() );
+			SetProcess( true );
+
+			_logger.PrintLine( $"Upgrade shopping finished, resuming game loop & spawning new wave..." );
 		}
 
 		/*
@@ -57,15 +82,20 @@ namespace Game.Common {
 			base._Ready();
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
-			_waveStarted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveStarted ) );
 			_waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveCompleted ) );
+			_waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveStarted ) );
 			_waveTimeChanged = eventFactory.GetEvent<WaveTimeChangedEventArgs>( nameof( WaveTimeChanged ) );
 
 			_waveTimer = GetNode<Timer>( "WaveTimer" );
 			_waveTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnWaveTimerTimeout ) );
 
-			// start the wave
-			_waveStarted.Publish( new WaveChangedEventArgs( _currentWave, _currentWave ) );
+			_waveStarted.Publish( new EmptyEventArgs() );
+
+			var shoppingFinished = eventFactory.GetEvent<EmptyEventArgs>( nameof( UpgradeManager.ShoppingFinished ) );
+			shoppingFinished.Subscribe( this, OnUpgradeMenuHide );
+
+			_logger = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<ILoggerService>();
+			_category = _logger.CreateCategory( nameof( WaveManager ), LogLevel.Info, true );
 		}
 
 		/*
