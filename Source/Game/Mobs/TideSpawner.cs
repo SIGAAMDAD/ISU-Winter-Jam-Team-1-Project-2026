@@ -28,7 +28,6 @@ namespace Game.Mobs {
 		private int _spawnMaxX;
 		private int _spawnMaxY;
 
-		private float _spawnInterval = 4.0f;
 		private Timer _spawnTimer;
 
 		private readonly ICacheEntry<PackedScene, FilePath> _tidePrefab = SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Source/Game/Mobs/Wave.tscn" ) );

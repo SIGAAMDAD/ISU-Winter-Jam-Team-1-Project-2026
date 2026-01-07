@@ -17,6 +17,7 @@ namespace Game.Player.Weapons {
 	public partial class Projectile : Sprite2D {
 		public float Damage = 10.0f;
 		public float Speed = 30.0f;
+		public float Piercing = 0.0f;
 		public PlayerDirection Direction = PlayerDirection.North;
 
 		private Vector2 _frameVelocity = Vector2.Zero;
@@ -36,6 +37,9 @@ namespace Game.Player.Weapons {
 		private void OnBodyHit( Rid bodyRid, Node2D body, int bodyShapeIndex, int localShapeIndex ) {
 			if ( body is MobBase mob ) {
 				mob.Damage( Damage );
+
+				// TODO: implement armor piercing
+				QueueFree();
 			}
 		}
 

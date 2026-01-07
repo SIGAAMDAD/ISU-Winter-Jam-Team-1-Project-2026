@@ -80,7 +80,7 @@ script = ExtResource("6_623ao")
 _worldBounds = NodePath("../CanvasLayer/WorldArea/CollisionShape2D")
 
 [node name="SpawnTimer" type="Timer" parent="TideSpawner"]
-wait_time = 8.5
+wait_time = 4.5
 autostart = true
 
 [node name="WaveManager" type="Node" parent="."]
@@ -100,7 +100,7 @@ _worldBounds = NodePath("../CanvasLayer/WorldArea/CollisionShape2D")
 _enemyTypes = Array[PackedScene]([ExtResource("12_6tp7i"), ExtResource("11_yrfwb"), ExtResource("13_6tp7i"), ExtResource("14_r0y47")])
 
 [node name="SpawnInterval" type="Timer" parent="MobSpawner"]
-wait_time = 10.0
+wait_time = 3.5
 autostart = true
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="MobSpawner"]

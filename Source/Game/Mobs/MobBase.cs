@@ -103,7 +103,7 @@ namespace Game.Mobs {
 		/// 
 		/// </summary>
 		private void OnTargetReached() {
-			if ( _health <= 0.0f ) {
+			if ( ( _flags & FlagBits.Dead ) != 0 ) {
 				return;
 			}
 		}
