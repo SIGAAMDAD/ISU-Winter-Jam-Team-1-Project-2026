@@ -52,6 +52,12 @@ namespace Game.Systems {
 		/// </remarks>
 		[Export]
 		public GameState GameState { get; private set; } = GameState.TitleScreen;
+#if DEBUG
+		[Export]
+		private string _gameState;
+		[Export]
+		private string _prevGameState;
+#endif
 
 		public static IGameEvent<GameStateChangedEventArgs> GameStateChanged => Instance._stateChanged;
 		private IGameEvent<GameStateChangedEventArgs> _stateChanged;
@@ -85,6 +91,10 @@ namespace Game.Systems {
 
 			_logger = serviceLocator.GetService<ILoggerService>();
 			_category = _logger.CreateCategory( nameof( GameStateManager ), LogLevel.Info, true );
+#if DEBUG
+			_gameState = Enum.GetName( typeof( GameState ), GameState );
+			_prevGameState = Enum.GetName( typeof( GameState ), GameState );
+#endif
 		}
 
 		/*
@@ -254,6 +264,11 @@ namespace Game.Systems {
 			// establish the new state BEFORE we notify the rest of the system to avoid state corruption
 			GameState oldState = GameState;
 			GameState = newState;
+
+#if DEBUG
+			_prevGameState = Enum.GetName( typeof( GameState ), oldState );
+			_gameState = Enum.GetName( typeof( GameState ), GameState );
+#endif
 
 			// notify the system now that we've established the new state
 			_stateChanged.Publish( new GameStateChangedEventArgs( oldState, newState ) );

@@ -19,9 +19,6 @@ namespace Game.Player.Upgrades {
 		public IGameEvent<UpgradeBoughtEventArgs> UpgradeBought => _upgradeBought;
 		private IGameEvent<UpgradeBoughtEventArgs> _upgradeBought;
 
-		public IGameEvent<EmptyEventArgs> ShoppingFinished => _shoppingFinished;
-		private IGameEvent<EmptyEventArgs> _shoppingFinished;
-
 		private readonly Dictionary<UpgradeType, int> _upgrades = new();
 		
 		/*
@@ -37,7 +34,6 @@ namespace Game.Player.Upgrades {
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeBought ) );
-			_shoppingFinished = eventFactory.GetEvent<EmptyEventArgs>( nameof( ShoppingFinished ) );
 		}
 		
 		/*

@@ -1,4 +1,5 @@
 using Game.Common;
+using Game.Player;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
@@ -37,7 +38,7 @@ namespace Game.Mobs {
 
 		protected NavigationAgent2D _navigationAgent;
 		protected AnimatedSprite2D _animation;
-		private EntityManager _entityManager;
+		protected PlayerManager _target;
 
 		protected FlagBits _flags;
 		protected int _mobId;
@@ -134,6 +135,7 @@ namespace Game.Mobs {
 			base._Ready();
 
 			_mobId = GetPath().GetHashCode();
+			_target = GetNode<PlayerManager>( "/root/World/Player" );
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_takeDamage = eventFactory.GetEvent<MobTakeDamageEventArgs>( nameof( TakeDamage ) );
@@ -146,7 +148,6 @@ namespace Game.Mobs {
 			_navigationAgent.Connect( NavigationAgent2D.SignalName.TargetReached, Callable.From( OnTargetReached ) );
 
 			_animation = GetNode<AnimatedSprite2D>( "AnimatedSprite2D" );
-			_entityManager = GetNode<EntityManager>( "/root/World/EntityManager" );
 
 			_damageEffectTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnResetColor ) );
 			AddChild( _damageEffectTimer );
@@ -169,7 +170,7 @@ namespace Game.Mobs {
 				return;
 			}
 
-			_navigationAgent.TargetPosition = _entityManager.TargetPosition;
+			_navigationAgent.TargetPosition = _target.GlobalPosition;
 		}
 
 		/*
@@ -188,6 +189,20 @@ namespace Game.Mobs {
 			EntityUtils.CalcSpeed( ref _frameVelocity, _speed, (float)delta, position.DirectionTo( _navigationAgent.TargetPosition ) );
 			position += _frameVelocity;
 			SetDeferred( PropertyName.GlobalPosition, position );
+		}
+
+		/*
+		===============
+		_ExitTree
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		public override void _ExitTree() {
+			base._ExitTree();
+
+			_target = null;
 		}
 	};
 };

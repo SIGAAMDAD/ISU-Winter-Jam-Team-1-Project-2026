@@ -32,5 +32,16 @@ namespace Game.Player.UserInterface {
 			_healthBar = new HealthBar( GetNode<ProgressBar>( "HealthBar" ), eventFactory );
 			_waveUI = new WaveUI( GetNode<VBoxContainer>( "WaveDataContainer" ), eventFactory );
 		}
+
+		/*
+		===============
+		_Process
+		===============
+		*/
+		public override void _Process( double delta ) {
+			base._Process( delta );
+
+			_waveUI.WaveTimer.Update();
+		}
 	};
 };

@@ -3,7 +3,6 @@ using Game.Player.Upgrades;
 using Game.Systems;
 using Nomad.Core.Events;
 using Game.Player;
-using Game.Common;
 
 namespace Game.Menus {
 	/*
@@ -16,7 +15,7 @@ namespace Game.Menus {
 	/// <summary>
 	/// 
 	/// </summary>
-	
+
 	public partial class UpgradeMenu : Control {
 		[Export]
 		private UpgradeManager _upgradeManager;
@@ -40,12 +39,11 @@ namespace Game.Menus {
 		/// </summary>
 		public override void _Ready() {
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
-			
+
 			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
-			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
-			waveCompleted.Subscribe( this, OnShow );
+			GameStateManager.GameStateChanged.Subscribe( this, OnGameStateChanged );
 
 			HookButtons();
 			HookLabels();
@@ -68,15 +66,21 @@ namespace Game.Menus {
 
 		/*
 		===============
-		OnShow
+		OnGameStateChanged
 		===============
 		*/
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="args"></param>
-		private void OnShow( in WaveChangedEventArgs args ) {
-			Visible = true;
+		private void OnGameStateChanged( in GameStateChangedEventArgs args ) {
+			if ( args.NewState == GameState.UpgradeMenu && args.OldState == GameState.Level ) {
+				Visible = true;
+				ProcessMode = ProcessModeEnum.Pausable;
+			} else if ( args.NewState == GameState.Level && args.OldState == GameState.UpgradeMenu ) {
+				Visible = false;
+				ProcessMode = ProcessModeEnum.Disabled;
+			}
 		}
 
 		/*
@@ -88,8 +92,10 @@ namespace Game.Menus {
 		/// 
 		/// </summary>
 		private void OnFinished() {
-			_upgradeManager.ShoppingFinished.Publish( new EmptyEventArgs() );
-			Visible = false;
+			if ( GameStateManager.Instance.GameState == GameState.UpgradeMenu ) {
+				GD.Print( "Hiding upgrade menu..." );
+				GameStateManager.Instance.SetGameState( GameState.Level );
+			}
 		}
 
 		/*
@@ -106,6 +112,11 @@ namespace Game.Menus {
 			_moneyLabel = GetNode<Label>( "%ExpLabel" );
 		}
 
+		/*
+		===============
+		HookButtons
+		===============
+		*/
 		private void HookButtons() {
 			Button finishButton = GetNode<Button>( "%FinishButton" );
 			finishButton.Connect( Button.SignalName.Pressed, Callable.From( OnFinished ) );
@@ -126,9 +137,14 @@ namespace Game.Menus {
 			attackSpeedButton.Connect( Button.SignalName.Pressed, Callable.From( OnAttackSpeedUpgradePurchased ) );
 		}
 
+		/*
+		===============
+		OnUpgradePurchased
+		===============
+		*/
 		private void OnUpgradePurchased( UpgradeType type ) {
 			bool isUpgradeOwned = _upgradeManager.UpgradeIsOwned( type );
-			
+
 			if ( _moneyAmount > 0.0f && !isUpgradeOwned ) {
 				_moneyAmount--;
 				_upgradeManager.BuyUpgrade( type );
@@ -141,26 +157,51 @@ namespace Game.Menus {
 			_moneyLabel.Text = $"MONEY: {_moneyAmount}";
 		}
 
+		/*
+		===============
+		OnHealthUpgradePurchased
+		===============
+		*/
 		private void OnHealthUpgradePurchased() {
 			OnUpgradePurchased( UpgradeType.MaxHealth );
 			_healthLabel.Text = $"Currently max health is level {_upgradeManager.GetUpgradeTier( UpgradeType.MaxHealth )}";
 		}
 
+		/*
+		===============
+		OnSpeedUpgradePurchase
+		===============
+		*/
 		private void OnSpeedUpgradePurchase() {
 			OnUpgradePurchased( UpgradeType.Speed );
 			_speedLabel.Text = $"Currently speed is level {_upgradeManager.GetUpgradeTier( UpgradeType.Speed )}";
 		}
 
+		/*
+		===============
+		OnArmorUpgradePurchased
+		===============
+		*/
 		private void OnArmorUpgradePurchased() {
 			OnUpgradePurchased( UpgradeType.Armor );
 			_armorLabel.Text = $"Currently armor is level {_upgradeManager.GetUpgradeTier( UpgradeType.Armor )}";
 		}
 
+		/*
+		===============
+		OnAttackDamageUpgradePurchased
+		===============
+		*/
 		private void OnAttackDamageUpgradePurchased() {
 			OnUpgradePurchased( UpgradeType.AttackDamage );
 			_attackDamageLabel.Text = $"Currently attack power is level {_upgradeManager.GetUpgradeTier( UpgradeType.AttackDamage )}";
 		}
-		
+
+		/*
+		===============
+		OnAttackSpeedUpgradePurchased
+		===============
+		*/
 		private void OnAttackSpeedUpgradePurchased() {
 			OnUpgradePurchased( UpgradeType.AttackSpeed );
 			_attackSpeedLabel.Text = "currently attack speed is level " + _upgradeManager.GetUpgradeTier( UpgradeType.AttackSpeed );

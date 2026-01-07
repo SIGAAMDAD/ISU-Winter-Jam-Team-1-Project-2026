@@ -21,6 +21,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="WaveCounter" type="Label" parent="WaveDataContainer"]
 layout_mode = 2
+text = "WAVE 1"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 

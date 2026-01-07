@@ -18,7 +18,9 @@ namespace Game.Player.UserInterface {
 	
 	public sealed class WaveUI {
 		private readonly WaveCounter _waveCounter;
-		private readonly Label _waveTimer;
+
+		public WaveTimer WaveTimer => _waveTimer;
+		private readonly WaveTimer _waveTimer;
 
 		/*
 		===============
@@ -32,23 +34,7 @@ namespace Game.Player.UserInterface {
 		/// <param name="eventFactory"></param>
 		public WaveUI( VBoxContainer container, IGameEventRegistryService eventFactory ) {
 			_waveCounter = new WaveCounter( container.GetNode<Label>( "WaveCounter" ), eventFactory );
-			_waveTimer = container.GetNode<Label>( "WaveTimer" );
-
-			var waveTimeChanged = eventFactory.GetEvent<WaveTimeChangedEventArgs>( nameof( WaveManager.WaveTimeChanged ) );
-			waveTimeChanged.Subscribe( this, OnWaveTimeChanged );
-		}
-
-		/*
-		===============
-		OnWaveTimeChanged
-		===============
-		*/
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="args"></param>
-		private void OnWaveTimeChanged( in WaveTimeChangedEventArgs args ) {
-			_waveTimer.Text = ( (int)args.Value ).ToString();
+			_waveTimer = new WaveTimer( container.GetNode<Label>( "WaveTimer" ), eventFactory );
 		}
 	};
 };

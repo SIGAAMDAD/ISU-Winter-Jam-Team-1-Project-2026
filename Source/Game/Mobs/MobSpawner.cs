@@ -64,10 +64,12 @@ namespace Game.Mobs {
 				throw new InvalidOperationException( "WorldBounds contain a RectangleShape2D!" );
 			}
 
-			_logger = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<ILoggerService>();
+			var serviceLocator = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator;
+
+			_logger = serviceLocator.GetService<ILoggerService>();
 			_category = _logger.CreateCategory( nameof( MobSpawner ), LogLevel.Info, true );
 
-			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
+			var eventFactory = serviceLocator.GetService<IGameEventRegistryService>();
 
 			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
 			waveCompleted.Subscribe( this, OnWaveCompleted );

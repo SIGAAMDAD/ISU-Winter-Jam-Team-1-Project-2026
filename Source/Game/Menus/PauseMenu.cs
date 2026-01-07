@@ -108,8 +108,12 @@ namespace Game.Menus {
 		public override void _UnhandledInput( InputEvent @event ) {
 			base._UnhandledInput( @event );
 
-			if ( Input.IsActionJustPressed( "pause" ) && GameStateManager.Instance.GameState != GameState.Paused ) {
-				GameStateManager.Instance.SetGameState( GameState.Paused );
+			if ( Input.IsActionJustPressed( "pause" ) ) {
+				if ( GameStateManager.Instance.GameState == GameState.Paused ) {
+					GameStateManager.Instance.SetGameState( _prevState );
+				} else {
+					GameStateManager.Instance.SetGameState( GameState.Paused );
+				}
 			}
 		}
 	};
