@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "dgSpecHash": "emi/XcQ+dRg=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\tryst\\Documents\\GitHub\\ISU-Winter-Jam-Team-1-Project-2026\\ISU Winter Jam team 1 Project 2026.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\tryst\\.nuget\\packages\\godot.net.sdk\\4.5.1\\godot.net.sdk.4.5.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\godot.sourcegenerators\\4.5.1\\godot.sourcegenerators.4.5.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\godotsharp\\4.5.1\\godotsharp.4.5.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\godotsharpeditor\\4.5.1\\godotsharpeditor.4.5.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\microsoft.extensions.configuration\\10.0.1\\microsoft.extensions.configuration.10.0.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\10.0.1\\microsoft.extensions.configuration.abstractions.10.0.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\microsoft.extensions.configuration.fileextensions\\10.0.1\\microsoft.extensions.configuration.fileextensions.10.0.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\microsoft.extensions.configuration.ini\\10.0.1\\microsoft.extensions.configuration.ini.10.0.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\10.0.0\\microsoft.extensions.dependencyinjection.10.0.0.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.0\\microsoft.extensions.dependencyinjection.abstractions.10.0.0.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\10.0.1\\microsoft.extensions.fileproviders.abstractions.10.0.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\microsoft.extensions.fileproviders.physical\\10.0.1\\microsoft.extensions.fileproviders.physical.10.0.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\microsoft.extensions.filesystemglobbing\\10.0.1\\microsoft.extensions.filesystemglobbing.10.0.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.1\\microsoft.extensions.primitives.10.0.1.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\steamworks.net\\2024.8.0\\steamworks.net.2024.8.0.nupkg.sha512",
+    "C:\\Users\\tryst\\.nuget\\packages\\system.io.hashing\\10.0.1\\system.io.hashing.10.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

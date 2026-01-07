@@ -1,0 +1,121 @@
+[gd_scene load_steps=2 format=3 uid="uid://doe5r671rgsbl"]
+
+[ext_resource type="Script" uid="uid://c2fp2q1uwoxd3" path="res://Source/Game/Menus/UpgradeMenu.cs" id="1_x4tbj"]
+
+[node name="UpgradeMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_x4tbj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 93.0
+offset_right = 441.0
+offset_bottom = 618.0
+alignment = 1
+
+[node name="UpgradeSpeed" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "SPEED"
+
+[node name="SpeedLabel" type="Label" parent="VBoxContainer/UpgradeSpeed"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 433.0
+offset_top = 18.0
+offset_right = 473.0
+offset_bottom = 41.0
+text = "Currently speed is X"
+
+[node name="UpgradeAttack" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "ATTACK POWER"
+
+[node name="AttackLabel" type="Label" parent="VBoxContainer/UpgradeAttack"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 433.0
+offset_top = 18.0
+offset_right = 473.0
+offset_bottom = 41.0
+text = "Currently attack is X"
+
+[node name="UpgradeAttackSpeed" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "ATTACK SPEED"
+
+[node name="AttackSpeedLabel" type="Label" parent="VBoxContainer/UpgradeAttackSpeed"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 433.0
+offset_top = 18.0
+offset_right = 473.0
+offset_bottom = 41.0
+text = "Currently attack speed is X"
+
+[node name="UpgradeDefense" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "ARMOR"
+
+[node name="DefenseLabel" type="Label" parent="VBoxContainer/UpgradeDefense"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 433.0
+offset_top = 18.0
+offset_right = 473.0
+offset_bottom = 41.0
+text = "Currently defense is X"
+
+[node name="UpgradeHealth" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "MAX HEALTH"
+
+[node name="HealthLabel" type="Label" parent="VBoxContainer/UpgradeHealth"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 433.0
+offset_top = 18.0
+offset_right = 473.0
+offset_bottom = 41.0
+text = "Currently max health is X"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 472.0
+offset_top = 36.0
+offset_right = 787.0
+offset_bottom = 110.0
+theme_override_font_sizes/font_size = 48
+text = "UPGRADES"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ExpLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_top = 642.0
+offset_right = 448.0
+offset_bottom = 676.0
+theme_override_font_sizes/font_size = 24
+text = "Upgrade Bucks Available: X"

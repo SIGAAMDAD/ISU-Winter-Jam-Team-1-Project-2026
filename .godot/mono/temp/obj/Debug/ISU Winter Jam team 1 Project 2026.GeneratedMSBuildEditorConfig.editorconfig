@@ -1,0 +1,22 @@
+is_global = true
+build_property.GodotDisabledSourceGenerators = 
+build_property.GodotProjectDir = C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\
+build_property.GodotProjectDirBase64 = QzpcVXNlcnNcdHJ5c3RcRG9jdW1lbnRzXEdpdEh1YlxJU1UtV2ludGVyLUphbS1UZWFtLTEtUHJvamVjdC0yMDI2XA==
+build_property.GodotSourceGenerators = 
+build_property.IsGodotToolsProject = 
+build_property.TargetFramework = net10.0
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v10.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = ISU_Winter_Jam_team_1_Project_2026
+build_property.ProjectDir = C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.EffectiveAnalysisLevelStyle = 10.0
+build_property.EnableCodeStyleSeverity = 

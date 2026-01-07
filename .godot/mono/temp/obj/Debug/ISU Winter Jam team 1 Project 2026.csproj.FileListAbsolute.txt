@@ -1,0 +1,50 @@
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\ISU Winter Jam team 1 Project 2026.deps.json
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\ISU Winter Jam team 1 Project 2026.runtimeconfig.json
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\ISU Winter Jam team 1 Project 2026.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\ISU Winter Jam team 1 Project 2026.pdb
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\GodotSharp.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\GodotSharpEditor.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Microsoft.Extensions.Configuration.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Microsoft.Extensions.Configuration.FileExtensions.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Microsoft.Extensions.Configuration.Ini.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Microsoft.Extensions.FileProviders.Physical.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Microsoft.Extensions.FileSystemGlobbing.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Microsoft.Extensions.Primitives.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Steamworks.NET.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\System.IO.Hashing.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\runtimes\linux-x64\lib\netstandard2.1\Steamworks.NET.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\runtimes\linux-x86\lib\netstandard2.1\Steamworks.NET.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\runtimes\osx-x64\lib\netstandard2.1\Steamworks.NET.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\runtimes\osx-x86\lib\netstandard2.1\Steamworks.NET.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\runtimes\win-x64\lib\netstandard2.1\Steamworks.NET.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\runtimes\win-x86\lib\netstandard2.1\Steamworks.NET.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.Console.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.Core.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.CVars.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.Events.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.Logger.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.Rendering.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.ResourceCache.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.Core.pdb
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.Logger.pdb
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.CVars.pdb
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.Events.pdb
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.Console.pdb
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.ResourceCache.pdb
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\bin\Debug\Nomad.Rendering.pdb
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\ISU Winter Jam team 1 Project 2026.csproj.AssemblyReference.cache
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\ISU Winter Jam team 1 Project 2026.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\ISU Winter Jam team 1 Project 2026.AssemblyInfoInputs.cache
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\ISU Winter Jam team 1 Project 2026.AssemblyInfo.cs
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\ISU Winter Jam team 1 Project 2026.csproj.CoreCompileInputs.cache
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\ISU Winter Jam team 1 Project 2026.sourcelink.json
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\ISU Wint.58B5116D.Up2Date
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\ISU Winter Jam team 1 Project 2026.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\refint\ISU Winter Jam team 1 Project 2026.dll
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\ISU Winter Jam team 1 Project 2026.pdb
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\ISU Winter Jam team 1 Project 2026.genruntimeconfig.cache
+C:\Users\tryst\Documents\GitHub\ISU-Winter-Jam-Team-1-Project-2026\.godot\mono\temp\obj\Debug\ref\ISU Winter Jam team 1 Project 2026.dll
