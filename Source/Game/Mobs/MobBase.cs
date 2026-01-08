@@ -4,7 +4,6 @@ using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
 using System;
-using System.Collections;
 
 namespace Game.Mobs {
 	/*
@@ -48,7 +47,7 @@ namespace Game.Mobs {
 			OneShot = true
 		};
 
-		public IGameEvent<MobDieEventArgs> Die => _die;
+		public IGameEvent<MobDieEventArgs> MobDie => _die;
 		private IGameEvent<MobDieEventArgs> _die;
 
 		public IGameEvent<MobTakeDamageEventArgs> TakeDamage => _takeDamage;
@@ -71,9 +70,6 @@ namespace Game.Mobs {
 			_health -= amount;
 			if ( _health <= 0.0f ) {
 				_flags |= FlagBits.Dead;
-				_die.Publish( new MobDieEventArgs( _mobId ) );
-				QueueFree();
-				return;
 			}
 			_animation.SpeedScale = 0.0f;
 			_animation.Modulate = Colors.Red;
@@ -94,6 +90,10 @@ namespace Game.Mobs {
 			_animation.Modulate = Colors.White;
 			_animation.SpeedScale = 1.0f;
 			_flags &= ~FlagBits.Hurt;
+			if ( ( _flags & FlagBits.Dead ) != 0 ) {
+				_die.Publish( new MobDieEventArgs( _mobId, _xpKillAmount ) );
+				QueueFree();
+			}
 		}
 
 		/*
@@ -139,7 +139,7 @@ namespace Game.Mobs {
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_takeDamage = eventFactory.GetEvent<MobTakeDamageEventArgs>( nameof( TakeDamage ) );
-			_die = eventFactory.GetEvent<MobDieEventArgs>( nameof( Die ) );
+			_die = eventFactory.GetEvent<MobDieEventArgs>( nameof( MobDie ) );
 
 			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
 			waveCompleted.Subscribe( this, OnWaveCompleted );

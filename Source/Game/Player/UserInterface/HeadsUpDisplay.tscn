@@ -1,6 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://ci45mqkirclcs"]
+[gd_scene load_steps=12 format=3 uid="uid://ci45mqkirclcs"]
 
 [ext_resource type="Script" uid="uid://c1oaidojbjp3t" path="res://Source/Game/Player/UserInterface/HeadsUpDisplay.cs" id="1_ggood"]
+[ext_resource type="PackedScene" uid="uid://bp7tu6bkhlxep" path="res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeMenu.tscn" id="2_qifin"]
+[ext_resource type="PackedScene" uid="uid://dl7rchk4o22yp" path="res://Source/Game/Player/UserInterface/StatValueContainer.tscn" id="3_qa41n"]
+[ext_resource type="Texture2D" uid="uid://diro2587u143n" path="res://Assets/Textures/SpriteSheets/MaxHealthIcon.png" id="4_032hy"]
+[ext_resource type="Texture2D" uid="uid://dkcl0jyoc1itk" path="res://Assets/Textures/SpriteSheets/HealthRegenIcon.png" id="5_mamce"]
+[ext_resource type="Texture2D" uid="uid://dt7f7l3gi48kk" path="res://Assets/Textures/SpriteSheets/Armorcon.png" id="6_mamce"]
+[ext_resource type="Texture2D" uid="uid://bc5yt4a4v7okr" path="res://Assets/Textures/SpriteSheets/SpeedIcon.png" id="7_ibbdo"]
+[ext_resource type="Texture2D" uid="uid://ddf2uvfod1oef" path="res://Assets/Textures/SpriteSheets/AttackDamageIcon.png" id="8_xu540"]
+[ext_resource type="Texture2D" uid="uid://bsbi8hhbtvn07" path="res://Assets/Textures/SpriteSheets/AttackSpeedIcon.png" id="9_xu540"]
+[ext_resource type="Texture2D" uid="uid://3xf0730eaxae" path="res://Assets/Textures/Coin.png" id="10_mub6a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ggood"]
 bg_color = Color(1, 0, 0, 1)
@@ -29,13 +38,80 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 2
 horizontal_alignment = 1
 
-[node name="HealthBar" type="ProgressBar" parent="."]
-custom_minimum_size = Vector2(120, 20)
+[node name="UpgradeMenu" parent="." instance=ExtResource("2_qifin")]
+visible = false
+
+[node name="MainHUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="StatsContainer" type="MarginContainer" parent="MainHUD"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.157
-anchor_bottom = 0.051000003
-offset_right = 0.039993286
-offset_bottom = 0.27999878
+anchor_left = 0.87500006
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.00012207031
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="StatsList" type="VBoxContainer" parent="MainHUD/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MaxHealth" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+layout_mode = 2
+_icon = ExtResource("4_032hy")
+_statName = "MaxHealth"
+
+[node name="HealthRegen" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+layout_mode = 2
+_icon = ExtResource("5_mamce")
+_statName = "HealthRegen"
+
+[node name="Armor" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+layout_mode = 2
+_icon = ExtResource("6_mamce")
+_statName = "Armor"
+
+[node name="Speed" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+layout_mode = 2
+_icon = ExtResource("7_ibbdo")
+_statName = "Speed"
+
+[node name="AttackDamage" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+layout_mode = 2
+_icon = ExtResource("8_xu540")
+_statName = "AttackDamage"
+
+[node name="AttackSpeed" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+layout_mode = 2
+_icon = ExtResource("9_xu540")
+_statName = "AttackSpeed"
+
+[node name="ValuesContainer" type="VBoxContainer" parent="MainHUD"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.27915627
+anchor_bottom = 0.12194445
+offset_right = -0.32000732
+offset_bottom = 0.19999695
+metadata/_edit_use_anchors_ = true
+
+[node name="HealthBar" type="ProgressBar" parent="MainHUD/ValuesContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 20)
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_ggood")
@@ -43,7 +119,7 @@ value = 100.0
 show_percentage = false
 metadata/_edit_use_anchors_ = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HealthBar"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainHUD/ValuesContainer/HealthBar"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.485
@@ -58,16 +134,29 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="CurrentHealth" type="Label" parent="HealthBar/HBoxContainer"]
+[node name="CurrentHealth" type="Label" parent="MainHUD/ValuesContainer/HealthBar/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "100"
 horizontal_alignment = 1
 
-[node name="MaxHealth" type="Label" parent="HealthBar/HBoxContainer"]
+[node name="MaxHealth" type="Label" parent="MainHUD/ValuesContainer/HealthBar/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "/100"
 horizontal_alignment = 1
+
+[node name="MoneyContainer" type="HBoxContainer" parent="MainHUD/ValuesContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainHUD/ValuesContainer/MoneyContainer"]
+layout_mode = 2
+texture = ExtResource("10_mub6a")
+
+[node name="MoneyLabel" type="Label" parent="MainHUD/ValuesContainer/MoneyContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3

@@ -5,6 +5,7 @@ namespace Game.Player.Upgrades {
 		AttackSpeed,
 		Armor,
 		MaxHealth,
+		HealthRegen,
 		
 		Count
 	};

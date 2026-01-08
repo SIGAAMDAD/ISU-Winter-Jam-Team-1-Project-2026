@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bqu3afytkq6mj"
-path="res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.ctex"
+path.bptc="res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.bptc.ctex"
+path.astc="res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Assets/Textures/SpriteSheets/Shark2.png"
-dest_files=["res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.ctex"]
+dest_files=["res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.bptc.ctex", "res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

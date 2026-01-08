@@ -53,6 +53,7 @@ namespace Game.Menus {
 		///
 		/// </summary>
 		private void OnQuitGame() {
+			GetTree().Paused = false;
 			GameStateManager.Instance.SetGameState( GameState.TitleScreen );
 		}
 
@@ -69,10 +70,12 @@ namespace Game.Menus {
 			if ( args.NewState == GameState.Paused ) {
 				_prevState = args.OldState;
 				GetTree().Paused = true;
-			} else if ( args.OldState == GameState.Paused ) {
+				Visible = true;
+			} else if ( args.NewState == _prevState ) {
+				_prevState = GameState.Count;
 				GetTree().Paused = false;
+				Visible = false;
 			}
-			Visible = GetTree().Paused;
 		}
 
 		/*

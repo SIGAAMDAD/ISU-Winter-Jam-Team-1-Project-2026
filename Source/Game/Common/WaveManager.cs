@@ -1,5 +1,5 @@
 using Game.Mobs;
-using Game.Player.Upgrades;
+using Game.Player.UserInterface;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;

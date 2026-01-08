@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://q3d8f588rgns"]
+[gd_scene load_steps=18 format=3 uid="uid://q3d8f588rgns"]
 
 [ext_resource type="Script" uid="uid://c0j83efpa6svk" path="res://Assets/Prefabs/World/World.cs" id="1_yd2wk"]
 [ext_resource type="Script" uid="uid://c43nx6mgcq070" path="res://Source/Game/Common/WaveManager.cs" id="2_oturc"]
@@ -6,10 +6,8 @@
 [ext_resource type="Script" uid="uid://dxuxfcosntln8" path="res://Assets/Prefabs/World/WorldArea.cs" id="3_t3kjs"]
 [ext_resource type="PackedScene" uid="uid://dkml08sjkleg4" path="res://Source/Game/Player/Player.tscn" id="4_623ao"]
 [ext_resource type="PackedScene" uid="uid://ci45mqkirclcs" path="res://Source/Game/Player/UserInterface/HeadsUpDisplay.tscn" id="4_e7xia"]
-[ext_resource type="PackedScene" uid="uid://bp7tu6bkhlxep" path="res://Source/Game/Menus/UpgradeMenu.tscn" id="6_2pfkr"]
 [ext_resource type="Script" uid="uid://cwio4re8cg5yy" path="res://Source/Game/Mobs/TideSpawner.cs" id="6_623ao"]
 [ext_resource type="Script" uid="uid://ckum0efkn2yxu" path="res://Source/Game/Mobs/MobSpawner.cs" id="7_nap3e"]
-[ext_resource type="Script" uid="uid://bvsjkqk8ngfhl" path="res://Source/Game/Player/Upgrades/UpgradeManager.cs" id="10_7ey30"]
 [ext_resource type="PackedScene" uid="uid://by5pr3oyf568c" path="res://Assets/Prefabs/Mobs/Shark/Shark.tscn" id="11_yrfwb"]
 [ext_resource type="PackedScene" uid="uid://dvpo7welfd08k" path="res://Assets/Prefabs/Mobs/FlyingFish/FlyingFish.tscn" id="12_6tp7i"]
 [ext_resource type="PackedScene" uid="uid://bxxge54kolwnt" path="res://Assets/Prefabs/Mobs/Orca/Orca.tscn" id="13_6tp7i"]
@@ -64,14 +62,6 @@ polygon = PackedVector2Array(1280, 0, 0, 0, 0, 721, 1280, 721)
 
 [node name="HeadsUpDisplay" parent="CanvasLayer" instance=ExtResource("4_e7xia")]
 
-[node name="UpgradeManager" type="CanvasLayer" parent="CanvasLayer"]
-script = ExtResource("10_7ey30")
-
-[node name="UpgradeMenu" parent="CanvasLayer/UpgradeManager" node_paths=PackedStringArray("_upgradeManager") instance=ExtResource("6_2pfkr")]
-visible = false
-_upgradeManager = NodePath("..")
-metadata/_edit_use_anchors_ = true
-
 [node name="Player" parent="." instance=ExtResource("4_623ao")]
 y_sort_enabled = true
 position = Vector2(640, 360)
@@ -82,11 +72,10 @@ limit_top = 0
 limit_right = 1280
 limit_bottom = 720
 
-[node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("_tideSpawner", "_mobSpawner", "_waveTimer")]
+[node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("_tideSpawner", "_mobSpawner")]
 script = ExtResource("2_oturc")
 _tideSpawner = NodePath("TideSpawner")
 _mobSpawner = NodePath("MobSpawner")
-_waveTimer = NodePath("WaveTimer")
 
 [node name="WaveTimer" type="Timer" parent="WaveManager"]
 wait_time = 15.0

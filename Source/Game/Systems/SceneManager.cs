@@ -11,7 +11,6 @@ public partial class SceneManager : Node {
 	private void OnStateChanged( in GameStateChangedEventArgs args ) {
 		if ( args.NewState == GameState.Level && args.OldState == GameState.TitleScreen ) {
 			GetTree().ChangeSceneToFile( "res://Assets/Prefabs/World/World.tscn" );
-			GD.PrintErr( "CHANGING SCENE!" );
 		} else if ( args.NewState == GameState.TitleScreen ) {
 			GetTree().ChangeSceneToFile( "res://Source/Game/Menus/MainMenu.tscn" );
 		}

@@ -1,8 +1,9 @@
 using Nomad.Core.Events;
 using Godot;
 using System;
+using Game.Common;
 
-namespace Game.Common {
+namespace Game.Player.UserInterface {
 	/*
 	===================================================================================
 	

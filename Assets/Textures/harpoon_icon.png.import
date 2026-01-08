@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cn1v23354jvyr"
-path="res://.godot/imported/harpoon_icon.png-4f08d34b5fc180460fdb49d4f54d5ada.ctex"
+path.bptc="res://.godot/imported/harpoon_icon.png-4f08d34b5fc180460fdb49d4f54d5ada.bptc.ctex"
+path.astc="res://.godot/imported/harpoon_icon.png-4f08d34b5fc180460fdb49d4f54d5ada.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Assets/Textures/harpoon_icon.png"
-dest_files=["res://.godot/imported/harpoon_icon.png-4f08d34b5fc180460fdb49d4f54d5ada.ctex"]
+dest_files=["res://.godot/imported/harpoon_icon.png-4f08d34b5fc180460fdb49d4f54d5ada.bptc.ctex", "res://.godot/imported/harpoon_icon.png-4f08d34b5fc180460fdb49d4f54d5ada.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

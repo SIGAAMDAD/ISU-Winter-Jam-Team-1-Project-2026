@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cuju45rl2efen"
-path="res://.godot/imported/Boat.png-ad8faeab2a62693edcfa149606a0e7dc.ctex"
+path.bptc="res://.godot/imported/Boat.png-ad8faeab2a62693edcfa149606a0e7dc.bptc.ctex"
+path.astc="res://.godot/imported/Boat.png-ad8faeab2a62693edcfa149606a0e7dc.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Assets/Textures/SpriteSheets/Boat.png"
-dest_files=["res://.godot/imported/Boat.png-ad8faeab2a62693edcfa149606a0e7dc.ctex"]
+dest_files=["res://.godot/imported/Boat.png-ad8faeab2a62693edcfa149606a0e7dc.bptc.ctex", "res://.godot/imported/Boat.png-ad8faeab2a62693edcfa149606a0e7dc.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

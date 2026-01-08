@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bq2r7t8ge5v3v"
-path="res://.godot/imported/SealOnBoat.png-17a2988b96237ff23555a11e1a61fca7.ctex"
+path.bptc="res://.godot/imported/SealOnBoat.png-17a2988b96237ff23555a11e1a61fca7.bptc.ctex"
+path.astc="res://.godot/imported/SealOnBoat.png-17a2988b96237ff23555a11e1a61fca7.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://Assets/Textures/SpriteSheets/SealOnBoat.png"
-dest_files=["res://.godot/imported/SealOnBoat.png-17a2988b96237ff23555a11e1a61fca7.ctex"]
+dest_files=["res://.godot/imported/SealOnBoat.png-17a2988b96237ff23555a11e1a61fca7.bptc.ctex", "res://.godot/imported/SealOnBoat.png-17a2988b96237ff23555a11e1a61fca7.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

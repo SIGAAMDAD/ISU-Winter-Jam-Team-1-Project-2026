@@ -1,3 +1,4 @@
+using Game.Player.UserInterface.UpgradeInterface;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
@@ -15,10 +16,23 @@ namespace Game.Player.UserInterface {
 	/// <summary>
 	/// 
 	/// </summary>
-	
+
 	public partial class HeadsUpDisplay : CanvasLayer {
-		private HealthBar _healthBar;
 		private WaveUI _waveUI;
+		private UpgradeMenu _upgradeMenu;
+
+		private HealthBar _healthBar;
+		private StatsList _statsList;
+		private MoneyCounter _moneyCounter;
+
+		/*
+		===============
+		OnGameStateChanged
+		===============
+		*/
+		private void OnGameStateChanged( in GameStateChangedEventArgs args ) {
+			GetNode<Control>( "MainHUD" ).Visible = args.NewState != GameState.UpgradeMenu;
+		}
 
 		/*
 		===============
@@ -29,8 +43,13 @@ namespace Game.Player.UserInterface {
 			base._Ready();
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
-			_healthBar = new HealthBar( GetNode<ProgressBar>( "HealthBar" ), eventFactory );
+			_healthBar = new HealthBar( GetNode<ProgressBar>( "%HealthBar" ), eventFactory );
 			_waveUI = new WaveUI( GetNode<VBoxContainer>( "WaveDataContainer" ), eventFactory );
+			_upgradeMenu = new UpgradeMenu( GetNode<CanvasLayer>( "UpgradeMenu" ), eventFactory );
+			_statsList = new StatsList( GetNode<VBoxContainer>( "%StatsList" ), eventFactory );
+			_moneyCounter = new MoneyCounter( GetNode<Label>( "%MoneyLabel" ), eventFactory );
+
+			GameStateManager.GameStateChanged.Subscribe( this, OnGameStateChanged );
 		}
 
 		/*

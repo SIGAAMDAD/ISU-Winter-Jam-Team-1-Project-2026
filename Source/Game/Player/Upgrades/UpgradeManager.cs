@@ -1,5 +1,3 @@
-using Game.Systems;
-using Godot;
 using Nomad.Core.Events;
 using System.Collections.Generic;
 
@@ -15,7 +13,11 @@ namespace Game.Player.Upgrades {
 	/// Handles upgrade tiers and events.
 	/// </summary>
 	
-	public sealed partial class UpgradeManager : CanvasLayer {
+	public sealed class UpgradeManager {
+		public const int MAX_UPGRADE_TIER = 4;
+
+		private float _moneyAmount = 0.0f;
+
 		public IGameEvent<UpgradeBoughtEventArgs> UpgradeBought => _upgradeBought;
 		private IGameEvent<UpgradeBoughtEventArgs> _upgradeBought;
 
@@ -23,17 +25,18 @@ namespace Game.Player.Upgrades {
 		
 		/*
 		===============
-		_Ready
+		UpgradeManager
 		===============
 		*/
 		/// <summary>
-		/// 
+		/// Creates an UpgradeManager.
 		/// </summary>
-		public override void _Ready() {
-			base._Ready();
-
-			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
+		/// <param name="eventFactory"></param>
+		public UpgradeManager( IGameEventRegistryService eventFactory ) {
 			_upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeBought ) );
+
+			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
+			statChanged.Subscribe( this, OnStatChanged );
 		}
 		
 		/*
@@ -73,18 +76,43 @@ namespace Game.Player.Upgrades {
 		===============
 		*/
 		/// <summary>
-		/// Activates an upgrade
+		/// Activates an upgrade.
 		/// </summary>
 		/// <param name="type"></param>
-		public void BuyUpgrade( UpgradeType type ) {
+		public bool BuyUpgrade( UpgradeType type, float addAmount, float cost ) {
+			if ( _moneyAmount - cost < 0.0f ) {
+				return false;
+			}
+
 			if ( _upgrades.TryGetValue( type, out int tier ) ) {
+				if ( tier >= MAX_UPGRADE_TIER ) {
+					// already at max
+					return false;
+				}
 				tier++;
 			} else {
 				tier = 1;
 			}
 
 			_upgrades[ type ] = tier;
-			_upgradeBought.Publish( new UpgradeBoughtEventArgs( type, tier, 10.0f ) );
+			_upgradeBought.Publish( new UpgradeBoughtEventArgs( type, tier, addAmount, cost ) );
+
+			return true;
+		}
+
+		/*
+		===============
+		OnStatChanged
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnStatChanged( in StatChangedEventArgs args ) {
+			if ( args.StatId == PlayerStats.MONEY ) {
+				_moneyAmount = args.Value;
+			}
 		}
 	};
 };

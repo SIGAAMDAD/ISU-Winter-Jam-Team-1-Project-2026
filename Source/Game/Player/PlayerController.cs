@@ -35,6 +35,8 @@ namespace Game.Player {
 
 		private readonly PackedScene[] _harpoonPrefabs = new PackedScene[ (int)PlayerDirection.Count ];
 
+		private readonly Vector2 _startPosition;
+
 		private readonly PlayerStats _stats;
 		private readonly PlayerManager _owner;
 		private readonly PlayerAnimator _animator;
@@ -74,6 +76,8 @@ namespace Game.Player {
 			};
 			_weaponCooldown.Connect( Timer.SignalName.Timeout, Callable.From( OnWeaponCooldownFinished ) );
 			owner.AddChild( _weaponCooldown );
+
+			_startPosition = owner.GlobalPosition;
 
 			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/UpHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.North ] );
 			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/RightHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.East ] );
@@ -155,6 +159,7 @@ namespace Game.Player {
 		*/
 		private void OnWaveStarted( in EmptyEventArgs args ) {
 			_flags |= FlagBits.CanAttack | FlagBits.CanMove | FlagBits.WaveActive;
+			_owner.GlobalPosition = _startPosition;
 		}
 
 		/*

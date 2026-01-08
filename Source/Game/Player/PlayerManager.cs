@@ -45,7 +45,8 @@ namespace Game.Player {
 		public override void _Ready() {
 			base._Ready();
 
-			_stats = new PlayerStats( this, GetNode<UpgradeManager>( "/root/World/CanvasLayer/UpgradeManager" ), GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>() );
+			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
+			_stats = new PlayerStats( this, eventFactory );
 			_animator = new PlayerAnimator( this );
 			_controller = new PlayerController( this, _animator, _stats );
 			_audioPlayer = new PlayerAudioPlayer( this, _controller, _animator );
