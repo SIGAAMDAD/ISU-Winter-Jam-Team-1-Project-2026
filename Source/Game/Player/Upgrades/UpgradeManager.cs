@@ -57,10 +57,11 @@ namespace Game.Player.Upgrades {
 			statChanged.Subscribe( this, OnStatChanged );
 
 			_upgradeData = new Dictionary<int, UpgradeData> {
-				[ 0 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
-				[ 1 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
-				[ 2 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
-				[ 3 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER ),
+				[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
+				[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
+				[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
+				[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
+				[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER ),
 			};
 		}
 		
@@ -141,9 +142,8 @@ namespace Game.Player.Upgrades {
 					// already at max
 					return false;
 				}
-				tier++;
 			} else {
-				tier = 0;
+				tier = 1;
 			}
 
 			float cost = GetUpgradeCost( type, tier );

@@ -44,7 +44,7 @@ namespace Game.Player.UserInterface {
 			_type = type;
 			_name = name;
 			_manager = manager;
-			SetTier( _manager.GetUpgradeTier( _type ) ) ;
+			SetTier( _manager.GetUpgradeTier( _type ) + 1 ) ;
 		}
 
 		/*
