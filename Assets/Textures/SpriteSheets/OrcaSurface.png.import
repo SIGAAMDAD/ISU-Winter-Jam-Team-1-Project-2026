@@ -2,23 +2,21 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbnmjb4680knt"
-path.bptc="res://.godot/imported/Orca.png-dedcaa91871a8495e7c3d2dd8689e96d.bptc.ctex"
-path.astc="res://.godot/imported/Orca.png-dedcaa91871a8495e7c3d2dd8689e96d.astc.ctex"
+uid="uid://11ximh565qmr"
+path="res://.godot/imported/OrcaSurface.png-07062143686d53395112d4b862f93ca0.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/Orca.png"
-dest_files=["res://.godot/imported/Orca.png-dedcaa91871a8495e7c3d2dd8689e96d.bptc.ctex", "res://.godot/imported/Orca.png-dedcaa91871a8495e7c3d2dd8689e96d.astc.ctex"]
+source_file="res://Assets/Textures/SpriteSheets/OrcaSurface.png"
+dest_files=["res://.godot/imported/OrcaSurface.png-07062143686d53395112d4b862f93ca0.ctex"]
 
 [params]
 
-compress/mode=2
-compress/high_quality=true
+compress/mode=0
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

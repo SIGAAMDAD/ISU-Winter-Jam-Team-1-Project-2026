@@ -18,6 +18,9 @@ namespace Game.Mobs {
 	/// </summary>
 
 	public partial class MobBase : CharacterBody2D {
+		protected static readonly StringName @DefaultAnimationName = "default";
+		protected static readonly StringName @DieAnimationName = "die";
+
 		[Flags]
 		protected enum FlagBits : uint {
 			Dead = 1 << 0,
@@ -29,14 +32,15 @@ namespace Game.Mobs {
 		[Export]
 		private float _damageAmount = 0.0f;
 		[Export]
-		private float _health = 100.0f;
+		protected float _health = 100.0f;
 		[Export]
-		private float _speed = 10.0f;
+		protected float _speed = 10.0f;
 
 		private Vector2 _frameVelocity;
 
 		protected NavigationAgent2D _navigationAgent;
 		protected AnimatedSprite2D _animation;
+		protected CollisionShape2D _collisionShape;
 		protected PlayerManager _target;
 
 		protected FlagBits _flags;
@@ -70,6 +74,8 @@ namespace Game.Mobs {
 			_health -= amount;
 			if ( _health <= 0.0f ) {
 				_flags |= FlagBits.Dead;
+				_animation.Play( DieAnimationName );
+				_collisionShape.Disabled = true;
 			}
 			_animation.SpeedScale = 0.0f;
 			_animation.Modulate = Colors.Red;
@@ -136,6 +142,7 @@ namespace Game.Mobs {
 
 			_mobId = GetPath().GetHashCode();
 			_target = GetNode<PlayerManager>( "/root/World/Player" );
+			_collisionShape = GetNode<CollisionShape2D>( "CollisionShape2D" );
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_takeDamage = eventFactory.GetEvent<MobTakeDamageEventArgs>( nameof( TakeDamage ) );

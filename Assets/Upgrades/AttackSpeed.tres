@@ -1,8 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bhai4qkn15eal"]
-
-[ext_resource type="Script" uid="uid://c24a2lmbtmcqx" path="res://Assets/Prefabs/Upgrades/UpgradeBase.cs" id="1_nxbco"]
-
-[resource]
-script = ExtResource("1_nxbco")
-TierCosts = Array[float]([0.0, 0.0, 0.0, 0.0])
-TierIncreaseAmounts = Array[float]([0.0, 0.0, 0.0, 0.0])

@@ -31,7 +31,7 @@ namespace Game.Player.UserInterface {
 		===============
 		*/
 		private void OnGameStateChanged( in GameStateChangedEventArgs args ) {
-			GetNode<Control>( "MainHUD" ).Visible = args.NewState != GameState.UpgradeMenu;
+			GetNode<Control>( "MainHUD" ).Visible = args.NewState == GameState.Level;
 		}
 
 		/*

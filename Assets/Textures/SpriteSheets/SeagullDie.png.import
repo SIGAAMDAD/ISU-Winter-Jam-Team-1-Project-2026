@@ -2,22 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3xf0730eaxae"
-path.s3tc="res://.godot/imported/Coin.png-cf6e7aa601c0d62ca88d12b360605d66.s3tc.ctex"
-path.etc2="res://.godot/imported/Coin.png-cf6e7aa601c0d62ca88d12b360605d66.etc2.ctex"
+uid="uid://l0iftogqui1t"
+path="res://.godot/imported/SeagullDie.png-3c9d6789a72070d46b23ecbe5f62128a.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/Coin.png"
-dest_files=["res://.godot/imported/Coin.png-cf6e7aa601c0d62ca88d12b360605d66.s3tc.ctex", "res://.godot/imported/Coin.png-cf6e7aa601c0d62ca88d12b360605d66.etc2.ctex"]
+source_file="res://Assets/Textures/SpriteSheets/SeagullDie.png"
+dest_files=["res://.godot/imported/SeagullDie.png-3c9d6789a72070d46b23ecbe5f62128a.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

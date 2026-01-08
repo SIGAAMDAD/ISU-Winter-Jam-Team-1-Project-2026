@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://q3d8f588rgns"]
+[gd_scene load_steps=19 format=3 uid="uid://q3d8f588rgns"]
 
 [ext_resource type="Script" uid="uid://c0j83efpa6svk" path="res://Assets/Prefabs/World/World.cs" id="1_yd2wk"]
 [ext_resource type="Script" uid="uid://c43nx6mgcq070" path="res://Source/Game/Common/WaveManager.cs" id="2_oturc"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://ci45mqkirclcs" path="res://Source/Game/Player/UserInterface/HeadsUpDisplay.tscn" id="4_e7xia"]
 [ext_resource type="Script" uid="uid://cwio4re8cg5yy" path="res://Source/Game/Mobs/TideSpawner.cs" id="6_623ao"]
 [ext_resource type="Script" uid="uid://ckum0efkn2yxu" path="res://Source/Game/Mobs/MobSpawner.cs" id="7_nap3e"]
+[ext_resource type="PackedScene" uid="uid://dd1txusb8iduc" path="res://Assets/Prefabs/Mobs/Seagull/Seagull.tscn" id="9_r0y47"]
 [ext_resource type="PackedScene" uid="uid://by5pr3oyf568c" path="res://Assets/Prefabs/Mobs/Shark/Shark.tscn" id="11_yrfwb"]
 [ext_resource type="PackedScene" uid="uid://dvpo7welfd08k" path="res://Assets/Prefabs/Mobs/FlyingFish/FlyingFish.tscn" id="12_6tp7i"]
 [ext_resource type="PackedScene" uid="uid://bxxge54kolwnt" path="res://Assets/Prefabs/Mobs/Orca/Orca.tscn" id="13_6tp7i"]
@@ -15,8 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://b1luavxt1vbwu" path="res://Source/Game/Menus/PauseMenu.tscn" id="16_el5su"]
 
 [sub_resource type="Gradient" id="Gradient_623ao"]
-offsets = PackedFloat32Array(0.013333334)
-colors = PackedColorArray(0, 0, 1, 1)
+offsets = PackedFloat32Array(0.013333334, 0.96666664)
+colors = PackedColorArray(0, 0, 1, 1, 3.730133e-07, 0, 0.25671872, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_nap3e"]
 gradient = SubResource("Gradient_623ao")
@@ -33,19 +34,21 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 1280, 0, 1280, 72
 process_mode = 1
 script = ExtResource("1_yd2wk")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-layer = -10
-
-[node name="Water" type="TextureRect" parent="CanvasLayer"]
+[node name="Water" type="TextureRect" parent="."]
 unique_name_in_owner = true
 material = ExtResource("2_xtsie")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = -1
+offset_right = 1280.0
+offset_bottom = 721.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 texture = SubResource("GradientTexture1D_nap3e")
 metadata/_edit_use_anchors_ = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 0
 
 [node name="WorldArea" type="Area2D" parent="CanvasLayer"]
 script = ExtResource("3_t3kjs")
@@ -62,23 +65,13 @@ polygon = PackedVector2Array(1280, 0, 0, 0, 0, 721, 1280, 721)
 
 [node name="HeadsUpDisplay" parent="CanvasLayer" instance=ExtResource("4_e7xia")]
 
-[node name="Player" parent="." instance=ExtResource("4_623ao")]
-y_sort_enabled = true
-position = Vector2(640, 360)
-
-[node name="Camera2D" type="Camera2D" parent="Player"]
-limit_left = 0
-limit_top = 0
-limit_right = 1280
-limit_bottom = 720
-
 [node name="WaveManager" type="Node" parent="." node_paths=PackedStringArray("_tideSpawner", "_mobSpawner")]
 script = ExtResource("2_oturc")
 _tideSpawner = NodePath("TideSpawner")
 _mobSpawner = NodePath("MobSpawner")
 
 [node name="WaveTimer" type="Timer" parent="WaveManager"]
-wait_time = 15.0
+wait_time = 20.0
 autostart = true
 
 [node name="TideSpawner" type="Node2D" parent="WaveManager" node_paths=PackedStringArray("_worldBounds")]
@@ -92,7 +85,7 @@ autostart = true
 [node name="MobSpawner" type="Node2D" parent="WaveManager" node_paths=PackedStringArray("_worldBounds")]
 script = ExtResource("7_nap3e")
 _worldBounds = NodePath("../../CanvasLayer/WorldArea/CollisionShape2D")
-_enemyTypes = Array[PackedScene]([ExtResource("12_6tp7i"), ExtResource("11_yrfwb"), ExtResource("13_6tp7i"), ExtResource("14_r0y47")])
+_enemyTypes = Array[PackedScene]([ExtResource("9_r0y47"), ExtResource("12_6tp7i"), ExtResource("11_yrfwb"), ExtResource("13_6tp7i"), ExtResource("14_r0y47")])
 
 [node name="SpawnInterval" type="Timer" parent="WaveManager/MobSpawner"]
 wait_time = 3.5
@@ -101,6 +94,29 @@ autostart = true
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="WaveManager/MobSpawner"]
 navigation_polygon = SubResource("NavigationPolygon_623ao")
 
+[node name="SpawnClusters" type="Node" parent="WaveManager/MobSpawner"]
+
+[node name="Cluster1" type="Node2D" parent="WaveManager/MobSpawner/SpawnClusters"]
+position = Vector2(213, 145)
+
+[node name="Cluster2" type="Node2D" parent="WaveManager/MobSpawner/SpawnClusters"]
+position = Vector2(213, 547.4)
+
+[node name="Cluster3" type="Node2D" parent="WaveManager/MobSpawner/SpawnClusters"]
+position = Vector2(1012, 145)
+
+[node name="Cluster4" type="Node2D" parent="WaveManager/MobSpawner/SpawnClusters"]
+position = Vector2(1012, 547.4)
+
 [node name="PauseMenu" parent="." instance=ExtResource("16_el5su")]
 process_mode = 3
 visible = false
+
+[node name="Player" parent="." instance=ExtResource("4_623ao")]
+position = Vector2(640, 360)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+limit_left = 0
+limit_top = 0
+limit_right = 1280
+limit_bottom = 720

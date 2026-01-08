@@ -2,23 +2,21 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtpc8hxh4piji"
-path.bptc="res://.godot/imported/MiniBossShark.png-487c72ab6403c60eb9e33a9b4f623cef.bptc.ctex"
-path.astc="res://.godot/imported/MiniBossShark.png-487c72ab6403c60eb9e33a9b4f623cef.astc.ctex"
+uid="uid://bhy1npoe6y2pd"
+path="res://.godot/imported/Whirlpool.png-0863e3f5b7782063dd70566280f8d929.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/SpriteSheets/MiniBossShark.png"
-dest_files=["res://.godot/imported/MiniBossShark.png-487c72ab6403c60eb9e33a9b4f623cef.bptc.ctex", "res://.godot/imported/MiniBossShark.png-487c72ab6403c60eb9e33a9b4f623cef.astc.ctex"]
+source_file="res://Assets/Textures/SpriteSheets/Whirlpool.png"
+dest_files=["res://.godot/imported/Whirlpool.png-0863e3f5b7782063dd70566280f8d929.ctex"]
 
 [params]
 
-compress/mode=2
-compress/high_quality=true
+compress/mode=0
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

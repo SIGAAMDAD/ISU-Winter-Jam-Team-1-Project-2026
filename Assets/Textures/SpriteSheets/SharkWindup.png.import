@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cdnwig7xccgmd"
-path="res://.godot/imported/SharkAttack.png-7a7139f5f39b733dfc27577d9b217e0e.ctex"
+uid="uid://chmp3qe0xc8n5"
+path.bptc="res://.godot/imported/SharkWindup.png-c8c6eb0ae5e343a1d0f6469dd62e8d83.bptc.ctex"
+path.astc="res://.godot/imported/SharkWindup.png-c8c6eb0ae5e343a1d0f6469dd62e8d83.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
-source_file="res://Assets/Textures/SpriteSheets/SharkAttack.png"
-dest_files=["res://.godot/imported/SharkAttack.png-7a7139f5f39b733dfc27577d9b217e0e.ctex"]
+source_file="res://Assets/Textures/SpriteSheets/SharkWindup.png"
+dest_files=["res://.godot/imported/SharkWindup.png-c8c6eb0ae5e343a1d0f6469dd62e8d83.bptc.ctex", "res://.godot/imported/SharkWindup.png-c8c6eb0ae5e343a1d0f6469dd62e8d83.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

@@ -21,10 +21,9 @@ namespace Game.Player {
 	/// 
 	/// </summary>
 
-	public sealed class PlayerStats {
+	public sealed class PlayerStats : IPlayerStatsProvider {
 		public static readonly InternString HEALTH = new( nameof( Health ) );
 		public static readonly InternString SPEED = new( nameof( Speed ) );
-		public static readonly InternString DAMAGE_RESISTANCE = new( nameof( DamageResistance ) );
 		public static readonly InternString ATTACK_DAMAGE = new( nameof( AttackDamage ) );
 		public static readonly InternString ATTACK_SPEED = new( nameof( AttackSpeed) );
 		public static readonly InternString ARMOR = new( nameof( Armor ) );
@@ -35,7 +34,6 @@ namespace Game.Player {
 		public float HealthRegen => _statCache[ HEALTH_REGEN ];
 		public float Speed => _statCache[ SPEED ];
 		public float Health => _statCache[ HEALTH ];
-		public float DamageResistance => _statCache[ DAMAGE_RESISTANCE ];
 		public float AttackDamage => _statCache[ ATTACK_DAMAGE ];
 		public float AttackSpeed => _statCache[ ATTACK_SPEED ];
 		public float Armor => _statCache[ ARMOR ];
@@ -45,9 +43,8 @@ namespace Game.Player {
 		private readonly Dictionary<InternString, float> _statCache = new Dictionary<InternString, float> {
 			[ SPEED ] = 100.0f,
 			[ HEALTH ] = 100.0f,
-			[ HEALTH_REGEN ] = 0.5f,
-			[ DAMAGE_RESISTANCE ] = 0.95f,
-			[ ARMOR ] = 100.0f,
+			[ HEALTH_REGEN ] = 1.0f,
+			[ ARMOR ] = 0.0f,
 			[ ATTACK_DAMAGE ] = 10.0f,
 			[ MAX_HEALTH ] = 100.0f,
 			[ MONEY ] = 0.0f,
@@ -93,6 +90,24 @@ namespace Game.Player {
 				[ UpgradeType.AttackDamage ] = ATTACK_DAMAGE,
 				[ UpgradeType.AttackSpeed ] = ATTACK_SPEED,
 			}.ToImmutableDictionary();
+
+			foreach ( var stat in _statCache ) {
+				_statChanged.Publish( new StatChangedEventArgs( stat.Key, stat.Value ) );
+			}
+		}
+
+		/*
+		===============
+		Dispose
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Dispose() {
+			_statCache.Clear();
+			_takeDamage.Dispose();
+			_statChanged.Dispose();
 		}
 
 		/*

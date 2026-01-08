@@ -5,9 +5,9 @@
 
 [node name="StatValueContainer" type="HBoxContainer"]
 anchors_preset = -1
-anchor_right = 0.054
+anchor_right = 0.061000004
 anchor_bottom = 0.089
-offset_right = -29.120003
+offset_right = -38.08
 offset_bottom = -24.080002
 size_flags_horizontal = 3
 script = ExtResource("1_4crny")

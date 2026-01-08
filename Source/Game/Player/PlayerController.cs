@@ -12,6 +12,8 @@ namespace Game.Player {
 	===================================================================================
 	
 	PlayerController
+
+	FIXME: this does too much
 	
 	===================================================================================
 	*/
@@ -20,6 +22,8 @@ namespace Game.Player {
 	/// </summary>
 
 	public sealed class PlayerController {
+		private const float BASE_WEAPON_COOLDOWN_TIME = 1.15f;
+
 		[Flags]
 		private enum FlagBits : byte {
 			CanMove = 1 << 0,
@@ -37,13 +41,14 @@ namespace Game.Player {
 
 		private readonly Vector2 _startPosition;
 
-		private readonly PlayerStats _stats;
 		private readonly PlayerManager _owner;
 		private readonly PlayerAnimator _animator;
 		private readonly Timer _weaponCooldown;
 
 		private FlagBits _flags = FlagBits.CanAttack | FlagBits.CanMove | FlagBits.WaveActive;
 		private Vector2 _frameVelocity = Vector2.Zero;
+
+		private float _movementSpeed = 0.0f;
 
 		public IGameEvent<EmptyEventArgs> UseWeapon => _useWeapon;
 		private readonly IGameEvent<EmptyEventArgs> _useWeapon;
@@ -56,14 +61,22 @@ namespace Game.Player {
 		PlayerController
 		===============
 		*/
-		public PlayerController( PlayerManager owner, PlayerAnimator animator, PlayerStats stats ) {
-			_stats = stats;
+		/// <summary>
+		/// Creates a PlayerController
+		/// </summary>
+		/// <param name="owner"></param>
+		/// <param name="animator"></param>
+		/// <param name="stats"></param>
+		public PlayerController( PlayerManager owner, PlayerAnimator animator ) {
 			_owner = owner;
 			_animator = animator;
 
 			var eventFactory = owner.GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_useWeapon = eventFactory.GetEvent<EmptyEventArgs>( nameof( UseWeapon ) );
 			_weaponCooldownFinished = eventFactory.GetEvent<EmptyEventArgs>( nameof( WeaponCooldownFinished ) );
+
+			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
+			statChanged.Subscribe( this, OnStatChanged );
 
 			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
 			waveCompleted.Subscribe( this, OnWaveCompleted );
@@ -106,7 +119,7 @@ namespace Game.Player {
 				Vector2 inputVelocity = Input.GetVector( MoveWestBind, MoveEastBind, MoveNorthBind, MoveSouthBind );
 				inputWasActive = inputVelocity != Vector2.Zero;
 
-				EntityUtils.CalcSpeed( ref _frameVelocity, _stats.Speed, delta, inputVelocity );
+				EntityUtils.CalcSpeed( ref _frameVelocity, _movementSpeed, delta, inputVelocity );
 
 				_owner.Velocity = _frameVelocity;
 				_owner.MoveAndSlide();
@@ -157,6 +170,10 @@ namespace Game.Player {
 		OnWaveStarted
 		===============
 		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
 		private void OnWaveStarted( in EmptyEventArgs args ) {
 			_flags |= FlagBits.CanAttack | FlagBits.CanMove | FlagBits.WaveActive;
 			_owner.GlobalPosition = _startPosition;
@@ -167,8 +184,29 @@ namespace Game.Player {
 		OnWaveCompleted
 		===============
 		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
 		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
 			_flags &= ~( FlagBits.CanMove | FlagBits.WaveActive );
+		}
+
+		/*
+		===============
+		OnStatChanged
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnStatChanged( in StatChangedEventArgs args ) {
+			if ( args.StatId == PlayerStats.ATTACK_SPEED ) {
+				_weaponCooldown.WaitTime = BASE_WEAPON_COOLDOWN_TIME / args.Value;
+			} else if ( args.StatId == PlayerStats.SPEED ) {
+				_movementSpeed = args.Value;
+			}
 		}
 	};
 };

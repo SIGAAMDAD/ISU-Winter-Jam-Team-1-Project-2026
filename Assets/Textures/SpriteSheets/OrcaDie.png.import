@@ -2,23 +2,21 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6t5bau38yd33"
-path.bptc="res://.godot/imported/Squid.png-6bf31f7eecd6cd7073e9c13a21491760.bptc.ctex"
-path.astc="res://.godot/imported/Squid.png-6bf31f7eecd6cd7073e9c13a21491760.astc.ctex"
+uid="uid://cr3q3x6wnetm8"
+path="res://.godot/imported/OrcaDie.png-c4d84af6b62a11f433dcb0904cca06bc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/Squid.png"
-dest_files=["res://.godot/imported/Squid.png-6bf31f7eecd6cd7073e9c13a21491760.bptc.ctex", "res://.godot/imported/Squid.png-6bf31f7eecd6cd7073e9c13a21491760.astc.ctex"]
+source_file="res://Assets/Textures/SpriteSheets/OrcaDie.png"
+dest_files=["res://.godot/imported/OrcaDie.png-c4d84af6b62a11f433dcb0904cca06bc.ctex"]
 
 [params]
 
-compress/mode=2
-compress/high_quality=true
+compress/mode=0
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3xf0730eaxae"
-path.s3tc="res://.godot/imported/Coin.png-cf6e7aa601c0d62ca88d12b360605d66.s3tc.ctex"
-path.etc2="res://.godot/imported/Coin.png-cf6e7aa601c0d62ca88d12b360605d66.etc2.ctex"
+uid="uid://cbnmjb4680knt"
+path.bptc="res://.godot/imported/Orca.png-c0cf9b05bb108d725fbf5d8d1cf22695.bptc.ctex"
+path.astc="res://.godot/imported/Orca.png-c0cf9b05bb108d725fbf5d8d1cf22695.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,13 +12,13 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/Textures/Coin.png"
-dest_files=["res://.godot/imported/Coin.png-cf6e7aa601c0d62ca88d12b360605d66.s3tc.ctex", "res://.godot/imported/Coin.png-cf6e7aa601c0d62ca88d12b360605d66.etc2.ctex"]
+source_file="res://Assets/Textures/SpriteSheets/Orca.png"
+dest_files=["res://.godot/imported/Orca.png-c0cf9b05bb108d725fbf5d8d1cf22695.bptc.ctex", "res://.godot/imported/Orca.png-c0cf9b05bb108d725fbf5d8d1cf22695.astc.ctex"]
 
 [params]
 
 compress/mode=2
-compress/high_quality=false
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

@@ -4,7 +4,6 @@ using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Logger;
 using System;
-using System.Collections.Generic;
 
 namespace Game.Mobs {
 	/*

@@ -31,7 +31,7 @@ namespace Game.Player {
 		===============
 		*/
 		public void Damage( float damage ) {
-			_stats.Damage( damage * _stats.DamageResistance );
+			_stats.Damage( damage - _stats.Armor );
 		}
 
 		/*
@@ -45,11 +45,14 @@ namespace Game.Player {
 		public override void _Ready() {
 			base._Ready();
 
+			var serviceRegistry = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServicesFactory;
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
-			_stats = new PlayerStats( this, eventFactory );
 			_animator = new PlayerAnimator( this );
-			_controller = new PlayerController( this, _animator, _stats );
+			_controller = new PlayerController( this, _animator );
 			_audioPlayer = new PlayerAudioPlayer( this, _controller, _animator );
+
+			_stats = new PlayerStats( this, eventFactory );
+			serviceRegistry.RegisterSingleton<IPlayerStatsProvider>( _stats );
 		}
 
 		/*
@@ -63,6 +66,7 @@ namespace Game.Player {
 			float _delta = (float)delta;
 			_controller.Update( _delta, out bool inputWasActive );
 			_animator.Update( _delta, inputWasActive );
+			_stats.Update( _delta );
 		}
 	};
 };

@@ -1,0 +1,76 @@
+[gd_scene load_steps=11 format=3 uid="uid://dd1txusb8iduc"]
+
+[ext_resource type="Script" uid="uid://bf6t7euesj3vr" path="res://Assets/Prefabs/Mobs/Seagull/Seagull.cs" id="1_vnl8o"]
+[ext_resource type="Texture2D" uid="uid://x32ibu487cdl" path="res://Assets/Textures/SpriteSheets/Seagull.png" id="2_2mmui"]
+[ext_resource type="Texture2D" uid="uid://l0iftogqui1t" path="res://Assets/Textures/SpriteSheets/SeagullDie.png" id="3_2mmui"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3nahn"]
+atlas = ExtResource("2_2mmui")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6dfn"]
+atlas = ExtResource("2_2mmui")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cucik"]
+atlas = ExtResource("2_2mmui")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eufht"]
+atlas = ExtResource("2_2mmui")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_awn2u"]
+atlas = ExtResource("3_2mmui")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_awn2u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3nahn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c6dfn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cucik")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eufht")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_awn2u")
+}],
+"loop": false,
+"name": &"die",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eppw5"]
+size = Vector2(42.608696, 31.304348)
+
+[node name="Seagull" type="CharacterBody2D"]
+scale = Vector2(1.15, 1.15)
+script = ExtResource("1_vnl8o")
+_damageAmount = 2.0
+_health = 5.0
+_speed = 0.9
+metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_awn2u")
+animation = &"die"
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.43478262, -1.7391305)
+shape = SubResource("RectangleShape2D_eppw5")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_max_distance = 1000.0

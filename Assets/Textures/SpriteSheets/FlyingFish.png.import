@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://br1qv1joyri33"
-path="res://.godot/imported/PlayerIdle.png-fdac432897111e92e3b4855a506ab311.ctex"
+uid="uid://m5uigqky27ka"
+path.bptc="res://.godot/imported/FlyingFish.png-e69eab368df04c79f0581b876b648c82.bptc.ctex"
+path.astc="res://.godot/imported/FlyingFish.png-e69eab368df04c79f0581b876b648c82.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
-source_file="res://Assets/Textures/PlayerIdle.png"
-dest_files=["res://.godot/imported/PlayerIdle.png-fdac432897111e92e3b4855a506ab311.ctex"]
+source_file="res://Assets/Textures/SpriteSheets/FlyingFish.png"
+dest_files=["res://.godot/imported/FlyingFish.png-e69eab368df04c79f0581b876b648c82.bptc.ctex", "res://.godot/imported/FlyingFish.png-e69eab368df04c79f0581b876b648c82.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

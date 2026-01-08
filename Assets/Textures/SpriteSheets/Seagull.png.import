@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqu3afytkq6mj"
-path.bptc="res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.bptc.ctex"
-path.astc="res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.astc.ctex"
+uid="uid://x32ibu487cdl"
+path.bptc="res://.godot/imported/Seagull.png-3fed8bc16833d6a18cde655b92b3690c.bptc.ctex"
+path.astc="res://.godot/imported/Seagull.png-3fed8bc16833d6a18cde655b92b3690c.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/Textures/SpriteSheets/Shark2.png"
-dest_files=["res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.bptc.ctex", "res://.godot/imported/Shark2.png-755fa6b8330756eb07841614b7d2ed41.astc.ctex"]
+source_file="res://Assets/Textures/SpriteSheets/Seagull.png"
+dest_files=["res://.godot/imported/Seagull.png-3fed8bc16833d6a18cde655b92b3690c.bptc.ctex", "res://.godot/imported/Seagull.png-3fed8bc16833d6a18cde655b92b3690c.astc.ctex"]
 
 [params]
 

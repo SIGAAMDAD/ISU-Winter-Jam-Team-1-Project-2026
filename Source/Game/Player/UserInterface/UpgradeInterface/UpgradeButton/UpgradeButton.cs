@@ -1,10 +1,6 @@
 using Game.Player.Upgrades;
 using Game.Player.UserInterface.UpgradeInterface;
 using Godot;
-using Nomad.Core.Util;
-using Prefabs;
-using System;
-using Systems.Caching;
 
 namespace Game.Player.UserInterface {
 	/*
@@ -24,9 +20,6 @@ namespace Game.Player.UserInterface {
 		private readonly Button _owner;
 		private readonly Label _costLabel;
 		private readonly string _name;
-
-		private readonly UpgradeBase _upgradeData;
-
 		/*
 		===============
 		UpgradeButton
@@ -43,13 +36,6 @@ namespace Game.Player.UserInterface {
 			button.Connect( Button.SignalName.FocusEntered, Callable.From( OnFocused ) );
 			button.Connect( Button.SignalName.MouseEntered, Callable.From( OnFocused ) );
 			button.Connect( Button.SignalName.Pressed, Callable.From( OnPressed ) );
-
-			ResourceCache.Instance.GetCached( FilePath.FromResourcePath( $"res://Assets/Upgrades/{type}.tres" ) ).Get( out var resource );
-			if ( resource is UpgradeBase data ) {
-				_upgradeData = data;
-			} else {
-				throw new InvalidCastException( "Upgrade resources must be UpgradeBase objects!" );
-			}
 
 			_owner = button;
 			_costLabel = node.GetNode<Label>( "CostLabel" );
@@ -71,7 +57,7 @@ namespace Game.Player.UserInterface {
 		public void SetTier( int tier ) {
 			// FIXME: this should be an event
 			_owner.Text = $"{_name} [{tier}]";
-			_costLabel.Text = _upgradeData.TierCosts[ tier ].ToString();
+			_costLabel.Text = _manager.GetUpgradeCost( _type, tier ).ToString();
 		}
 
 		/*
@@ -95,7 +81,7 @@ namespace Game.Player.UserInterface {
 		/// </summary>
 		private void OnPressed() {
 			int tier = _manager.GetUpgradeTier( _type );
-			_manager.BuyUpgrade( _type, _upgradeData.TierIncreaseAmounts[ tier ], _upgradeData.TierCosts[ tier ] );
+			_manager.BuyUpgrade( _type );
 			SetTier( _manager.GetUpgradeTier( _type ) );
 		}
 	};

@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://bxx2uro5uusm8"]
 
 [ext_resource type="Script" uid="uid://b43snt0sswaqk" path="res://Assets/Prefabs/Mobs/Squid/Squid.cs" id="1_bgroo"]
-[ext_resource type="Texture2D" uid="uid://6t5bau38yd33" path="res://Assets/Textures/Squid.png" id="2_eyq8v"]
+[ext_resource type="Texture2D" uid="uid://6t5bau38yd33" path="res://Assets/Textures/SpriteSheets/Squid.png" id="2_eyq8v"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r31au"]
 atlas = ExtResource("2_eyq8v")
