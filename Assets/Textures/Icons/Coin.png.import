@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ddf2uvfod1oef"
-path.bptc="res://.godot/imported/AttackDamageIcon.png-11cf95e4820764691ffebb156b8fbda9.bptc.ctex"
-path.astc="res://.godot/imported/AttackDamageIcon.png-11cf95e4820764691ffebb156b8fbda9.astc.ctex"
+uid="uid://3xf0730eaxae"
+path.s3tc="res://.godot/imported/Coin.png-d0cec9cc0c20f5c5bfffd1671a8620a0.s3tc.ctex"
+path.etc2="res://.godot/imported/Coin.png-d0cec9cc0c20f5c5bfffd1671a8620a0.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,13 +12,13 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/Textures/SpriteSheets/AttackDamageIcon.png"
-dest_files=["res://.godot/imported/AttackDamageIcon.png-11cf95e4820764691ffebb156b8fbda9.bptc.ctex", "res://.godot/imported/AttackDamageIcon.png-11cf95e4820764691ffebb156b8fbda9.astc.ctex"]
+source_file="res://Assets/Textures/Icons/Coin.png"
+dest_files=["res://.godot/imported/Coin.png-d0cec9cc0c20f5c5bfffd1671a8620a0.s3tc.ctex", "res://.godot/imported/Coin.png-d0cec9cc0c20f5c5bfffd1671a8620a0.etc2.ctex"]
 
 [params]
 
 compress/mode=2
-compress/high_quality=true
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

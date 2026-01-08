@@ -65,7 +65,6 @@ metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_awn2u")
-animation = &"die"
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

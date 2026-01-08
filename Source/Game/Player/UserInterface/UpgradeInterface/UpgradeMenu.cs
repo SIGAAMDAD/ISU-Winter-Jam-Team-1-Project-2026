@@ -38,7 +38,7 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
-			_moneyLabel = _node.GetNode<Label>( "MoneyLabel" );
+			_moneyLabel = _node.GetNode<Label>( "%MoneyLabel" );
 
 			GameStateManager.GameStateChanged.Subscribe( this, OnGameStateChanged );
 
@@ -114,7 +114,7 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 				}
 			}
 
-			Button exitButton = _node.GetNode<Button>( "FinishButton" );
+			Button exitButton = _node.GetNode<Button>( "%FinishButton" );
 			exitButton.Connect( Button.SignalName.Pressed, Callable.From( OnFinished ) );
 		}
 	};

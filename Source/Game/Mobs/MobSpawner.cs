@@ -1,9 +1,13 @@
 using Game.Common;
 using Game.Systems;
+using Game.Systems.Caching;
 using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Logger;
+using Nomad.Core.Util;
 using System;
+using System.Collections.Generic;
+using Systems.Caching;
 
 namespace Game.Mobs {
 	/*
@@ -38,49 +42,6 @@ namespace Game.Mobs {
 
 		private Timer _spawnTimer;
 		private NavigationRegion2D _navRegion;
-
-		/*
-		===============
-		_Ready
-		===============
-		*/
-		/// <summary>
-		/// 
-		/// </summary>
-		public override void _Ready() {
-			base._Ready();
-
-			if ( _worldBounds.Shape is RectangleShape2D shape ) {
-				float sizeX = shape.Size.X * 0.5f;
-				float sizeY = shape.Size.Y * 0.5f;
-				Vector2 position = _worldBounds.GlobalPosition;
-
-				_spawnMinX = (int)( position.X - sizeX );
-				_spawnMinY = (int)( position.Y - sizeY );
-				_spawnMaxX = (int)( position.X + sizeX );
-				_spawnMaxY = (int)( position.Y + sizeY );
-			} else {
-				throw new InvalidOperationException( "WorldBounds contain a RectangleShape2D!" );
-			}
-
-			var serviceLocator = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator;
-
-			_logger = serviceLocator.GetService<ILoggerService>();
-			_category = _logger.CreateCategory( nameof( MobSpawner ), LogLevel.Info, true );
-
-			var eventFactory = serviceLocator.GetService<IGameEventRegistryService>();
-
-			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
-			waveCompleted.Subscribe( this, OnWaveCompleted );
-
-			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
-			waveStarted.Subscribe( this, OnWaveStarted );
-
-			_spawnTimer = GetNode<Timer>( "SpawnInterval" );
-			_spawnTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnSpawnEnemies ) );
-
-			_navRegion = GetNode<NavigationRegion2D>( "NavigationRegion2D" );
-		}
 
 		/*
 		===============
@@ -159,6 +120,49 @@ namespace Game.Mobs {
 			_spawnTimer.Stop();
 
 			_waveNumber = args.NewWave;
+		}
+
+		/*
+		===============
+		_Ready
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		public override void _Ready() {
+			base._Ready();
+
+			if ( _worldBounds.Shape is RectangleShape2D shape ) {
+				float sizeX = shape.Size.X * 0.5f;
+				float sizeY = shape.Size.Y * 0.5f;
+				Vector2 position = _worldBounds.GlobalPosition;
+
+				_spawnMinX = (int)( position.X - sizeX );
+				_spawnMinY = (int)( position.Y - sizeY );
+				_spawnMaxX = (int)( position.X + sizeX );
+				_spawnMaxY = (int)( position.Y + sizeY );
+			} else {
+				throw new InvalidOperationException( "WorldBounds contain a RectangleShape2D!" );
+			}
+
+			var serviceLocator = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator;
+
+			_logger = serviceLocator.GetService<ILoggerService>();
+			_category = _logger.CreateCategory( nameof( MobSpawner ), LogLevel.Info, true );
+
+			var eventFactory = serviceLocator.GetService<IGameEventRegistryService>();
+
+			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
+			waveCompleted.Subscribe( this, OnWaveCompleted );
+
+			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
+			waveStarted.Subscribe( this, OnWaveStarted );
+
+			_spawnTimer = GetNode<Timer>( "SpawnInterval" );
+			_spawnTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnSpawnEnemies ) );
+
+			_navRegion = GetNode<NavigationRegion2D>( "NavigationRegion2D" );
 		}
 	};
 };

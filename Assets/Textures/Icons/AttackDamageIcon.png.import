@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dt7f7l3gi48kk"
-path.bptc="res://.godot/imported/Armorcon.png-3b282289fbe3b6e22a5acc868a3f68fd.bptc.ctex"
-path.astc="res://.godot/imported/Armorcon.png-3b282289fbe3b6e22a5acc868a3f68fd.astc.ctex"
+uid="uid://ddf2uvfod1oef"
+path.bptc="res://.godot/imported/AttackDamageIcon.png-81ce915165298cfb476826b9ebd4689c.bptc.ctex"
+path.astc="res://.godot/imported/AttackDamageIcon.png-81ce915165298cfb476826b9ebd4689c.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/Textures/SpriteSheets/Armorcon.png"
-dest_files=["res://.godot/imported/Armorcon.png-3b282289fbe3b6e22a5acc868a3f68fd.bptc.ctex", "res://.godot/imported/Armorcon.png-3b282289fbe3b6e22a5acc868a3f68fd.astc.ctex"]
+source_file="res://Assets/Textures/Icons/AttackDamageIcon.png"
+dest_files=["res://.godot/imported/AttackDamageIcon.png-81ce915165298cfb476826b9ebd4689c.bptc.ctex", "res://.godot/imported/AttackDamageIcon.png-81ce915165298cfb476826b9ebd4689c.astc.ctex"]
 
 [params]
 

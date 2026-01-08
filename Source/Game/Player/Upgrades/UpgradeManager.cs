@@ -1,6 +1,7 @@
+using Godot;
 using Nomad.Core.Events;
-using Prefabs;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Game.Player.Upgrades {
 	/*
@@ -15,10 +16,22 @@ namespace Game.Player.Upgrades {
 	/// </summary>
 	
 	public sealed class UpgradeManager {
+		private readonly record struct UpgradeData(
+			float Cost,
+			float AddAmount
+		);
+
 		public const int MAX_UPGRADE_TIER = 4;
-		private const float UPGRADE_TIER_COST_MULTIPLIER = 2.5f;
-		private const float UPGRADE_TIER_ADD_MULTIPLIER = 1.5f;
-		private const float UPGRADE_TIER_ADD_SPEED_MULTIPLIER = 1.25f;
+
+		private const float UPGRADE_TIER1_MULTIPLIER = 2.0f;
+		private const float UPGRADE_TIER2_MULTIPLIER = 3.0f;
+		private const float UPGRADE_TIER3_MULTIPLIER = 4.0f;
+		private const float UPGRADE_TIER4_MULTIPLIER = 5.0f;
+
+		private const float UPGRADE_TIER1_COST = 4.0f;
+		private const float UPGRADE_TIER2_COST = 12.0f;
+		private const float UPGRADE_TIER3_COST = 36.0f;
+		private const float UPGRADE_TIER4_COST = 108.0f;
 
 		private float _moneyAmount = 0.0f;
 
@@ -26,23 +39,7 @@ namespace Game.Player.Upgrades {
 		private IGameEvent<UpgradeBoughtEventArgs> _upgradeBought;
 
 		private readonly Dictionary<UpgradeType, int> _upgrades = new();
-
-		private static readonly Dictionary<int, float> _tierCosts = new Dictionary<int, float> {
-			[ 0 ] = 2.0f,
-			[ 1 ] = 6.0f,
-			[ 2 ] = 10.0f
-		};
-		private static readonly Dictionary<int, float> _tierIncreaseAmounts = new Dictionary<int, float> {
-			[ 0 ] = 10.0f,
-			[ 1 ] = 20.0f,
-			[ 2 ] = 40.0f,
-		};
-
-		private readonly record struct UpgradeData(
-			float Cost,
-			float AddAmount
-		);
-		private readonly Dictionary<int, UpgradeData> _upgradeData = new Dictionary<int, UpgradeData>();
+		private readonly Dictionary<int, UpgradeData> _upgradeData;
 
 		/*
 		===============
@@ -58,6 +55,13 @@ namespace Game.Player.Upgrades {
 
 			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
+
+			_upgradeData = new Dictionary<int, UpgradeData> {
+				[ 0 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
+				[ 1 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
+				[ 2 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
+				[ 3 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER ),
+			};
 		}
 		
 		/*
@@ -70,11 +74,9 @@ namespace Game.Player.Upgrades {
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public int GetUpgradeTier( UpgradeType type ) {
-			if ( _upgrades.TryGetValue( type, out int upgrade ) ) {
-				return upgrade;
-			}
-			return 0;
+			return _upgrades.TryGetValue( type, out int upgrade ) ? upgrade : 0;
 		}
 
 		/*
@@ -87,8 +89,41 @@ namespace Game.Player.Upgrades {
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public bool UpgradeIsOwned( UpgradeType type ) {
 			return _upgrades.ContainsKey( type );
+		}
+
+		/*
+		===============
+		GetUpgradeCost
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="tier"></param>
+		/// <returns></returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public float GetUpgradeCost( UpgradeType type, int tier ) {
+			return _upgradeData[ tier ].Cost;
+		}
+
+		/*
+		===============
+		GetUpgradeMultiplier
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="tier"></param>
+		/// <returns></returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public float GetUpgradeMultiplier( UpgradeType type, int tier ) {
+			return _upgradeData[ tier ].AddAmount;
 		}
 
 		/*
@@ -108,42 +143,18 @@ namespace Game.Player.Upgrades {
 				}
 				tier++;
 			} else {
-				tier = 1;
+				tier = 0;
 			}
 
-			float cost = _tierCosts[ tier ];
+			float cost = GetUpgradeCost( type, tier );
 			if ( _moneyAmount - cost < 0.0f ) {
 				return false;
 			}
 
-			float addAmount = _tierIncreaseAmounts[ tier ];
-			_upgrades[ type ] = tier;
-			_upgradeBought.Publish( new UpgradeBoughtEventArgs( type, tier, addAmount, cost ) );
+			_upgrades[ type ] = tier + 1;
+			_upgradeBought.Publish( new UpgradeBoughtEventArgs( type, tier, cost, _upgradeData[ tier ].AddAmount ) );
 
 			return true;
-		}
-
-		/*
-		===============
-		GetUpgradeCost
-		===============
-		*/
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="tier"></param>
-		/// <returns></returns>
-		public float GetUpgradeCost( UpgradeType type, int tier ) {
-			switch ( type ) {
-				case UpgradeType.Armor:
-					break;
-				case UpgradeType.AttackDamage:
-					break;
-				case UpgradeType.AttackSpeed:
-					break;
-			}
-			return 0.0f;
 		}
 
 		/*

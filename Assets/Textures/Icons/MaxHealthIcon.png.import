@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkcl0jyoc1itk"
-path.bptc="res://.godot/imported/HealthRegenIcon.png-11ff800db0f42ac7a341f3c895783afb.bptc.ctex"
-path.astc="res://.godot/imported/HealthRegenIcon.png-11ff800db0f42ac7a341f3c895783afb.astc.ctex"
+uid="uid://diro2587u143n"
+path.bptc="res://.godot/imported/MaxHealthIcon.png-f33f86eaf3e78a3f18c3bae8f23e81ca.bptc.ctex"
+path.astc="res://.godot/imported/MaxHealthIcon.png-f33f86eaf3e78a3f18c3bae8f23e81ca.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/Textures/SpriteSheets/HealthRegenIcon.png"
-dest_files=["res://.godot/imported/HealthRegenIcon.png-11ff800db0f42ac7a341f3c895783afb.bptc.ctex", "res://.godot/imported/HealthRegenIcon.png-11ff800db0f42ac7a341f3c895783afb.astc.ctex"]
+source_file="res://Assets/Textures/Icons/MaxHealthIcon.png"
+dest_files=["res://.godot/imported/MaxHealthIcon.png-f33f86eaf3e78a3f18c3bae8f23e81ca.bptc.ctex", "res://.godot/imported/MaxHealthIcon.png-f33f86eaf3e78a3f18c3bae8f23e81ca.astc.ctex"]
 
 [params]
 

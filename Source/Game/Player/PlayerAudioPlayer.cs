@@ -1,7 +1,7 @@
 using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Util;
-using Systems.Caching;
+using Game.Systems.Caching;
 
 namespace Game.Player {
 	/*

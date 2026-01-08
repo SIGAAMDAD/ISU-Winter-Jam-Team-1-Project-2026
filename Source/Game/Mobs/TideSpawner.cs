@@ -30,7 +30,7 @@ namespace Game.Mobs {
 
 		private Timer _spawnTimer;
 
-		private readonly ICacheEntry<PackedScene, FilePath> _tidePrefab = SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Source/Game/Mobs/Wave.tscn" ) );
+		private readonly ICacheEntry<PackedScene, FilePath> _tidePrefab = SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/EnvironmentalEffects/Tide/Tide.tscn" ) );
 
 		/*
 		===============
@@ -107,7 +107,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
-			Godot.Collections.Array<Node> children = GetChildren();
+			var children = GetChildren();
 			for ( int i = 0; i < children.Count; i++ ) {
 				if ( children[ i ] is Tide tide ) {
 					tide.QueueFree();

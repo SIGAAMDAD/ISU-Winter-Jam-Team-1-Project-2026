@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bxx2uro5uusm8"]
+[gd_scene load_steps=11 format=3 uid="uid://bxx2uro5uusm8"]
 
 [ext_resource type="Script" uid="uid://b43snt0sswaqk" path="res://Assets/Prefabs/Mobs/Squid/Squid.cs" id="1_bgroo"]
 [ext_resource type="Texture2D" uid="uid://6t5bau38yd33" path="res://Assets/Textures/SpriteSheets/Squid.png" id="2_eyq8v"]
+[ext_resource type="Texture2D" uid="uid://d7ah2ju7o8ab" path="res://Assets/Textures/SpriteSheets/SquidDeath.png" id="3_eyq8v"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r31au"]
 atlas = ExtResource("2_eyq8v")
@@ -18,6 +19,10 @@ region = Rect2(0, 64, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_8i47l"]
 atlas = ExtResource("2_eyq8v")
 region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_733kn"]
+atlas = ExtResource("3_eyq8v")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_qlj56"]
 animations = [{
@@ -37,6 +42,14 @@ animations = [{
 "loop": true,
 "name": &"default",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_733kn")
+}],
+"loop": false,
+"name": &"die",
+"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eppw5"]
@@ -50,8 +63,8 @@ metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_qlj56")
+animation = &"die"
 autoplay = "default"
-frame_progress = 0.14172514
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -2.5)

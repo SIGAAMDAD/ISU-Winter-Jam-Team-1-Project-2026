@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bsbi8hhbtvn07"
-path.bptc="res://.godot/imported/AttackSpeedIcon.png-fe5aefbb7d4bc23eef31053d068e9384.bptc.ctex"
-path.astc="res://.godot/imported/AttackSpeedIcon.png-fe5aefbb7d4bc23eef31053d068e9384.astc.ctex"
+uid="uid://dkcl0jyoc1itk"
+path.bptc="res://.godot/imported/HealthRegenIcon.png-354e9c63278bb2481540fe227f32e21f.bptc.ctex"
+path.astc="res://.godot/imported/HealthRegenIcon.png-354e9c63278bb2481540fe227f32e21f.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/Textures/SpriteSheets/AttackSpeedIcon.png"
-dest_files=["res://.godot/imported/AttackSpeedIcon.png-fe5aefbb7d4bc23eef31053d068e9384.bptc.ctex", "res://.godot/imported/AttackSpeedIcon.png-fe5aefbb7d4bc23eef31053d068e9384.astc.ctex"]
+source_file="res://Assets/Textures/Icons/HealthRegenIcon.png"
+dest_files=["res://.godot/imported/HealthRegenIcon.png-354e9c63278bb2481540fe227f32e21f.bptc.ctex", "res://.godot/imported/HealthRegenIcon.png-354e9c63278bb2481540fe227f32e21f.astc.ctex"]
 
 [params]
 

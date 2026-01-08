@@ -14,7 +14,21 @@ namespace Prefabs {
 	/// </summary>
 	
 	public partial class Seagull : MobBase {
+		private static readonly NodePath @GlobalPositionNodePath = "global_position.y";
+
+		/*
+		===============
+		OnAnimationChanged
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
 		private void OnAnimationChanged() {
+			if ( _animation.Name == DieAnimationName ) {
+				// make them fall a little bit
+				CreateTween().TweenProperty( this, GlobalPositionNodePath, GlobalPosition.Y - 120.0f, 0.25f );
+			}
 		}
 
 		/*
@@ -22,6 +36,9 @@ namespace Prefabs {
 		_Ready
 		===============
 		*/
+		/// <summary>
+		/// 
+		/// </summary>
 		public override void _Ready() {
 			base._Ready();
 

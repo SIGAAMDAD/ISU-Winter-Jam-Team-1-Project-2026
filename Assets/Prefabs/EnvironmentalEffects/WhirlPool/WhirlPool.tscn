@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://ikyjpejn77y5"]
 
 [ext_resource type="Texture2D" uid="uid://bhy1npoe6y2pd" path="res://Assets/Textures/SpriteSheets/Whirlpool.png" id="1_j8j8t"]
-[ext_resource type="Script" uid="uid://bugh8str2qga6" path="res://Assets/Prefabs/Mobs/WhirlPool/WhirlPool.cs" id="1_tlqtg"]
+[ext_resource type="Script" uid="uid://bugh8str2qga6" path="res://Assets/Prefabs/EnvironmentalEffects/WhirlPool/WhirlPool.cs" id="1_tlqtg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p3kve"]
 atlas = ExtResource("1_j8j8t")
@@ -72,7 +72,7 @@ animations = [{
 [node name="WhirlPool" type="AnimatedSprite2D"]
 sprite_frames = SubResource("SpriteFrames_5yb71")
 autoplay = "default"
-frame_progress = 0.32770693
+frame_progress = 0.99787885
 script = ExtResource("1_tlqtg")
 
 [node name="Area2D" type="Area2D" parent="."]

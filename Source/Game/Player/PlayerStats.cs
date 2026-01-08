@@ -2,6 +2,7 @@ using Game.Common;
 using Game.Mobs;
 using Game.Player.Upgrades;
 using Game.Player.UserInterface.UpgradeInterface;
+using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Util;
 using System;
@@ -46,9 +47,11 @@ namespace Game.Player {
 			[ HEALTH_REGEN ] = 1.0f,
 			[ ARMOR ] = 0.0f,
 			[ ATTACK_DAMAGE ] = 10.0f,
+			[ ATTACK_SPEED ] = 1.25f,
 			[ MAX_HEALTH ] = 100.0f,
 			[ MONEY ] = 0.0f,
 		};
+		private readonly ImmutableDictionary<UpgradeType, float> _baseStatValues;
 		private readonly ImmutableDictionary<UpgradeType, InternString> _upgradeToStatId;
 
 		private readonly int _entityId;
@@ -82,6 +85,9 @@ namespace Game.Player {
 			var upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeManager.UpgradeBought ) );
 			upgradeBought.Subscribe( this, OnUpgradeBought );
 
+			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
+			waveCompleted.Subscribe( this, OnWaveCompleted );
+
 			_upgradeToStatId = new Dictionary<UpgradeType, InternString> {
 				[ UpgradeType.Speed ] = SPEED,
 				[ UpgradeType.MaxHealth ] = MAX_HEALTH,
@@ -89,6 +95,15 @@ namespace Game.Player {
 				[ UpgradeType.Armor ] = ARMOR,
 				[ UpgradeType.AttackDamage ] = ATTACK_DAMAGE,
 				[ UpgradeType.AttackSpeed ] = ATTACK_SPEED,
+			}.ToImmutableDictionary();
+
+			_baseStatValues = new Dictionary<UpgradeType, float> {
+				[ UpgradeType.Speed ] = _statCache[ SPEED ],
+				[ UpgradeType.MaxHealth ] = _statCache[ MAX_HEALTH ],
+				[ UpgradeType.HealthRegen ] = _statCache[ HEALTH_REGEN ],
+				[ UpgradeType.Armor ] = _statCache[ ARMOR ],
+				[ UpgradeType.AttackDamage ] = _statCache[ ATTACK_DAMAGE ],
+				[ UpgradeType.AttackSpeed ] = _statCache[ ATTACK_SPEED ]
 			}.ToImmutableDictionary();
 
 			foreach ( var stat in _statCache ) {
@@ -150,6 +165,20 @@ namespace Game.Player {
 
 		/*
 		===============
+		OnWaveCompleted
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
+			ref float health = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, HEALTH, out _ );
+			health = MaxHealth;
+		}
+
+		/*
+		===============
 		OnMobKilled
 		===============
 		*/
@@ -178,11 +207,11 @@ namespace Game.Player {
 			InternString statId = _upgradeToStatId[ args.Type ];
 
 			ref float value = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, statId, out _ );
-			value += args.AddAmount;
+			value = _baseStatValues[ args.Type ] * args.MultiplyAmount;
 
 			ref float money = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, MONEY, out _ );
 			money -= args.Cost;
-
+			
 			_statChanged.Publish( new StatChangedEventArgs( MONEY, money ) );
 			_statChanged.Publish( new StatChangedEventArgs( statId, value ) );
 		}

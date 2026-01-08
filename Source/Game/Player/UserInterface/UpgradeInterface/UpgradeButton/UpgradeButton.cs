@@ -19,6 +19,7 @@ namespace Game.Player.UserInterface {
 		private readonly UpgradeManager _manager;
 		private readonly Button _owner;
 		private readonly Label _costLabel;
+		private readonly Label _valueLabel;
 		private readonly string _name;
 		/*
 		===============
@@ -39,6 +40,7 @@ namespace Game.Player.UserInterface {
 
 			_owner = button;
 			_costLabel = node.GetNode<Label>( "CostLabel" );
+			_valueLabel = node.GetNode<Label>( "StatValueLabel" );
 			_type = type;
 			_name = name;
 			_manager = manager;
@@ -58,6 +60,7 @@ namespace Game.Player.UserInterface {
 			// FIXME: this should be an event
 			_owner.Text = $"{_name} [{tier}]";
 			_costLabel.Text = _manager.GetUpgradeCost( _type, tier ).ToString();
+			_valueLabel.Text = $"+{_manager.GetUpgradeMultiplier( _type, tier )}";
 		}
 
 		/*

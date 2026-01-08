@@ -1,12 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://bp7tu6bkhlxep"]
+[gd_scene load_steps=9 format=3 uid="uid://bp7tu6bkhlxep"]
 
 [ext_resource type="PackedScene" uid="uid://c5l5fqjcktnqg" path="res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/UpgradeButton.tscn" id="2_v8nt4"]
-[ext_resource type="Texture2D" uid="uid://diro2587u143n" path="res://Assets/Textures/SpriteSheets/MaxHealthIcon.png" id="3_2kjoo"]
+[ext_resource type="Texture2D" uid="uid://diro2587u143n" path="res://Assets/Textures/Icons/MaxHealthIcon.png" id="3_2kjoo"]
 [ext_resource type="Texture2D" uid="uid://bc5yt4a4v7okr" path="res://Assets/Textures/SpriteSheets/SpeedIcon.png" id="3_8r11l"]
-[ext_resource type="Texture2D" uid="uid://dt7f7l3gi48kk" path="res://Assets/Textures/SpriteSheets/Armorcon.png" id="3_uciwc"]
-[ext_resource type="Texture2D" uid="uid://dkcl0jyoc1itk" path="res://Assets/Textures/SpriteSheets/HealthRegenIcon.png" id="5_x5gbg"]
-[ext_resource type="Texture2D" uid="uid://ddf2uvfod1oef" path="res://Assets/Textures/SpriteSheets/AttackDamageIcon.png" id="6_omusq"]
-[ext_resource type="Texture2D" uid="uid://bsbi8hhbtvn07" path="res://Assets/Textures/SpriteSheets/AttackSpeedIcon.png" id="7_73cac"]
+[ext_resource type="Texture2D" uid="uid://dt7f7l3gi48kk" path="res://Assets/Textures/Icons/Armorcon.png" id="3_uciwc"]
+[ext_resource type="Texture2D" uid="uid://dkcl0jyoc1itk" path="res://Assets/Textures/Icons/HealthRegenIcon.png" id="5_x5gbg"]
+[ext_resource type="Texture2D" uid="uid://ddf2uvfod1oef" path="res://Assets/Textures/Icons/AttackDamageIcon.png" id="6_omusq"]
+[ext_resource type="Texture2D" uid="uid://bsbi8hhbtvn07" path="res://Assets/Textures/Icons/AttackSpeedIcon.png" id="7_73cac"]
+[ext_resource type="Texture2D" uid="uid://3xf0730eaxae" path="res://Assets/Textures/Icons/Coin.png" id="8_thklw"]
 
 [node name="UpgradeMenu" type="CanvasLayer"]
 metadata/_edit_use_anchors_ = true
@@ -18,7 +19,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 20
 metadata/_edit_use_anchors_ = true
+
+[node name="Title" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "BUY UPGRADES"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="UpgradeList" type="VBoxContainer" parent="MarginContainer"]
 unique_name_in_owner = true
@@ -26,16 +39,47 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
+[node name="Legend" type="HBoxContainer" parent="MarginContainer/UpgradeList"]
+layout_mode = 2
+
+[node name="UpgradeLabel" type="Label" parent="MarginContainer/UpgradeList/Legend"]
+custom_minimum_size = Vector2(290, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "UPGRADE"
+horizontal_alignment = 1
+
+[node name="StatValueLabel" type="Label" parent="MarginContainer/UpgradeList/Legend"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "BONUS"
+horizontal_alignment = 1
+
+[node name="CostLabel" type="Label" parent="MarginContainer/UpgradeList/Legend"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "COST"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/UpgradeList"]
+layout_mode = 2
+
 [node name="ArmorButton" parent="MarginContainer/UpgradeList" instance=ExtResource("2_v8nt4")]
 layout_mode = 2
 Type = 3
 StatName = "ARMOR"
 Icon = ExtResource("3_uciwc")
 
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/UpgradeList"]
+layout_mode = 2
+
 [node name="SpeedButton" parent="MarginContainer/UpgradeList" instance=ExtResource("2_v8nt4")]
 layout_mode = 2
 StatName = "SPEED"
 Icon = ExtResource("3_8r11l")
+
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/UpgradeList"]
+layout_mode = 2
 
 [node name="MaxHealthButton" parent="MarginContainer/UpgradeList" instance=ExtResource("2_v8nt4")]
 layout_mode = 2
@@ -43,11 +87,17 @@ Type = 4
 StatName = "MAX HEALTH"
 Icon = ExtResource("3_2kjoo")
 
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/UpgradeList"]
+layout_mode = 2
+
 [node name="HealthRegenButton" parent="MarginContainer/UpgradeList" instance=ExtResource("2_v8nt4")]
 layout_mode = 2
 Type = 5
 StatName = "HEALTH REGENERATION"
 Icon = ExtResource("5_x5gbg")
+
+[node name="HSeparator5" type="HSeparator" parent="MarginContainer/UpgradeList"]
+layout_mode = 2
 
 [node name="AttackDamageButton" parent="MarginContainer/UpgradeList" instance=ExtResource("2_v8nt4")]
 layout_mode = 2
@@ -55,49 +105,34 @@ Type = 1
 StatName = "ATTACK DAMAGE"
 Icon = ExtResource("6_omusq")
 
+[node name="HSeparator6" type="HSeparator" parent="MarginContainer/UpgradeList"]
+layout_mode = 2
+
 [node name="AttackSpeedButton" parent="MarginContainer/UpgradeList" instance=ExtResource("2_v8nt4")]
 layout_mode = 2
 Type = 2
 StatName = "ATTACK SPEED"
 Icon = ExtResource("7_73cac")
 
-[node name="Title" type="Label" parent="."]
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.093
-offset_bottom = 0.040000916
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 48
-text = "BUY UPGRADES"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MoneyLabel" type="Label" parent="."]
+[node name="FinishButton" type="Button" parent="MarginContainer"]
 unique_name_in_owner = true
-anchors_preset = -1
-anchor_left = 0.022000002
-anchor_top = 0.892
-anchor_right = 0.35000002
-anchor_bottom = 0.93900007
-offset_left = -0.16000175
-offset_top = -0.23999023
-offset_right = -3.0517578e-05
-offset_bottom = -0.080078125
-theme_override_font_sizes/font_size = 24
-text = "MONEY:"
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "START NEXT WAVE"
 metadata/_edit_use_anchors_ = true
 
-[node name="FinishButton" type="Button" parent="."]
+[node name="MoneyContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/MoneyContainer"]
+layout_mode = 2
+texture = ExtResource("8_thklw")
+
+[node name="MoneyLabel" type="Label" parent="MarginContainer/MoneyContainer"]
 unique_name_in_owner = true
-anchors_preset = -1
-anchor_left = 0.87000006
-anchor_top = 0.93200004
-anchor_right = 0.98700005
-anchor_bottom = 0.975
-offset_left = -0.60009766
-offset_top = -0.040039063
-offset_right = -0.36010742
-grow_horizontal = 0
-grow_vertical = 0
-text = "START NEXT WAVE"
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
 metadata/_edit_use_anchors_ = true

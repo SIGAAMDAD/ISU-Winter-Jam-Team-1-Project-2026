@@ -21,7 +21,6 @@ terms, you may contact me via email at nyvantil@gmail.com.
 ===========================================================================
 */
 
-using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Logger;
@@ -29,7 +28,7 @@ using Nomad.Core.Util;
 using Nomad.ResourceCache;
 using System;
 
-namespace Systems.Caching {
+namespace Game.Systems.Caching {
 	/*
 	===================================================================================
 	

@@ -45,7 +45,7 @@ namespace Game.Player.UserInterface {
 
 			_timer = new Timer() {
 				Name = "WaveTimer",
-				WaitTime = 10.0f,
+				WaitTime = 15.0f,
 				OneShot = true
 			};
 			_timer.Connect( Timer.SignalName.Timeout, Callable.From( OnWaveTimerTimeout ) );
@@ -57,7 +57,11 @@ namespace Game.Player.UserInterface {
 		Dispose
 		===============
 		*/
+		/// <summary>
+		/// 
+		/// </summary>
 		public void Dispose() {
+			_waveTimeout.Dispose();
 		}
 
 		/*
@@ -65,6 +69,9 @@ namespace Game.Player.UserInterface {
 		Update
 		===============
 		*/
+		/// <summary>
+		/// 
+		/// </summary>
 		public void Update() {
 			if ( ( Engine.GetProcessFrames() % 60 ) != 0 ) {
 				return;
@@ -81,7 +88,6 @@ namespace Game.Player.UserInterface {
 		/// 
 		/// </summary>
 		private void OnWaveTimerTimeout() {
-			GD.Print( "Wave Timed Out" );
 			_waveTimeout.Publish( new EmptyEventArgs() );
 		}
 

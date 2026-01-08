@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://du7figp5hhtgb"]
+[gd_scene load_steps=9 format=3 uid="uid://du7figp5hhtgb"]
 
 [ext_resource type="Texture2D" uid="uid://b182sto545vax" path="res://Assets/Textures/SpriteSheets/BigTide.png" id="1_geb60"]
-[ext_resource type="Script" uid="uid://dcwler0s3q4cy" path="res://Assets/Prefabs/Mobs/BigTide/BigTide.cs" id="2_f3s3g"]
-[ext_resource type="Script" uid="uid://cburu6b4ckehs" path="res://addons/godot-rapier2d/custom_nodes/rapier_area_2d.gd" id="3_60hxd"]
+[ext_resource type="Script" uid="uid://dcwler0s3q4cy" path="res://Assets/Prefabs/EnvironmentalEffects/BigTide/BigTide.cs" id="2_f3s3g"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f3s3g"]
 atlas = ExtResource("1_geb60")
@@ -50,9 +49,7 @@ autoplay = "default"
 frame_progress = 0.33826977
 script = ExtResource("2_f3s3g")
 
-[node name="RapierArea2D" type="Area2D" parent="."]
-script = ExtResource("3_60hxd")
-metadata/_custom_type_script = "uid://cburu6b4ckehs"
+[node name="Area2D" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RapierArea2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_5pqf4")

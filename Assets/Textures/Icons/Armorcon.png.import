@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://diro2587u143n"
-path.bptc="res://.godot/imported/MaxHealthIcon.png-b6bbf4f51caa60f7f4c167651bfc458c.bptc.ctex"
-path.astc="res://.godot/imported/MaxHealthIcon.png-b6bbf4f51caa60f7f4c167651bfc458c.astc.ctex"
+uid="uid://dt7f7l3gi48kk"
+path.bptc="res://.godot/imported/Armorcon.png-aa24371a5988e96e78c34bfcd321259e.bptc.ctex"
+path.astc="res://.godot/imported/Armorcon.png-aa24371a5988e96e78c34bfcd321259e.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/Textures/SpriteSheets/MaxHealthIcon.png"
-dest_files=["res://.godot/imported/MaxHealthIcon.png-b6bbf4f51caa60f7f4c167651bfc458c.bptc.ctex", "res://.godot/imported/MaxHealthIcon.png-b6bbf4f51caa60f7f4c167651bfc458c.astc.ctex"]
+source_file="res://Assets/Textures/Icons/Armorcon.png"
+dest_files=["res://.godot/imported/Armorcon.png-aa24371a5988e96e78c34bfcd321259e.bptc.ctex", "res://.godot/imported/Armorcon.png-aa24371a5988e96e78c34bfcd321259e.astc.ctex"]
 
 [params]
 

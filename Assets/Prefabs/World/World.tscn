@@ -37,7 +37,6 @@ script = ExtResource("1_yd2wk")
 [node name="Water" type="TextureRect" parent="."]
 unique_name_in_owner = true
 material = ExtResource("2_xtsie")
-anchors_preset = -1
 offset_right = 1280.0
 offset_bottom = 721.0
 grow_horizontal = 2
@@ -69,10 +68,6 @@ polygon = PackedVector2Array(1280, 0, 0, 0, 0, 721, 1280, 721)
 script = ExtResource("2_oturc")
 _tideSpawner = NodePath("TideSpawner")
 _mobSpawner = NodePath("MobSpawner")
-
-[node name="WaveTimer" type="Timer" parent="WaveManager"]
-wait_time = 20.0
-autostart = true
 
 [node name="TideSpawner" type="Node2D" parent="WaveManager" node_paths=PackedStringArray("_worldBounds")]
 script = ExtResource("6_623ao")
