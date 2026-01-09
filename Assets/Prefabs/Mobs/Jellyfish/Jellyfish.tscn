@@ -1,0 +1,69 @@
+[gd_scene load_steps=10 format=3 uid="uid://dgx2nfjme5vr2"]
+
+[ext_resource type="Script" uid="uid://6xdcqy2i2a50" path="res://Assets/Prefabs/Mobs/Jellyfish/Jellyfish.cs" id="1_l68b0"]
+[ext_resource type="Texture2D" uid="uid://cdw383uxifpd5" path="res://Assets/Textures/SpriteSheets/Jellyfish.png" id="2_pb0ve"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x8gk7"]
+atlas = ExtResource("2_pb0ve")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a5d0j"]
+atlas = ExtResource("2_pb0ve")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ew4hs"]
+atlas = ExtResource("2_pb0ve")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dolb1"]
+atlas = ExtResource("2_pb0ve")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l68b0"]
+atlas = ExtResource("2_pb0ve")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s6iuj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x8gk7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a5d0j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ew4hs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dolb1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l68b0")
+}],
+"loop": false,
+"name": &"die",
+"speed": 1.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p108e"]
+radius = 17.0
+
+[node name="Jellyfish" type="Area2D"]
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("1_l68b0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_s6iuj")
+animation = &"die"
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -9)
+shape = SubResource("CircleShape2D_p108e")

@@ -1,6 +1,7 @@
 using Godot;
 using Nomad.Core.Events;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
 namespace Game.Player.Upgrades {
@@ -14,7 +15,7 @@ namespace Game.Player.Upgrades {
 	/// <summary>
 	/// Handles upgrade tiers and events.
 	/// </summary>
-	
+
 	public sealed class UpgradeManager {
 		private readonly record struct UpgradeData(
 			float Cost,
@@ -39,7 +40,7 @@ namespace Game.Player.Upgrades {
 		private IGameEvent<UpgradeBoughtEventArgs> _upgradeBought;
 
 		private readonly Dictionary<UpgradeType, int> _upgrades = new();
-		private readonly Dictionary<int, UpgradeData> _upgradeData;
+		private readonly ImmutableDictionary<UpgradeType, ImmutableDictionary<int, UpgradeData>> _upgradeData;
 
 		/*
 		===============
@@ -56,15 +57,53 @@ namespace Game.Player.Upgrades {
 			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
-			_upgradeData = new Dictionary<int, UpgradeData> {
-				[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
-				[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
-				[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
-				[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
-				[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER ),
-			};
+			//...
+			_upgradeData = new Dictionary<UpgradeType, ImmutableDictionary<int, UpgradeData>> {
+				[ UpgradeType.Armor ] = new Dictionary<int, UpgradeData> {
+					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
+					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
+					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
+					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
+					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER )
+				}.ToImmutableDictionary(),
+				[ UpgradeType.MaxHealth ] = new Dictionary<int, UpgradeData> {
+					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
+					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
+					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
+					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
+					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER )
+				}.ToImmutableDictionary(),
+				[ UpgradeType.HealthRegen ] = new Dictionary<int, UpgradeData> {
+					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
+					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
+					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
+					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
+					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER )
+				}.ToImmutableDictionary(),
+				[ UpgradeType.Speed ] = new Dictionary<int, UpgradeData> {
+					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
+					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, 1.05f ),
+					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, 1.5f ),
+					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, 2.75f ),
+					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, 3.5f )
+				}.ToImmutableDictionary(),
+				[ UpgradeType.AttackDamage ] = new Dictionary<int, UpgradeData> {
+					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
+					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
+					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
+					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
+					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER )
+				}.ToImmutableDictionary(),
+				[ UpgradeType.AttackSpeed ] = new Dictionary<int, UpgradeData> {
+					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
+					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, 0.75f ),
+					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, 0.60f ),
+					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, 0.45f ),
+					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, 0.15f )
+				}.ToImmutableDictionary(),
+			}.ToImmutableDictionary();
 		}
-		
+
 		/*
 		===============
 		GetUpgrade
@@ -108,7 +147,7 @@ namespace Game.Player.Upgrades {
 		/// <returns></returns>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public float GetUpgradeCost( UpgradeType type, int tier ) {
-			return _upgradeData[ tier ].Cost;
+			return _upgradeData[ type ][ tier ].Cost;
 		}
 
 		/*
@@ -124,7 +163,7 @@ namespace Game.Player.Upgrades {
 		/// <returns></returns>
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public float GetUpgradeMultiplier( UpgradeType type, int tier ) {
-			return _upgradeData[ tier ].AddAmount;
+			return _upgradeData[ type ][ tier ].AddAmount;
 		}
 
 		/*
@@ -138,7 +177,7 @@ namespace Game.Player.Upgrades {
 		/// <param name="type"></param>
 		public bool BuyUpgrade( UpgradeType type ) {
 			if ( _upgrades.TryGetValue( type, out int tier ) ) {
-				if ( tier >= MAX_UPGRADE_TIER ) {
+				if ( tier > MAX_UPGRADE_TIER ) {
 					// already at max
 					return false;
 				}
@@ -152,7 +191,7 @@ namespace Game.Player.Upgrades {
 			}
 
 			_upgrades[ type ] = tier + 1;
-			_upgradeBought.Publish( new UpgradeBoughtEventArgs( type, tier, cost, _upgradeData[ tier ].AddAmount ) );
+			_upgradeBought.Publish( new UpgradeBoughtEventArgs( type, tier, cost, _upgradeData[ type ][ tier ].AddAmount ) );
 
 			return true;
 		}

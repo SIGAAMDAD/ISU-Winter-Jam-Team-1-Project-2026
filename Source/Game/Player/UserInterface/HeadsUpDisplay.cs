@@ -51,16 +51,5 @@ namespace Game.Player.UserInterface {
 
 			GameStateManager.GameStateChanged.Subscribe( this, OnGameStateChanged );
 		}
-
-		/*
-		===============
-		_Process
-		===============
-		*/
-		public override void _Process( double delta ) {
-			base._Process( delta );
-
-			_waveUI.WaveTimer.Update();
-		}
 	};
 };

@@ -44,7 +44,7 @@ namespace Game.Player.UserInterface {
 		/// <param name="args"></param>
 		private void OnStatChanged( in StatChangedEventArgs args ) {
 			if ( args.StatId == PlayerStats.MONEY ) {
-				_countLabel.Text = $"{args.Value}";
+				_countLabel.SetDeferred( Label.PropertyName.Text, $"{args.Value}" );
 			}
 		}
 	};

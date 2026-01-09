@@ -18,6 +18,8 @@ namespace Game.Common {
 	/// </summary>
 
 	public partial class WaveManager : Node {
+		public const int MAX_WAVES = 20;
+
 		[Export]
 		private TideSpawner _tideSpawner;
 		[Export]

@@ -2,42 +2,34 @@
 
 [ext_resource type="Shader" uid="uid://58gyh5dmu0kl" path="res://Assets/Prefabs/World/Water.gdshader" id="1_3w3il"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_e7xia"]
-noise_type = 3
-frequency = 0.115
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_3w3il"]
+noise_type = 2
+frequency = 0.0072
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_oturc"]
-noise = SubResource("FastNoiseLite_e7xia")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_f2400"]
+noise = SubResource("FastNoiseLite_3w3il")
+seamless = true
+seamless_blend_skirt = 1.0
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_xtsie"]
-seed = 85
-frequency = 0.0905
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xy4vu"]
+frequency = 0.173
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_e7xia"]
-width = 256
-height = 256
-generate_mipmaps = false
-noise = SubResource("FastNoiseLite_xtsie")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ke25u"]
+noise = SubResource("FastNoiseLite_xy4vu")
 seamless = true
 seamless_blend_skirt = 1.0
 
 [resource]
 shader = ExtResource("1_3w3il")
-shader_parameter/waterNoise = SubResource("NoiseTexture2D_e7xia")
-shader_parameter/waterDistortionNoise = SubResource("NoiseTexture2D_oturc")
-shader_parameter/waterColor = Color(0.117, 0.27, 0.58, 1)
-shader_parameter/colorCorection = 0.499999988824
-shader_parameter/distortionForce = 0.0250000011875
-shader_parameter/WDBrightness = 2.05000003054746
-shader_parameter/WDFreq = 0.6
-shader_parameter/WDSize = 1.15000003203752
-shader_parameter/WDSpeed = 1.0
-shader_parameter/tiling = Vector2(2.085, 1.61)
+shader_parameter/waterNoise = SubResource("NoiseTexture2D_ke25u")
+shader_parameter/waterDistortionNoise = SubResource("NoiseTexture2D_f2400")
+shader_parameter/colorCorection = 0.50999998860048
+shader_parameter/distortionForce = 0.0490000023275
+shader_parameter/WDBrightness = 1.5000000223518
+shader_parameter/WDFreq = 0.60000000894071
+shader_parameter/WDSize = 0.90000002831222
+shader_parameter/WDSpeed = 1.15000000223518
+shader_parameter/tiling = Vector2(5.895, 5.405)
 shader_parameter/offSetSpeed = Vector2(0.1, 0.1)
-shader_parameter/backGroundDirX = -0.07800000044512001
-shader_parameter/backGroundDirY = 0.05500000587237999
-shader_parameter/wake_position = Vector2(16.83, 0.5)
-shader_parameter/wake_radius = 0.2850000135375
-shader_parameter/wake_strength = 0.05
-shader_parameter/wake_speed = 2.350000111625
-shader_parameter/wake_falloff = 2.43000011216512
+shader_parameter/backGroundDirX = 0.01
+shader_parameter/backGroundDirY = 0.01

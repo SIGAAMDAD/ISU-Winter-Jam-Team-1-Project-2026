@@ -136,22 +136,33 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7a8lv"]
 size = Vector2(72.17392, 52.173912)
 
-[node name="Orca" type="CharacterBody2D"]
+[node name="Orca" type="Area2D"]
 scale = Vector2(1.15, 1.15)
+collision_layer = 0
+collision_mask = 3
 script = ExtResource("1_8xrhf")
-_health = 20.0
+_xpKillAmount = 80.0
+_damageAmount = 30.0
+_health = 50.0
 _speed = 0.4
-metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_8fuud")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_index = -2
-position = Vector2(-0.4347818, -8.695652)
+position = Vector2(0, -15.652174)
+scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_7a8lv")
 disabled = true
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+target_desired_distance = 20.0
 path_max_distance = 1000.0
+avoidance_enabled = true
+radius = 80.0
+max_neighbors = 1000
+time_horizon_agents = 1.5
+max_speed = 1000.0

@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://bxx2uro5uusm8"]
+[gd_scene load_steps=28 format=3 uid="uid://bxx2uro5uusm8"]
 
 [ext_resource type="Script" uid="uid://b43snt0sswaqk" path="res://Assets/Prefabs/Mobs/Squid/Squid.cs" id="1_bgroo"]
 [ext_resource type="Texture2D" uid="uid://6t5bau38yd33" path="res://Assets/Textures/SpriteSheets/Squid.png" id="2_eyq8v"]
 [ext_resource type="Texture2D" uid="uid://d7ah2ju7o8ab" path="res://Assets/Textures/SpriteSheets/SquidDeath.png" id="3_eyq8v"]
+[ext_resource type="Texture2D" uid="uid://c6x8efjvycg37" path="res://Assets/Textures/SpriteSheets/GiantSquidGrab.png" id="4_733kn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r31au"]
 atlas = ExtResource("2_eyq8v")
@@ -53,22 +54,162 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eppw5"]
-size = Vector2(64, 53)
+size = Vector2(56.899994, 52.300003)
 
-[node name="Squid" type="CharacterBody2D"]
-scale = Vector2(5, 4.847)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eyq8v"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_733kn"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u8ryw"]
+atlas = ExtResource("4_733kn")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crqdn"]
+atlas = ExtResource("4_733kn")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0dyx8"]
+atlas = ExtResource("4_733kn")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ft5l"]
+atlas = ExtResource("4_733kn")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w0sh3"]
+atlas = ExtResource("4_733kn")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_85yth"]
+atlas = ExtResource("4_733kn")
+region = Rect2(128, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aic5a"]
+atlas = ExtResource("4_733kn")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8nk6c"]
+atlas = ExtResource("4_733kn")
+region = Rect2(64, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2wm0x"]
+atlas = ExtResource("4_733kn")
+region = Rect2(128, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ktl2"]
+atlas = ExtResource("4_733kn")
+region = Rect2(128, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gwgu0"]
+atlas = ExtResource("4_733kn")
+region = Rect2(0, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bexje"]
+atlas = ExtResource("4_733kn")
+region = Rect2(64, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wkhj6"]
+atlas = ExtResource("4_733kn")
+region = Rect2(128, 192, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wkhj6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u8ryw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crqdn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0dyx8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ft5l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w0sh3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_85yth")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aic5a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8nk6c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2wm0x")
+}],
+"loop": false,
+"name": &"grab",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ktl2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gwgu0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bexje")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wkhj6")
+}],
+"loop": false,
+"name": &"release",
+"speed": 5.0
+}]
+
+[node name="Squid" type="Area2D"]
+collision_layer = 0
+collision_mask = 3
 script = ExtResource("1_bgroo")
+_xpKillAmount = 200.0
+_damageAmount = 20.0
+_health = 900.0
 _speed = 0.1
-metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(10, 10)
 sprite_frames = SubResource("SpriteFrames_qlj56")
-animation = &"die"
 autoplay = "default"
+frame_progress = 0.10062488
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -2.5)
+position = Vector2(0.50000024, -35.500008)
+scale = Vector2(10, 10)
 shape = SubResource("RectangleShape2D_eppw5")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+target_desired_distance = 20.0
 path_max_distance = 1000.0
+avoidance_enabled = true
+radius = 300.0
+max_neighbors = 1000
+time_horizon_agents = 1.5
+max_speed = 1000.0
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -237.0
+offset_top = 175.0
+offset_right = 237.0
+offset_bottom = 198.25253
+theme_override_styles/background = SubResource("StyleBoxFlat_eyq8v")
+theme_override_styles/fill = SubResource("StyleBoxFlat_733kn")
+value = 100.0
+show_percentage = false
+metadata/_edit_use_anchors_ = true
+
+[node name="GrabbedPlayer" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(-2, 291)
+sprite_frames = SubResource("SpriteFrames_wkhj6")
+animation = &"release"
+frame = 3
+frame_progress = 1.0

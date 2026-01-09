@@ -1,5 +1,7 @@
 using Game.Player;
+using Game.Systems;
 using Godot;
+using Nomad.Core.Events;
 using System;
 
 namespace Game.Mobs {
@@ -14,27 +16,23 @@ namespace Game.Mobs {
 	/// 
 	/// </summary>
 	
-	public sealed partial class Tide : AnimatedSprite2D {
+	public sealed partial class Tide : EffectBase {
 		private Vector2 _velocity = Vector2.Zero;
+		private IGameEvent<PlayerTakeDamageEventArgs> _damagePlayer;
 
 		/*
 		===============
-		OnBodyEntered
+		OnPlayerEntered
 		===============
 		*/
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="bodyRid"></param>
-		/// <param name="body"></param>
-		/// <param name="bodyShapeIndex"></param>
-		/// <param name="localShapeIndex"></param>
-		private void OnBodyEntered( Rid bodyRid, Node2D body, int bodyShapeIndex, int localShapeIndex ) {
-			if ( body is PlayerManager player ) {
-				player.Damage( 20.0f );
-				GetParent().CallDeferred( MethodName.RemoveChild, this );
-				CallDeferred( MethodName.QueueFree );
-			}
+		/// <param name="player"></param>
+		protected override void OnPlayerEntered( PlayerManager player ) {
+			_damagePlayer.Publish( new PlayerTakeDamageEventArgs( 25.0f ) );
+			// TODO: add particle effect
+			QueueFree();
 		}
 
 		/*
@@ -48,8 +46,8 @@ namespace Game.Mobs {
 		public override void _Ready() {
 			base._Ready();
 
-			var collisionArea = GetNode<Area2D>( "Area2D" );
-			collisionArea.Connect( Area2D.SignalName.BodyShapeEntered, Callable.From<Rid, Node2D, int, int>( OnBodyEntered ) );
+			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
+			_damagePlayer = eventFactory.GetEvent<PlayerTakeDamageEventArgs>( nameof( PlayerStats.TakeDamage ) );
 		}
 
 		/*

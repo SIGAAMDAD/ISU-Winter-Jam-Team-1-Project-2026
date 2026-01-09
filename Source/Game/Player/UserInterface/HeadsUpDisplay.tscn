@@ -160,3 +160,34 @@ texture = ExtResource("10_mub6a")
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="AnnouncmentLabel" type="Label" parent="MainHUD"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.48400003
+anchor_right = 1.0
+anchor_bottom = 0.51600003
+offset_top = 0.019989014
+offset_bottom = -0.020019531
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="BossHealthBar" type="VBoxContainer" parent="MainHUD"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="BossNameLabel" type="Label" parent="MainHUD/BossHealthBar"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="MainHUD/BossHealthBar"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+show_percentage = false

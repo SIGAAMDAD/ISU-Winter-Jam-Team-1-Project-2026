@@ -1,0 +1,7 @@
+[gd_resource type="ParticleProcessMaterial" format=3 uid="uid://b7qus8k8s84iq"]
+
+[resource]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 6.05
+gravity = Vector3(0, 98, 0)

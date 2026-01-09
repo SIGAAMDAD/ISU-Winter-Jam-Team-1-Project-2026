@@ -1,0 +1,74 @@
+[gd_scene load_steps=11 format=3 uid="uid://d3ceufeyvmw0q"]
+
+[ext_resource type="Texture2D" uid="uid://bd2dkwmfs1w47" path="res://Assets/Textures/SpriteSheets/ExplosiveHarpoon.png" id="1_x8lpv"]
+[ext_resource type="Script" uid="uid://xxnpe6m067bx" path="res://Assets/Prefabs/Weapons/Harpoon/Explosive/ExplosiveHarpoon.cs" id="2_x8lpv"]
+[ext_resource type="Material" uid="uid://b7qus8k8s84iq" path="res://Assets/Prefabs/Weapons/Harpoon/HarpoonTrail.tres" id="3_af8or"]
+[ext_resource type="Texture2D" uid="uid://u86rwyuqchrx" path="res://Assets/Textures/SpriteSheets/HarpoonExplosion.png" id="4_0o70v"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gvynp"]
+radius = 5.0
+height = 20.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_af8or"]
+atlas = ExtResource("4_0o70v")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oogs6"]
+atlas = ExtResource("4_0o70v")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pewlw"]
+atlas = ExtResource("4_0o70v")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cgxhx"]
+atlas = ExtResource("4_0o70v")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4cp00"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_af8or")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oogs6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pewlw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cgxhx")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="ExplosiveHarpoon" type="Sprite2D"]
+texture = ExtResource("1_x8lpv")
+region_enabled = true
+region_rect = Rect2(64, 0, 64, 64)
+script = ExtResource("2_x8lpv")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(-1, 0)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CapsuleShape2D_gvynp")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(0, -2)
+amount = 20
+lifetime = 0.9
+speed_scale = 4.0
+local_coords = true
+process_material = ExtResource("3_af8or")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_4cp00")
+frame = 3
+frame_progress = 1.0

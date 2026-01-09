@@ -2,10 +2,7 @@ using Game.Common;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
-using Nomad.Core.Util;
-using Nomad.ResourceCache;
 using System;
-using Systems.Caching;
 
 namespace Game.Mobs {
 	/*
@@ -22,7 +19,11 @@ namespace Game.Mobs {
 	public sealed partial class TideSpawner : Node2D {
 		[Export]
 		private CollisionShape2D _worldBounds;
+		[Export]
+		private PackedScene[] _environmentalEffects;
 
+		private int _waveNumber;
+		private int _effectCount = 2;
 		private int _spawnMinX;
 		private int _spawnMinY;
 		private int _spawnMaxX;
@@ -30,7 +31,77 @@ namespace Game.Mobs {
 
 		private Timer _spawnTimer;
 
-		private readonly ICacheEntry<PackedScene, FilePath> _tidePrefab = SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/EnvironmentalEffects/Tide/Tide.tscn" ) );
+		/*
+		===============
+		OnSpawnTides
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		private void OnSpawnEnvironmentalEffects() {
+			int effectTier = 1;
+			if ( _waveNumber >= 3 ) {
+				effectTier++;
+			}
+			if ( _waveNumber >= 7 ) {
+				effectTier++;
+			}
+			if ( _waveNumber >= 15 ) {
+				effectTier++;
+			}
+
+			for ( int t = 0; t < effectTier; t++ ) {
+				int count = _effectCount / effectTier;
+				PackedScene scene = _environmentalEffects[ t ];
+				for ( int i = 0; i < count; i++ ) {
+					EffectBase effect = scene.Instantiate<EffectBase>();
+					AddChild( effect );
+
+					Vector2 spawnPoint = new Vector2(
+						Random.Shared.Next( _spawnMinX, _spawnMaxX ),
+						Random.Shared.Next( _spawnMinY, _spawnMaxY )
+					);
+					effect.GlobalPosition = spawnPoint;
+				}
+			}
+		}
+
+		/*
+		===============
+		OnWaveStarted
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnWaveStarted( in EmptyEventArgs args ) {
+			_spawnTimer.Start();
+		}
+
+		/*
+		===============
+		OnWaveCompleted
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
+			_waveNumber = args.NewWave;
+			_effectCount = (int)( _waveNumber * 0.0625f + _effectCount );
+
+			var children = GetChildren();
+			for ( int i = 0; i < children.Count; i++ ) {
+				if ( children[ i ] is Tide tide ) {
+					tide.QueueFree();
+				}
+			}
+
+			_spawnTimer.Stop();
+		}
 
 		/*
 		===============
@@ -65,56 +136,7 @@ namespace Game.Mobs {
 			waveStarted.Subscribe( this, OnWaveStarted );
 
 			_spawnTimer = GetNode<Timer>( "SpawnTimer" );
-			_spawnTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnSpawnTide ) );
-		}
-
-		/*
-		===============
-		OnSpawnTides
-		===============
-		*/
-		/// <summary>
-		/// 
-		/// </summary>
-		private void OnSpawnTide() {
-			_tidePrefab.Get( out var scene );
-			Tide tide = scene.Instantiate<Tide>();
-			AddChild( tide );
-
-			Vector2 spawnPoint = new Vector2(
-				Random.Shared.Next( _spawnMinX, _spawnMaxX ),
-				Random.Shared.Next( _spawnMinY, _spawnMaxY )
-			);
-			tide.GlobalPosition = spawnPoint;
-		}
-
-		/*
-		===============
-		OnWaveStarted
-		===============
-		*/
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="args"></param>
-		private void OnWaveStarted( in EmptyEventArgs args ) {
-			_spawnTimer.Start();
-		}
-
-		/*
-		===============
-		OnWaveCompleted
-		===============
-		*/
-		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
-			var children = GetChildren();
-			for ( int i = 0; i < children.Count; i++ ) {
-				if ( children[ i ] is Tide tide ) {
-					tide.QueueFree();
-				}
-			}
-
-			_spawnTimer.Stop();
+			_spawnTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnSpawnEnvironmentalEffects ) );
 		}
 	};
 };

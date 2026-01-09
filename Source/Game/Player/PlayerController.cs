@@ -203,7 +203,7 @@ namespace Game.Player {
 		/// <param name="args"></param>
 		private void OnStatChanged( in StatChangedEventArgs args ) {
 			if ( args.StatId == PlayerStats.ATTACK_SPEED ) {
-				_weaponCooldown.WaitTime = BASE_WEAPON_COOLDOWN_TIME / args.Value;
+				_weaponCooldown.WaitTime = args.Value;
 			} else if ( args.StatId == PlayerStats.SPEED ) {
 				_movementSpeed = args.Value;
 			}

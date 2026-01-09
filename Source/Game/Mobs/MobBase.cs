@@ -1,5 +1,6 @@
 using Game.Common;
 using Game.Player;
+using Game.Player.UserInterface;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
@@ -17,7 +18,7 @@ namespace Game.Mobs {
 	/// The base object that all mobs inherit from.
 	/// </summary>
 
-	public partial class MobBase : CharacterBody2D {
+	public partial class MobBase : Area2D {
 		protected static readonly StringName @DefaultAnimationName = "default";
 		protected static readonly StringName @DieAnimationName = "die";
 
@@ -37,6 +38,7 @@ namespace Game.Mobs {
 		protected float _speed = 10.0f;
 
 		private Vector2 _frameVelocity;
+		private Vector2 _nextPathPosition;
 
 		protected NavigationAgent2D _navigationAgent;
 		protected AnimatedSprite2D _animation;
@@ -45,6 +47,8 @@ namespace Game.Mobs {
 
 		protected FlagBits _flags;
 		protected int _mobId;
+
+		protected IGameEvent<PlayerTakeDamageEventArgs> _damagePlayer;
 
 		private readonly Timer _damageEffectTimer = new Timer() {
 			WaitTime = 0.75f,
@@ -66,7 +70,7 @@ namespace Game.Mobs {
 		/// 
 		/// </summary>
 		/// <param name="amount"></param>
-		public void Damage( float amount ) {
+		public virtual void Damage( float amount ) {
 			if ( ( _flags & FlagBits.Dead ) != 0 ) {
 				return;
 			}
@@ -74,14 +78,35 @@ namespace Game.Mobs {
 			_health -= amount;
 			if ( _health <= 0.0f ) {
 				_flags |= FlagBits.Dead;
-				_animation.Play( DieAnimationName );
-				_collisionShape.Disabled = true;
+				_animation.CallDeferred( AnimatedSprite2D.MethodName.Play, DieAnimationName );
+				_collisionShape.SetDeferred( CollisionShape2D.PropertyName.Disabled, true );
 			}
-			_animation.SpeedScale = 0.0f;
-			_animation.Modulate = Colors.Red;
-			_damageEffectTimer.Start();
+			_animation.SetDeferred( AnimatedSprite2D.PropertyName.SpeedScale, 0.0f );
+			_animation.SetDeferred( AnimatedSprite2D.PropertyName.Modulate, Colors.Red );
+			_damageEffectTimer.CallDeferred( Timer.MethodName.Start );
 			_flags |= FlagBits.Hurt;
 			_takeDamage.Publish( new MobTakeDamageEventArgs( _mobId, amount ) );
+
+			var damageNumber = new DamageNumberLabel() {
+				GlobalPosition = GlobalPosition,
+				Value = amount
+			};
+			GetTree().Root.CallDeferred( MethodName.AddChild, damageNumber );
+		}
+
+		/*
+		===============
+		OnTargetReached
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		protected virtual void OnTargetReached() {
+			if ( ( _flags & FlagBits.Dead ) != 0 ) {
+				return;
+			}
+			_damagePlayer.Publish( new PlayerTakeDamageEventArgs( _damageAmount ) );
 		}
 
 		/*
@@ -93,26 +118,12 @@ namespace Game.Mobs {
 		/// Resets the "hurt" color back to white.
 		/// </summary>
 		private void OnResetColor() {
-			_animation.Modulate = Colors.White;
-			_animation.SpeedScale = 1.0f;
+			_animation.SetDeferred( AnimatedSprite2D.PropertyName.Modulate, Colors.White );
+			_animation.SetDeferred( AnimatedSprite2D.PropertyName.SpeedScale, 1.0f );
 			_flags &= ~FlagBits.Hurt;
 			if ( ( _flags & FlagBits.Dead ) != 0 ) {
 				_die.Publish( new MobDieEventArgs( _mobId, _xpKillAmount ) );
-				QueueFree();
-			}
-		}
-
-		/*
-		===============
-		OnTargetReached
-		===============
-		*/
-		/// <summary>
-		/// 
-		/// </summary>
-		private void OnTargetReached() {
-			if ( ( _flags & FlagBits.Dead ) != 0 ) {
-				return;
+				CallDeferred( MethodName.QueueFree );
 			}
 		}
 
@@ -127,6 +138,19 @@ namespace Game.Mobs {
 		/// <param name="args"></param>
 		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
 			_flags |= FlagBits.Dead;
+		}
+
+		/*
+		===============
+		UpdateTargetPosition
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		private void UpdateTargetPosition() {
+			_navigationAgent.TargetPosition = _target.GlobalPosition;
+			_nextPathPosition = _navigationAgent.GetNextPathPosition();
 		}
 
 		/*
@@ -147,17 +171,22 @@ namespace Game.Mobs {
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_takeDamage = eventFactory.GetEvent<MobTakeDamageEventArgs>( nameof( TakeDamage ) );
 			_die = eventFactory.GetEvent<MobDieEventArgs>( nameof( MobDie ) );
+			_damagePlayer = eventFactory.GetEvent<PlayerTakeDamageEventArgs>( nameof( PlayerStats.TakeDamage ) );
 
 			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
 			waveCompleted.Subscribe( this, OnWaveCompleted );
 
 			_navigationAgent = GetNode<NavigationAgent2D>( "NavigationAgent2D" );
 			_navigationAgent.Connect( NavigationAgent2D.SignalName.TargetReached, Callable.From( OnTargetReached ) );
+			_navigationAgent.ProcessThreadGroup = ProcessThreadGroupEnum.MainThread;
 
 			_animation = GetNode<AnimatedSprite2D>( "AnimatedSprite2D" );
 
 			_damageEffectTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnResetColor ) );
 			AddChild( _damageEffectTimer );
+
+			ProcessThreadGroup = ProcessThreadGroupEnum.SubThread;
+			ProcessThreadGroupOrder = 1;
 		}
 
 		/*
@@ -177,7 +206,7 @@ namespace Game.Mobs {
 				return;
 			}
 
-			_navigationAgent.TargetPosition = _target.GlobalPosition;
+			CallDeferred( MethodName.UpdateTargetPosition );
 		}
 
 		/*
@@ -193,7 +222,10 @@ namespace Game.Mobs {
 			base._PhysicsProcess( delta );
 
 			Vector2 position = GlobalPosition;
-			EntityUtils.CalcSpeed( ref _frameVelocity, _speed, (float)delta, position.DirectionTo( _navigationAgent.TargetPosition ) );
+
+			// NOTE: could just set the agent speed...
+			EntityUtils.CalcSpeed( ref _frameVelocity, _speed, (float)delta, position.DirectionTo( _nextPathPosition ) );
+			NavigationServer2D.AgentSetVelocityForced( _navigationAgent.GetRid(), _frameVelocity );
 			position += _frameVelocity;
 			SetDeferred( PropertyName.GlobalPosition, position );
 		}

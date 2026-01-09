@@ -48,11 +48,11 @@ namespace Game.Player.UserInterface {
 		/// <param name="args"></param>
 		private void OnStatChanged( in StatChangedEventArgs args ) {
 			if ( args.StatId == PlayerStats.HEALTH ) {
-				_node.Value = args.Value;
-				_currentHealth.Text = args.Value.ToString();
+				_node.SetDeferred( ProgressBar.PropertyName.Value, args.Value );
+				_currentHealth.SetDeferred( Label.PropertyName.Text, args.Value.ToString() );
 			} else if ( args.StatId == PlayerStats.MAX_HEALTH ) {
-				_node.MaxValue = args.Value;
-				_maxHealth.Text = $"/{args.Value}";
+				_node.SetDeferred( ProgressBar.PropertyName.MaxValue, args.Value );
+				_maxHealth.SetDeferred( Label.PropertyName.Text, $"/{args.Value}" );
 			}
 		}
 	};

@@ -50,6 +50,13 @@ namespace Game.Player.UserInterface {
 			};
 			_timer.Connect( Timer.SignalName.Timeout, Callable.From( OnWaveTimerTimeout ) );
 			timerLabel.AddChild( _timer );
+
+			var updateTimer = new Timer() {
+				WaitTime = 1.0f
+			};
+			updateTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnUpdateTimer ) );
+			timerLabel.AddChild( updateTimer );
+			updateTimer.Start();
 		}
 
 		/*
@@ -62,21 +69,26 @@ namespace Game.Player.UserInterface {
 		/// </summary>
 		public void Dispose() {
 			_waveTimeout.Dispose();
+			_timerLabel.Dispose();
 		}
 
 		/*
 		===============
-		Update
+		OnUpdateTimer
 		===============
 		*/
 		/// <summary>
 		/// 
 		/// </summary>
-		public void Update() {
-			if ( ( Engine.GetProcessFrames() % 60 ) != 0 ) {
-				return;
+		private void OnUpdateTimer() {
+			int timeLeft = (int)_timer.TimeLeft;
+			
+			if ( timeLeft < 5 ) {
+				_timerLabel.Modulate = Colors.Red;
+			} else {
+				_timerLabel.Modulate = Colors.White;
 			}
-			_timerLabel.Text = ( (int)_timer.TimeLeft ).ToString();
+			_timerLabel.Text = timeLeft.ToString();
 		}
 
 		/*

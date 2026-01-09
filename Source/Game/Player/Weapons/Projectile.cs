@@ -24,19 +24,33 @@ namespace Game.Player.Weapons {
 
 		/*
 		===============
+		OnEnemyHit
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="mob"></param>
+		protected virtual void OnEnemyHit( MobBase mob ) {
+		}
+
+		/*
+		===============
 		OnBodyHit
 		===============
 		*/
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="bodyRid"></param>
-		/// <param name="body"></param>
+		/// <param name="areaRid"></param>
+		/// <param name="area"></param>
 		/// <param name="bodyShapeIndex"></param>
 		/// <param name="localShapeIndex"></param>
-		private void OnBodyHit( Rid bodyRid, Node2D body, int bodyShapeIndex, int localShapeIndex ) {
-			if ( body is MobBase mob ) {
+		private void OnAreaShapeEntered( Rid areaRid, Area2D area, int bodyShapeIndex, int localShapeIndex ) {
+			if ( area is MobBase mob ) {
 				mob.Damage( Damage );
+
+				OnEnemyHit( mob );
 
 				// TODO: implement armor piercing
 				QueueFree();
@@ -55,7 +69,7 @@ namespace Game.Player.Weapons {
 			base._Ready();
 
 			var collisionArea = GetNode<Area2D>( "Area2D" );
-			collisionArea.Connect( Area2D.SignalName.BodyShapeEntered, Callable.From<Rid, Node2D, int, int>( OnBodyHit ) );
+			collisionArea.Connect( Area2D.SignalName.AreaShapeEntered, Callable.From<Rid, Area2D, int, int>( OnAreaShapeEntered ) );
 		}
 
 		/*

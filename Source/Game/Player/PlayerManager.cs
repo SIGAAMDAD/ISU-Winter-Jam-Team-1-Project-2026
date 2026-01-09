@@ -1,5 +1,3 @@
-using Game.Common;
-using Game.Player.Upgrades;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
@@ -17,22 +15,13 @@ namespace Game.Player {
 	/// </summary>
 	
 	public partial class PlayerManager : CharacterBody2D {
-		public IGameEvent<EntityTakeDamageEventArgs> TakeDamage => _stats.TakeDamage;
+		public IGameEvent<PlayerTakeDamageEventArgs> TakeDamage => _stats.TakeDamage;
 		public IGameEvent<StatChangedEventArgs> StatChanged => _stats.StatChanged;
 
 		private PlayerStats _stats;
 		private PlayerController _controller;
 		private PlayerAnimator _animator;
 		private PlayerAudioPlayer _audioPlayer;
-
-		/*
-		===============
-		Damage
-		===============
-		*/
-		public void Damage( float damage ) {
-			_stats.Damage( damage - _stats.Armor );
-		}
 
 		/*
 		===============

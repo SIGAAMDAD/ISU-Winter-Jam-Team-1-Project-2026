@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://3lva0atxtv8f"]
+[gd_scene load_steps=5 format=3 uid="uid://3lva0atxtv8f"]
 
 [ext_resource type="Texture2D" uid="uid://b433agw4ipi0t" path="res://Assets/Textures/SpriteSheets/Harpoon.png" id="1_sxq8e"]
 [ext_resource type="Script" uid="uid://dvjcye8p3u1s5" path="res://Assets/Prefabs/Weapons/Harpoon/Harpoon.cs" id="2_8ioax"]
+[ext_resource type="Material" uid="uid://b7qus8k8s84iq" path="res://Assets/Prefabs/Weapons/Harpoon/HarpoonTrail.tres" id="3_wgv2r"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gvynp"]
 radius = 5.0
@@ -17,3 +18,11 @@ script = ExtResource("2_8ioax")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CapsuleShape2D_gvynp")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(0, -2)
+amount = 20
+lifetime = 0.9
+speed_scale = 4.0
+local_coords = true
+process_material = ExtResource("3_wgv2r")

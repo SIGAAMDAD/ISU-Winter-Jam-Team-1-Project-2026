@@ -1,0 +1,104 @@
+[gd_scene load_steps=11 format=3 uid="uid://cva0u7ipnqfff"]
+
+[ext_resource type="Script" uid="uid://brlesti85vf0p" path="res://Assets/Prefabs/Mobs/Shark/Shark.cs" id="1_tw8sf"]
+[ext_resource type="Texture2D" uid="uid://cjjud2o8mh4jc" path="res://Assets/Textures/SpriteSheets/MobyDick.png" id="2_iec0g"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xxilb"]
+atlas = ExtResource("2_iec0g")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sfsc5"]
+atlas = ExtResource("2_iec0g")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7gujq"]
+atlas = ExtResource("2_iec0g")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k3r32"]
+atlas = ExtResource("2_iec0g")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gewak"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xxilb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sfsc5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7gujq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k3r32")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tw8sf"]
+size = Vector2(84, 67)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tw8sf"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iec0g"]
+bg_color = Color(1, 0, 0, 1)
+
+[node name="MobyDick" type="Area2D"]
+collision_layer = 0
+collision_mask = 3
+input_pickable = false
+script = ExtResource("1_tw8sf")
+_xpKillAmount = 20.0
+_damageAmount = 40.0
+_health = 5000.0
+_speed = 0.3
+metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(6, 6)
+sprite_frames = SubResource("SpriteFrames_gewak")
+autoplay = "default"
+frame_progress = 0.4061144
+
+[node name="ColorRect" type="ColorRect" parent="AnimatedSprite2D"]
+offset_left = -18.0
+offset_top = 8.0
+offset_right = -14.0
+offset_bottom = 12.0
+color = Color(18.892157, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, -5.5)
+scale = Vector2(6, 6)
+shape = SubResource("RectangleShape2D_tw8sf")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -243.0
+offset_top = 206.0
+offset_right = 231.0
+offset_bottom = 229.25253
+theme_override_styles/background = SubResource("StyleBoxFlat_tw8sf")
+theme_override_styles/fill = SubResource("StyleBoxFlat_iec0g")
+value = 100.0
+show_percentage = false
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 10.0
+path_max_distance = 1000.0
+avoidance_enabled = true
+radius = 80.0
+max_neighbors = 1000
+time_horizon_agents = 1.5
+max_speed = 1000.0
+
+[node name="Label" type="Label" parent="."]
+offset_left = -18.0
+offset_top = -217.0
+offset_right = 22.0
+offset_bottom = -194.0

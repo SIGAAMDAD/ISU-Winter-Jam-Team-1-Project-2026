@@ -1,4 +1,3 @@
-using Game.Common;
 using Godot;
 using Nomad.Core.Events;
 
@@ -18,8 +17,6 @@ namespace Game.Player.UserInterface {
 	
 	public sealed class WaveUI {
 		private readonly WaveCounter _waveCounter;
-
-		public WaveTimer WaveTimer => _waveTimer;
 		private readonly WaveTimer _waveTimer;
 
 		/*

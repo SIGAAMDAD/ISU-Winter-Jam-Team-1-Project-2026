@@ -1,6 +1,7 @@
 using Game.Common;
 using Game.Mobs;
 using Game.Player.Upgrades;
+using Game.Player.UserInterface;
 using Game.Player.UserInterface.UpgradeInterface;
 using Godot;
 using Nomad.Core.Events;
@@ -26,7 +27,7 @@ namespace Game.Player {
 		public static readonly InternString HEALTH = new( nameof( Health ) );
 		public static readonly InternString SPEED = new( nameof( Speed ) );
 		public static readonly InternString ATTACK_DAMAGE = new( nameof( AttackDamage ) );
-		public static readonly InternString ATTACK_SPEED = new( nameof( AttackSpeed) );
+		public static readonly InternString ATTACK_SPEED = new( nameof( AttackSpeed ) );
 		public static readonly InternString ARMOR = new( nameof( Armor ) );
 		public static readonly InternString MAX_HEALTH = new( nameof( MaxHealth ) );
 		public static readonly InternString MONEY = new( nameof( Money ) );
@@ -41,6 +42,8 @@ namespace Game.Player {
 		public float MaxHealth => _statCache[ MAX_HEALTH ];
 		public float Money => _statCache[ MONEY ];
 
+		private readonly PlayerManager _owner;
+
 		private readonly Dictionary<InternString, float> _statCache = new Dictionary<InternString, float> {
 			[ SPEED ] = 100.0f,
 			[ HEALTH ] = 100.0f,
@@ -51,13 +54,19 @@ namespace Game.Player {
 			[ MAX_HEALTH ] = 100.0f,
 			[ MONEY ] = 0.0f,
 		};
+		private readonly ImmutableDictionary<UpgradeType, InternString> _upgradeToStatId = new Dictionary<UpgradeType, InternString> {
+			[ UpgradeType.Speed ] = SPEED,
+			[ UpgradeType.MaxHealth ] = MAX_HEALTH,
+			[ UpgradeType.HealthRegen ] = HEALTH_REGEN,
+			[ UpgradeType.Armor ] = ARMOR,
+			[ UpgradeType.AttackDamage ] = ATTACK_DAMAGE,
+			[ UpgradeType.AttackSpeed ] = ATTACK_SPEED,
+		}.ToImmutableDictionary();
+
 		private readonly ImmutableDictionary<UpgradeType, float> _baseStatValues;
-		private readonly ImmutableDictionary<UpgradeType, InternString> _upgradeToStatId;
 
-		private readonly int _entityId;
-
-		public IGameEvent<EntityTakeDamageEventArgs> TakeDamage => _takeDamage;
-		private readonly IGameEvent<EntityTakeDamageEventArgs> _takeDamage;
+		public IGameEvent<PlayerTakeDamageEventArgs> TakeDamage => _takeDamage;
+		private readonly IGameEvent<PlayerTakeDamageEventArgs> _takeDamage;
 
 		public IGameEvent<StatChangedEventArgs> StatChanged => _statChanged;
 		private readonly IGameEvent<StatChangedEventArgs> _statChanged;
@@ -74,9 +83,11 @@ namespace Game.Player {
 		/// <param name="upgradeManager"></param>
 		/// <param name="eventFactory"></param>
 		public PlayerStats( PlayerManager player, IGameEventRegistryService eventFactory ) {
-			_entityId = player.GetPath().GetHashCode();
+			_owner = player;
 
-			_takeDamage = eventFactory.GetEvent<EntityTakeDamageEventArgs>( nameof( TakeDamage ) );
+			_takeDamage = eventFactory.GetEvent<PlayerTakeDamageEventArgs>( nameof( TakeDamage ) );
+			_takeDamage.Subscribe( this, OnDamageReceived );
+
 			_statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( StatChanged ) );
 
 			var mobDie = eventFactory.GetEvent<MobDieEventArgs>( nameof( MobBase.MobDie ) );
@@ -85,17 +96,8 @@ namespace Game.Player {
 			var upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeManager.UpgradeBought ) );
 			upgradeBought.Subscribe( this, OnUpgradeBought );
 
-			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
-			waveCompleted.Subscribe( this, OnWaveCompleted );
-
-			_upgradeToStatId = new Dictionary<UpgradeType, InternString> {
-				[ UpgradeType.Speed ] = SPEED,
-				[ UpgradeType.MaxHealth ] = MAX_HEALTH,
-				[ UpgradeType.HealthRegen ] = HEALTH_REGEN,
-				[ UpgradeType.Armor ] = ARMOR,
-				[ UpgradeType.AttackDamage ] = ATTACK_DAMAGE,
-				[ UpgradeType.AttackSpeed ] = ATTACK_SPEED,
-			}.ToImmutableDictionary();
+			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
+			waveStarted.Subscribe( this, OnWaveStarted );
 
 			_baseStatValues = new Dictionary<UpgradeType, float> {
 				[ UpgradeType.Speed ] = _statCache[ SPEED ],
@@ -127,25 +129,6 @@ namespace Game.Player {
 
 		/*
 		===============
-		Damage
-		===============
-		*/
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="value"></param>
-		public void Damage( float value ) {
-			// TODO: clean this up
-			float health = Health;
-			health -= value;
-			_statCache[ HEALTH ] = health;
-
-			_takeDamage.Publish( new EntityTakeDamageEventArgs( _entityId, value ) );
-			_statChanged.Publish( new StatChangedEventArgs( HEALTH, health ) );
-		}
-
-		/*
-		===============
 		Update
 		===============
 		*/
@@ -160,21 +143,46 @@ namespace Game.Player {
 			if ( health >= maxHealth ) {
 				return;
 			}
-			health = Math.Clamp( health + HealthRegen * delta, 0.0f, maxHealth );
+			health = Math.Clamp( health + HealthRegen, 0.0f, maxHealth );
 		}
 
 		/*
 		===============
-		OnWaveCompleted
+		OnDamageReceived
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		private void OnDamageReceived( in PlayerTakeDamageEventArgs args ) {
+			// TODO: clean this up
+			float health = Health;
+			health -= args.Amount;
+			_statCache[ HEALTH ] = health;
+
+			_statChanged.Publish( new StatChangedEventArgs( HEALTH, health ) );
+
+			var damageNumber = new DamageNumberLabel() {
+				GlobalPosition = _owner.GlobalPosition,
+				Value = args.Amount
+			};
+			_owner.GetTree().Root.CallDeferred( Node.MethodName.AddChild, damageNumber );
+		}
+
+		/*
+		===============
+		OnWaveStarted
 		===============
 		*/
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="args"></param>
-		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
+		private void OnWaveStarted( in EmptyEventArgs args ) {
 			ref float health = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, HEALTH, out _ );
 			health = MaxHealth;
+			_statChanged.Publish( new StatChangedEventArgs( HEALTH, health ) );
 		}
 
 		/*
@@ -211,7 +219,7 @@ namespace Game.Player {
 
 			ref float money = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, MONEY, out _ );
 			money -= args.Cost;
-			
+
 			_statChanged.Publish( new StatChangedEventArgs( MONEY, money ) );
 			_statChanged.Publish( new StatChangedEventArgs( statId, value ) );
 		}

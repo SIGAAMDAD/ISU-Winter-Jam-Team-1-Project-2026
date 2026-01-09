@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://q3d8f588rgns"]
+[gd_scene load_steps=24 format=3 uid="uid://q3d8f588rgns"]
 
 [ext_resource type="Script" uid="uid://c0j83efpa6svk" path="res://Assets/Prefabs/World/World.cs" id="1_yd2wk"]
 [ext_resource type="Script" uid="uid://c43nx6mgcq070" path="res://Source/Game/Common/WaveManager.cs" id="2_oturc"]
@@ -7,23 +7,30 @@
 [ext_resource type="PackedScene" uid="uid://dkml08sjkleg4" path="res://Source/Game/Player/Player.tscn" id="4_623ao"]
 [ext_resource type="PackedScene" uid="uid://ci45mqkirclcs" path="res://Source/Game/Player/UserInterface/HeadsUpDisplay.tscn" id="4_e7xia"]
 [ext_resource type="Script" uid="uid://cwio4re8cg5yy" path="res://Source/Game/Mobs/TideSpawner.cs" id="6_623ao"]
+[ext_resource type="PackedScene" uid="uid://djyxbr83svaxk" path="res://Assets/Prefabs/EnvironmentalEffects/Tide/Tide.tscn" id="7_el5su"]
 [ext_resource type="Script" uid="uid://ckum0efkn2yxu" path="res://Source/Game/Mobs/MobSpawner.cs" id="7_nap3e"]
+[ext_resource type="PackedScene" uid="uid://ikyjpejn77y5" path="res://Assets/Prefabs/EnvironmentalEffects/WhirlPool/WhirlPool.tscn" id="8_06g14"]
+[ext_resource type="PackedScene" uid="uid://du7figp5hhtgb" path="res://Assets/Prefabs/EnvironmentalEffects/BigTide/BigTide.tscn" id="9_p0tfn"]
 [ext_resource type="PackedScene" uid="uid://dd1txusb8iduc" path="res://Assets/Prefabs/Mobs/Seagull/Seagull.tscn" id="9_r0y47"]
 [ext_resource type="PackedScene" uid="uid://by5pr3oyf568c" path="res://Assets/Prefabs/Mobs/Shark/Shark.tscn" id="11_yrfwb"]
 [ext_resource type="PackedScene" uid="uid://dvpo7welfd08k" path="res://Assets/Prefabs/Mobs/FlyingFish/FlyingFish.tscn" id="12_6tp7i"]
 [ext_resource type="PackedScene" uid="uid://bxxge54kolwnt" path="res://Assets/Prefabs/Mobs/Orca/Orca.tscn" id="13_6tp7i"]
 [ext_resource type="PackedScene" uid="uid://bxx2uro5uusm8" path="res://Assets/Prefabs/Mobs/Squid/Squid.tscn" id="14_r0y47"]
+[ext_resource type="Script" uid="uid://c4hau6on8128m" path="res://Assets/Prefabs/World/NavigationRegion2d.cs" id="15_06g14"]
 [ext_resource type="PackedScene" uid="uid://b1luavxt1vbwu" path="res://Source/Game/Menus/PauseMenu.tscn" id="16_el5su"]
+[ext_resource type="Script" uid="uid://dvghxmu71ww70" path="res://Assets/Prefabs/World/Camera2d.cs" id="18_80nep"]
 
 [sub_resource type="Gradient" id="Gradient_623ao"]
-offsets = PackedFloat32Array(0.013333334, 0.96666664)
-colors = PackedColorArray(0, 0, 1, 1, 3.730133e-07, 0, 0.25671872, 1)
+interpolation_mode = 2
+interpolation_color_space = 1
+offsets = PackedFloat32Array(0.23333333, 0.46, 0.75333333)
+colors = PackedColorArray(0.12949139, 0.36538237, 1, 1, 0, 0.14528143, 0.77687883, 1, 6.1366705e-07, 1.2032687e-07, 0.33234078, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_nap3e"]
 gradient = SubResource("Gradient_623ao")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7ey30"]
-size = Vector2(1280, 721)
+size = Vector2(1280, 720)
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_623ao"]
 vertices = PackedVector2Array(1270, 711, 10, 711, 10, 10, 1270, 10)
@@ -35,32 +42,30 @@ process_mode = 1
 script = ExtResource("1_yd2wk")
 
 [node name="Water" type="TextureRect" parent="."]
-unique_name_in_owner = true
 material = ExtResource("2_xtsie")
-offset_right = 1280.0
-offset_bottom = 721.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+offset_right = 3840.0
+offset_bottom = 2160.0
 texture = SubResource("GradientTexture1D_nap3e")
 metadata/_edit_use_anchors_ = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 0
 
-[node name="WorldArea" type="Area2D" parent="CanvasLayer"]
+[node name="WorldArea" type="Area2D" parent="CanvasLayer" node_paths=PackedStringArray("_bounds", "_shape", "_water")]
 script = ExtResource("3_t3kjs")
+_bounds = NodePath("WorldBounds/CollisionPolygon2D")
+_shape = NodePath("CollisionShape2D")
+_water = NodePath("../../Water")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/WorldArea"]
-position = Vector2(640, 360.5)
+position = Vector2(640, 360)
 shape = SubResource("RectangleShape2D_7ey30")
 
-[node name="WorldBounds" type="StaticBody2D" parent="CanvasLayer"]
+[node name="WorldBounds" type="StaticBody2D" parent="CanvasLayer/WorldArea"]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CanvasLayer/WorldBounds"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CanvasLayer/WorldArea/WorldBounds"]
 build_mode = 1
-polygon = PackedVector2Array(1280, 0, 0, 0, 0, 721, 1280, 721)
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 720, 0, 720)
 
 [node name="HeadsUpDisplay" parent="CanvasLayer" instance=ExtResource("4_e7xia")]
 
@@ -72,6 +77,7 @@ _mobSpawner = NodePath("MobSpawner")
 [node name="TideSpawner" type="Node2D" parent="WaveManager" node_paths=PackedStringArray("_worldBounds")]
 script = ExtResource("6_623ao")
 _worldBounds = NodePath("../../CanvasLayer/WorldArea/CollisionShape2D")
+_environmentalEffects = Array[PackedScene]([ExtResource("7_el5su"), ExtResource("8_06g14"), ExtResource("9_p0tfn")])
 
 [node name="SpawnTimer" type="Timer" parent="WaveManager/TideSpawner"]
 wait_time = 4.5
@@ -88,6 +94,7 @@ autostart = true
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="WaveManager/MobSpawner"]
 navigation_polygon = SubResource("NavigationPolygon_623ao")
+script = ExtResource("15_06g14")
 
 [node name="SpawnClusters" type="Node" parent="WaveManager/MobSpawner"]
 
@@ -115,3 +122,4 @@ limit_left = 0
 limit_top = 0
 limit_right = 1280
 limit_bottom = 720
+script = ExtResource("18_80nep")
