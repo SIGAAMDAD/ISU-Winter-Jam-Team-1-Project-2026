@@ -51,9 +51,6 @@ namespace Game.Player.Weapons {
 				mob.Damage( Damage );
 
 				OnEnemyHit( mob );
-
-				// TODO: implement armor piercing
-				QueueFree();
 			}
 		}
 
@@ -86,7 +83,7 @@ namespace Game.Player.Weapons {
 
 			Vector2 inputVelocity = Vector2.Right.Rotated( GlobalRotation );
 
-			EntityUtils.CalcSpeed( ref _frameVelocity, Speed,(float)delta, inputVelocity );
+			EntityUtils.CalcSpeed( ref _frameVelocity, new Vector2( Speed, Speed ),(float)delta, inputVelocity );
 			GlobalPosition += _frameVelocity;
 		}
 	};

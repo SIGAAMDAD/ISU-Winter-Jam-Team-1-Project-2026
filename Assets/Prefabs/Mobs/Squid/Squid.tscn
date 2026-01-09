@@ -173,7 +173,7 @@ script = ExtResource("1_bgroo")
 _xpKillAmount = 200.0
 _damageAmount = 20.0
 _health = 900.0
-_speed = 0.1
+_speed = Vector2(0.1, 0.1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(10, 10)

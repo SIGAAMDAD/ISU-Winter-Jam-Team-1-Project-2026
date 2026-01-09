@@ -129,10 +129,10 @@ size = Vector2(64, 53)
 collision_layer = 0
 collision_mask = 3
 script = ExtResource("1_5vjvo")
-_xpKillAmount = null
-_damageAmount = null
-_health = 1.0
-_speed = 0.8
+_xpKillAmount = 10.0
+_damageAmount = 6.0
+_health = 20.0
+_speed = Vector2(0.5, 0.5)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-2.0000026, -2.9999998)

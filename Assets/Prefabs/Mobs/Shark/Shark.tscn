@@ -93,10 +93,10 @@ size = Vector2(69, 60)
 collision_layer = 0
 collision_mask = 3
 script = ExtResource("1_byjlf")
-_xpKillAmount = 20.0
+_xpKillAmount = 30.0
 _damageAmount = 40.0
 _health = 20.0
-_speed = 1.0
+_speed = Vector2(0.4, 0.4)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)

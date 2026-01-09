@@ -19,7 +19,8 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 	public sealed class UpgradeMenu {
 		private readonly CanvasLayer _node;
 		private readonly UpgradeManager _manager;
-		private readonly Dictionary<UpgradeType, UpgradeButton> _buttons = new();
+		private readonly Dictionary<UpgradeType, UpgradeButton> _statButtons = new();
+		private readonly Dictionary<HarpoonType, HarpoonUpgradeButton> _harpoonButtons = new();
 
 		private readonly Label _moneyLabel;
 
@@ -99,16 +100,27 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		===============
 		*/
 		private void HookButtons() {
-			var upgradeList = _node.GetNode<VBoxContainer>( "%UpgradeList" );
-
-			var buttons = upgradeList.GetChildren();
-			_buttons.EnsureCapacity( buttons.Count );
-			for ( int i = 0; i < buttons.Count; i++ ) {
-				if ( buttons[ i ] is UpgradeButtonNode node ) {
-					_buttons[ node.Type ] = new UpgradeButton(
+			var statUpgradeList = _node.GetNode<VBoxContainer>( "%StatUpgradeList" );
+			var statButtons = statUpgradeList.GetChildren();
+			_statButtons.EnsureCapacity( statButtons.Count );
+			for ( int i = 0; i < statButtons.Count; i++ ) {
+				if ( statButtons[ i ] is UpgradeButtonNode node ) {
+					_statButtons[ node.Type ] = new UpgradeButton(
 						node,
 						node.Type,
 						node.StatName,
+						_manager
+					);
+				}
+			}
+
+			var harpoonUpgradeList = _node.GetNode<VBoxContainer>( "%HarpoonUpgradeList" );
+			var harpoonButtons = harpoonUpgradeList.GetChildren();
+			_harpoonButtons.EnsureCapacity( harpoonButtons.Count );
+			for ( int i = 0; i < harpoonButtons.Count; i++ ) {
+				if ( harpoonButtons[ i ] is HarpoonUpgradeButtonNode node ) {
+					_harpoonButtons[ node.Type ] = new HarpoonUpgradeButton(
+						node,
 						_manager
 					);
 				}

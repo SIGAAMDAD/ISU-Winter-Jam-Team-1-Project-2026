@@ -144,7 +144,7 @@ script = ExtResource("1_8xrhf")
 _xpKillAmount = 80.0
 _damageAmount = 30.0
 _health = 50.0
-_speed = 0.4
+_speed = Vector2(0.3, 0.3)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)

@@ -35,10 +35,7 @@ namespace Game.Mobs {
 		[Export]
 		protected float _health = 100.0f;
 		[Export]
-		protected float _speed = 10.0f;
-
-		private Vector2 _frameVelocity;
-		private Vector2 _nextPathPosition;
+		protected Vector2 _speed = new Vector2( 10.0f, 10.0f );
 
 		protected NavigationAgent2D _navigationAgent;
 		protected AnimatedSprite2D _animation;
@@ -48,12 +45,17 @@ namespace Game.Mobs {
 		protected FlagBits _flags;
 		protected int _mobId;
 
+		protected Vector2 _currentSpeed = Vector2.Zero;
+
 		protected IGameEvent<PlayerTakeDamageEventArgs> _damagePlayer;
 
 		private readonly Timer _damageEffectTimer = new Timer() {
 			WaitTime = 0.75f,
 			OneShot = true
 		};
+
+		private Vector2 _frameVelocity;
+		private Vector2 _nextPathPosition;
 
 		public IGameEvent<MobDieEventArgs> MobDie => _die;
 		private IGameEvent<MobDieEventArgs> _die;
@@ -92,6 +94,31 @@ namespace Game.Mobs {
 				Value = amount
 			};
 			GetTree().Root.CallDeferred( MethodName.AddChild, damageNumber );
+		}
+
+		/*
+		===============
+		SetSpeed
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="speed"></param>
+		public void SetSpeed( Vector2 speed ) {
+			_currentSpeed = speed;
+		}
+
+		/*
+		===============
+		ResetSpeed
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		public void ResetSpeed() {
+			_currentSpeed = _speed;
 		}
 
 		/*
@@ -187,6 +214,8 @@ namespace Game.Mobs {
 
 			ProcessThreadGroup = ProcessThreadGroupEnum.SubThread;
 			ProcessThreadGroupOrder = 1;
+
+			_currentSpeed = _speed;
 		}
 
 		/*
@@ -224,7 +253,7 @@ namespace Game.Mobs {
 			Vector2 position = GlobalPosition;
 
 			// NOTE: could just set the agent speed...
-			EntityUtils.CalcSpeed( ref _frameVelocity, _speed, (float)delta, position.DirectionTo( _nextPathPosition ) );
+			EntityUtils.CalcSpeed( ref _frameVelocity, _currentSpeed, (float)delta, position.DirectionTo( _nextPathPosition ) );
 			NavigationServer2D.AgentSetVelocityForced( _navigationAgent.GetRid(), _frameVelocity );
 			position += _frameVelocity;
 			SetDeferred( PropertyName.GlobalPosition, position );

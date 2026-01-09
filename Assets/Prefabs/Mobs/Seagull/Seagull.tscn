@@ -62,13 +62,14 @@ collision_mask = 3
 script = ExtResource("1_vnl8o")
 _damageAmount = 2.0
 _health = 5.0
-_speed = 0.9
+_speed = Vector2(0.6, 0.6)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_awn2u")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0.43478262, -1.7391305)
 shape = SubResource("RectangleShape2D_eppw5")
 

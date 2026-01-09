@@ -1,16 +1,13 @@
-[gd_scene load_steps=21 format=3 uid="uid://dkml08sjkleg4"]
+[gd_scene load_steps=24 format=3 uid="uid://dkml08sjkleg4"]
 
 [ext_resource type="Script" uid="uid://dgvw5sls61mdb" path="res://Source/Game/Player/PlayerManager.cs" id="1_43ce2"]
 [ext_resource type="Texture2D" uid="uid://cuju45rl2efen" path="res://Assets/Textures/SpriteSheets/Boat.png" id="2_278ex"]
 [ext_resource type="AudioStream" uid="uid://hso1oikogf53" path="res://Assets/Audio/SoundEffects/jetski.wav" id="3_278ex"]
+[ext_resource type="Texture2D" uid="uid://bhhkp61usa74w" path="res://Assets/Textures/SpriteSheets/HarpoonCannon.png.png" id="3_b2bpv"]
+[ext_resource type="Texture2D" uid="uid://bp8uc5d0ljth" path="res://Assets/Textures/SpriteSheets/HarpoonCannon.png" id="3_xhomw"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1u5oe"]
-atlas = ExtResource("2_278ex")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_eawnt"]
-atlas = ExtResource("2_278ex")
-region = Rect2(64, 0, 64, 64)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_278ex"]
+size = Vector2(66, 67)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b2bpv"]
 atlas = ExtResource("2_278ex")
@@ -20,14 +17,6 @@ region = Rect2(128, 0, 64, 64)
 atlas = ExtResource("2_278ex")
 region = Rect2(0, 64, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_278ex"]
-atlas = ExtResource("2_278ex")
-region = Rect2(128, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xhomw"]
-atlas = ExtResource("2_278ex")
-region = Rect2(0, 192, 64, 64)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_0dfno"]
 atlas = ExtResource("2_278ex")
 region = Rect2(64, 192, 64, 64)
@@ -35,14 +24,6 @@ region = Rect2(64, 192, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_14w6k"]
 atlas = ExtResource("2_278ex")
 region = Rect2(128, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cyti0"]
-atlas = ExtResource("2_278ex")
-region = Rect2(64, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_28dix"]
-atlas = ExtResource("2_278ex")
-region = Rect2(128, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gmuiy"]
 atlas = ExtResource("2_278ex")
@@ -56,35 +37,13 @@ region = Rect2(64, 128, 64, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_1u5oe")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_eawnt")
-}],
-"loop": true,
-"name": &"down_harpoon",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_b2bpv")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7xakp")
 }],
 "loop": true,
-"name": &"down_noharpoon",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_278ex")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xhomw")
-}],
-"loop": true,
-"name": &"horizontal_harpoon",
+"name": &"down",
 "speed": 5.0
 }, {
 "frames": [{
@@ -95,18 +54,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_14w6k")
 }],
 "loop": true,
-"name": &"horizontal_noharpoon",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cyti0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_28dix")
-}],
-"loop": true,
-"name": &"up_harpoon",
+"name": &"horizontal",
 "speed": 5.0
 }, {
 "frames": [{
@@ -117,7 +65,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_i5dxn")
 }],
 "loop": true,
-"name": &"up_noharpoon",
+"name": &"up",
 "speed": 5.0
 }]
 
@@ -143,18 +91,95 @@ linear_accel_max = 67.049995
 radial_accel_min = -42.350002
 radial_accel_max = 36.469997
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_278ex"]
-size = Vector2(66, 67)
+[sub_resource type="AtlasTexture" id="AtlasTexture_htbi3"]
+atlas = ExtResource("3_b2bpv")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_358il"]
+atlas = ExtResource("3_xhomw")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5bvdo"]
+atlas = ExtResource("3_b2bpv")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_42cni"]
+atlas = ExtResource("3_xhomw")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lgtmm"]
+atlas = ExtResource("3_b2bpv")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hbenj"]
+atlas = ExtResource("3_xhomw")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_42cni"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_htbi3")
+}],
+"loop": true,
+"name": &"down_harpoon",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_358il")
+}],
+"loop": true,
+"name": &"down_noharpoon",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5bvdo")
+}],
+"loop": true,
+"name": &"horizontal_harpoon",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_42cni")
+}],
+"loop": true,
+"name": &"horizontal_noharpoon",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lgtmm")
+}],
+"loop": true,
+"name": &"up_harpoon",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hbenj")
+}],
+"loop": true,
+"name": &"up_noharpoon",
+"speed": 5.0
+}]
 
 [node name="Player" type="CharacterBody2D"]
 motion_mode = 1
 script = ExtResource("1_43ce2")
 metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
 
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_278ex")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_b2bpv")
-animation = &"up_harpoon"
-flip_h = true
+animation = &"down"
+autoplay = "up"
 
 [node name="UpFoamMarker" type="Marker2D" parent="AnimatedSprite2D"]
 position = Vector2(0, 30)
@@ -178,14 +203,21 @@ position = Vector2(-33, 5)
 position = Vector2(33, 6)
 
 [node name="HarpoonSpawnRight" type="Marker2D" parent="AnimatedSprite2D"]
-position = Vector2(24, -10)
+position = Vector2(33, -10)
 
 [node name="HarpoonSpawnLeft" type="Marker2D" parent="AnimatedSprite2D"]
-position = Vector2(-24, -10)
+position = Vector2(-33, -10)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1.5)
-shape = SubResource("RectangleShape2D_278ex")
+[node name="HarpoonSpawnUp" type="Marker2D" parent="AnimatedSprite2D"]
+position = Vector2(0, -35)
+
+[node name="HarpoonCannon" type="AnimatedSprite2D" parent="AnimatedSprite2D/HarpoonSpawnUp"]
+sprite_frames = SubResource("SpriteFrames_42cni")
+animation = &"down_harpoon"
+autoplay = "up_noharpoon"
+
+[node name="HarpoonSpawnDown" type="Marker2D" parent="AnimatedSprite2D"]
+position = Vector2(0, 30)
 
 [node name="AudioListener2D" type="AudioListener2D" parent="."]
 

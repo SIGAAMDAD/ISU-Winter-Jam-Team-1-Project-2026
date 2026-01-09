@@ -26,7 +26,7 @@ namespace Game.Common {
 		/// <param name="speed"></param>
 		/// <param name="delta"></param>
 		/// <param name="moveVector"></param>
-		public static void CalcSpeed( ref Vector2 frameVelocity, float speed, float delta, Vector2 moveVector ) {
+		public static void CalcSpeed( ref Vector2 frameVelocity, Vector2 speed, float delta, Vector2 moveVector ) {
 			Vector2 targetVelocity = moveVector * speed;
 			frameVelocity += ( targetVelocity - frameVelocity ) * (float)( 1.0f - Math.Exp( -8.0f * delta ) );
 		}

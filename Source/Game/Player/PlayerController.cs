@@ -1,9 +1,11 @@
 using Game.Common;
+using Game.Player.Upgrades;
 using Game.Player.Weapons;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Util;
+using Prefabs;
 using System;
 using Systems.Caching;
 
@@ -37,13 +39,15 @@ namespace Game.Player {
 		private static readonly StringName @MoveNorthBind = "move_north";
 		private static readonly StringName @MoveSouthBind = "move_south";
 
-		private readonly PackedScene[] _harpoonPrefabs = new PackedScene[ (int)PlayerDirection.Count ];
+		private readonly PackedScene[] _harpoonPrefabs;
 
 		private readonly Vector2 _startPosition;
 
 		private readonly PlayerManager _owner;
 		private readonly PlayerAnimator _animator;
 		private readonly Timer _weaponCooldown;
+
+		private UpgradeType _harpoonType;
 
 		private FlagBits _flags = FlagBits.CanAttack | FlagBits.CanMove | FlagBits.WaveActive;
 		private Vector2 _frameVelocity = Vector2.Zero;
@@ -78,6 +82,9 @@ namespace Game.Player {
 			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
+			var harpoonType = eventFactory.GetEvent<UpgradeType>( nameof( PlayerStats.HarpoonTypeChanged ) );
+			harpoonType.Subscribe( this, OnHarpoonTypeChanged );
+
 			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
 			waveCompleted.Subscribe( this, OnWaveCompleted );
 
@@ -92,10 +99,10 @@ namespace Game.Player {
 
 			_startPosition = owner.GlobalPosition;
 
-			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/UpHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.North ] );
-			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/RightHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.East ] );
-			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/DownHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.South ] );
-			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/LeftHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)PlayerDirection.West ] );
+			_harpoonPrefabs = new PackedScene[ (int)HarpoonType.Count ];
+			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/UpHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)HarpoonType.Default ] );
+			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/Explosive/ExplosiveHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)HarpoonType.ExplosiveHarpoon ] );
+			SceneCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Prefabs/Weapons/Harpoon/Icy/IcyHarpoon.tscn" ) ).Get( out _harpoonPrefabs[ (int)HarpoonType.IcyHarpoon ] );
 		}
 
 		/*
@@ -119,7 +126,7 @@ namespace Game.Player {
 				Vector2 inputVelocity = Input.GetVector( MoveWestBind, MoveEastBind, MoveNorthBind, MoveSouthBind );
 				inputWasActive = inputVelocity != Vector2.Zero;
 
-				EntityUtils.CalcSpeed( ref _frameVelocity, _movementSpeed, delta, inputVelocity );
+				EntityUtils.CalcSpeed( ref _frameVelocity, new Vector2( _movementSpeed, _movementSpeed ), delta, inputVelocity );
 
 				_owner.Velocity = _frameVelocity;
 				_owner.MoveAndSlide();
@@ -147,6 +154,20 @@ namespace Game.Player {
 
 		/*
 		===============
+		OnHarpoonTypeChanged
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="type"></param>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		private void OnHarpoonTypeChanged( in UpgradeType type ) {
+			_harpoonType = type;
+		}
+
+		/*
+		===============
 		OnUseWeapon
 		===============
 		*/
@@ -156,7 +177,7 @@ namespace Game.Player {
 		private void OnUseWeapon() {
 			float angle = _owner.GlobalPosition.DirectionTo( _owner.GetGlobalMousePosition() ).Angle();
 
-			Projectile harpoon = _harpoonPrefabs[ 0 ].Instantiate<Projectile>();
+			Projectile harpoon = _harpoonPrefabs[ (int)_harpoonType ].Instantiate<Projectile>();
 			harpoon.Direction = _animator.Direction;
 			harpoon.GlobalPosition = _owner.GlobalPosition;
 			harpoon.Rotation = angle;

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://d3ceufeyvmw0q"]
+[gd_scene load_steps=12 format=3 uid="uid://d3ceufeyvmw0q"]
 
 [ext_resource type="Texture2D" uid="uid://bd2dkwmfs1w47" path="res://Assets/Textures/SpriteSheets/ExplosiveHarpoon.png" id="1_x8lpv"]
 [ext_resource type="Script" uid="uid://xxnpe6m067bx" path="res://Assets/Prefabs/Weapons/Harpoon/Explosive/ExplosiveHarpoon.cs" id="2_x8lpv"]
@@ -8,6 +8,9 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gvynp"]
 radius = 5.0
 height = 20.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0o70v"]
+radius = 74.00676
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_af8or"]
 atlas = ExtResource("4_0o70v")
@@ -68,7 +71,14 @@ speed_scale = 4.0
 local_coords = true
 process_material = ExtResource("3_af8or")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="ExplosionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionArea"]
+shape = SubResource("CircleShape2D_0o70v")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ExplosionArea"]
+visible = false
+position = Vector2(-4, -25)
+scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_4cp00")
-frame = 3
-frame_progress = 1.0
+autoplay = "default"

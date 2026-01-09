@@ -6,6 +6,7 @@ using Game.Player.UserInterface.UpgradeInterface;
 using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Util;
+using Prefabs;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -71,6 +72,9 @@ namespace Game.Player {
 		public IGameEvent<StatChangedEventArgs> StatChanged => _statChanged;
 		private readonly IGameEvent<StatChangedEventArgs> _statChanged;
 
+		public IGameEvent<HarpoonType> HarpoonTypeChanged => _harpoonTypeChanged;
+		private readonly IGameEvent<HarpoonType> _harpoonTypeChanged;
+
 		/*
 		===============
 		PlayerStats
@@ -89,12 +93,16 @@ namespace Game.Player {
 			_takeDamage.Subscribe( this, OnDamageReceived );
 
 			_statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( StatChanged ) );
+			_harpoonTypeChanged = eventFactory.GetEvent<HarpoonType>( nameof( HarpoonTypeChanged ) );
 
 			var mobDie = eventFactory.GetEvent<MobDieEventArgs>( nameof( MobBase.MobDie ) );
 			mobDie.Subscribe( this, OnMobKilled );
 
 			var upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeManager.UpgradeBought ) );
 			upgradeBought.Subscribe( this, OnUpgradeBought );
+
+			var harpoonTypeBought = eventFactory.GetEvent<HarpoonTypeUpgradeBoughtEventArgs>( nameof( UpgradeManager.HarpoonBought ) );
+			harpoonTypeBought.Subscribe( this, OnHarpoonTypeChanged );
 
 			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
 			waveStarted.Subscribe( this, OnWaveStarted );
@@ -200,6 +208,22 @@ namespace Game.Player {
 			_statCache[ MONEY ] = money;
 
 			_statChanged.Publish( new StatChangedEventArgs( MONEY, money ) );
+		}
+
+		/*
+		===============
+		OnHarpoonTypeChanged
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnHarpoonTypeChanged( in HarpoonTypeUpgradeBoughtEventArgs args ) {
+			ref float money = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, MONEY, out _ );
+			money -= args.Cost;
+
+			_harpoonTypeChanged.Publish( args.Type );
 		}
 
 		/*

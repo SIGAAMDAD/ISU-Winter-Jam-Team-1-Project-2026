@@ -21,6 +21,7 @@ namespace Game.Player.UserInterface {
 		private readonly Label _costLabel;
 		private readonly Label _valueLabel;
 		private readonly string _name;
+		
 		/*
 		===============
 		UpgradeButton

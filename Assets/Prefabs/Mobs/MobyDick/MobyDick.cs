@@ -6,20 +6,20 @@ namespace Prefabs {
 	/*
 	===================================================================================
 	
-	Shark
+	MobyDick
 	
 	===================================================================================
 	*/
 	/// <summary>
 	/// 
 	/// </summary>
-
-	public partial class Shark : MobBase {
+	
+	public partial class MobyDick : MobBase {
 		private static readonly StringName @WindupAnimationName = "windup";
 		private static readonly NodePath @ModulateNodePath = "modulate";
 
-		private const float CHARGE_WINDUP_TIME = 3.0f;
-		private const float CHARGE_COOLDOWN_TIME = 6.0f;
+		private const float CHARGE_WINDUP_TIME = 8.0f;
+		private const float CHARGE_COOLDOWN_TIME = 10.0f;
 
 		[Flags]
 		private enum SharkFlags : byte {
@@ -30,7 +30,7 @@ namespace Prefabs {
 		private SharkFlags _sharkFlags = SharkFlags.CanAttack;
 
 		private readonly Timer _checkAttackTimer = new Timer() {
-			WaitTime = 0.5f,
+			WaitTime = 1.5f,
 			OneShot = false
 		};
 		private readonly Timer _windupTimer = new Timer() {
@@ -104,7 +104,7 @@ namespace Prefabs {
 				return;
 			}
 
-			_currentSpeed = new Vector2( _currentSpeed.X * 2.0f, 0.0f );
+			_currentSpeed = new Vector2( _currentSpeed.X * 8.0f, 0.0f );
 			_navigationAgent.SetDeferred( NavigationAgent2D.PropertyName.TargetPosition, _target.GlobalPosition );
 		}
 
