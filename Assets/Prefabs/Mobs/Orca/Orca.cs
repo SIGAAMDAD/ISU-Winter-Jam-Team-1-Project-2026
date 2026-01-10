@@ -39,7 +39,7 @@ namespace Prefabs {
 		private void OnSurfaceTimerTimeout() {
 			_animation.Play( SurfaceDownAnimationName );
 			_collisionShape.Disabled = true;
-			ZIndex = -2;
+			ZIndex = -1;
 		}
 
 		/*
@@ -83,8 +83,6 @@ namespace Prefabs {
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();
-
-			ZIndex = -2;
 
 			_swimTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnSwimTimerTimeout ) );
 			AddChild( _swimTimer );

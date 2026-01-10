@@ -126,13 +126,13 @@ animations = [{
 size = Vector2(64, 53)
 
 [node name="FlyingFish" type="Area2D"]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 0
+collision_mask = 3
 script = ExtResource("1_5vjvo")
-_xpKillAmount = 4.0
+_xpKillAmount = 10.0
 _damageAmount = 6.0
 _health = 20.0
-_speed = Vector2(1.25, 1.25)
+_speed = Vector2(0.5, 0.5)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-2.0000026, -2.9999998)
@@ -146,11 +146,10 @@ position = Vector2(-2, -3)
 shape = SubResource("RectangleShape2D_eppw5")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-path_desired_distance = 60.0
-target_desired_distance = 60.0
+target_desired_distance = 20.0
 path_max_distance = 1000.0
 avoidance_enabled = true
-radius = 120.0
+radius = 80.0
 max_neighbors = 1000
 time_horizon_agents = 1.5
 max_speed = 1000.0

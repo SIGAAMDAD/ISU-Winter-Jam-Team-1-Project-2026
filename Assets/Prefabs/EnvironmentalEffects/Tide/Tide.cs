@@ -16,7 +16,7 @@ namespace Game.Mobs {
 	/// 
 	/// </summary>
 	
-	public sealed partial class Tide : EffectBase {
+	public partial class Tide : EffectBase {
 		private Vector2 _velocity = Vector2.Zero;
 		private IGameEvent<PlayerTakeDamageEventArgs> _damagePlayer;
 
@@ -32,7 +32,7 @@ namespace Game.Mobs {
 		protected override void OnPlayerEntered( PlayerManager player ) {
 			_damagePlayer.Publish( new PlayerTakeDamageEventArgs( 25.0f ) );
 			// TODO: add particle effect
-			_effectFinished.Publish( _effectId );
+			QueueFree();
 		}
 
 		/*

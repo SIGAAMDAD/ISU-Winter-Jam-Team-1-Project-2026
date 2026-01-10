@@ -36,7 +36,7 @@ namespace Prefabs {
 		/// Called when the whirlpool's timer ends.
 		/// </summary>
 		private void OnKill() {
-			_effectFinished.Publish( _effectId );
+			QueueFree();
 		}
 
 		/*

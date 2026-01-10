@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bxx2uro5uusm8"]
+[gd_scene load_steps=28 format=3 uid="uid://bxx2uro5uusm8"]
 
 [ext_resource type="Script" uid="uid://b43snt0sswaqk" path="res://Assets/Prefabs/Mobs/Squid/Squid.cs" id="1_bgroo"]
 [ext_resource type="Texture2D" uid="uid://6t5bau38yd33" path="res://Assets/Textures/SpriteSheets/Squid.png" id="2_eyq8v"]
@@ -166,17 +166,13 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_733kn"]
-size = Vector2(388, 158)
-
 [node name="Squid" type="Area2D"]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 0
+collision_mask = 3
 script = ExtResource("1_bgroo")
 _xpKillAmount = 200.0
 _damageAmount = 20.0
 _health = 900.0
-_attackCooldown = 2.5
 _speed = Vector2(0.1, 0.1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -217,19 +213,3 @@ sprite_frames = SubResource("SpriteFrames_wkhj6")
 animation = &"release"
 frame = 3
 frame_progress = 1.0
-
-[node name="Label" type="Label" parent="."]
-offset_left = -44.0
-offset_top = 151.0
-offset_right = 45.0
-offset_bottom = 174.0
-text = "THE KRAKEN"
-horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
-
-[node name="GrabArea" type="Area2D" parent="."]
-position = Vector2(0, 227)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GrabArea"]
-position = Vector2(0, 69)
-shape = SubResource("RectangleShape2D_733kn")

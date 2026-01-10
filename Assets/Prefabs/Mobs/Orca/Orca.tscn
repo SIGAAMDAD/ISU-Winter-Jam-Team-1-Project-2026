@@ -138,13 +138,12 @@ size = Vector2(72.17392, 52.173912)
 
 [node name="Orca" type="Area2D"]
 scale = Vector2(1.15, 1.15)
-collision_layer = 2
-collision_mask = 2
+collision_layer = 0
+collision_mask = 3
 script = ExtResource("1_8xrhf")
 _xpKillAmount = 80.0
 _damageAmount = 30.0
 _health = 50.0
-_attackCooldown = 4.0
 _speed = Vector2(0.3, 0.3)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

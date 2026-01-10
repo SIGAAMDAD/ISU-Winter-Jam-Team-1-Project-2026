@@ -90,13 +90,12 @@ animations = [{
 size = Vector2(69, 60)
 
 [node name="Shark" type="Area2D"]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 0
+collision_mask = 3
 script = ExtResource("1_byjlf")
 _xpKillAmount = 30.0
 _damageAmount = 40.0
 _health = 20.0
-_attackCooldown = 60.0
 _speed = Vector2(0.4, 0.4)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

@@ -178,8 +178,8 @@ bg_color = Color(0, 0, 0, 1)
 bg_color = Color(1, 0, 0, 1)
 
 [node name="MobyDick" type="Area2D"]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 0
+collision_mask = 3
 input_pickable = false
 script = ExtResource("1_sfsc5")
 _xpKillAmount = 900.0

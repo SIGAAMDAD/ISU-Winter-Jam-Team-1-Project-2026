@@ -49,7 +49,6 @@ frame_progress = 0.6244421
 script = ExtResource("2_haroh")
 
 [node name="Area2D" type="Area2D" parent="."]
-collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(-0.5, 3)
