@@ -283,6 +283,7 @@ namespace Game.Mobs {
 			_navigationAgent.MaxNeighbors = MobSpawner.MAX_WAVE_ENEMIES;
 			_navigationAgent.MaxSpeed = _speed.LengthSquared();
 			_navigationAgent.TimeHorizonAgents = 0.5f;
+			_navigationAgent.Radius = 20.0f;
 			_navigationAgent.ProcessThreadGroup = ProcessThreadGroupEnum.MainThread;
 			_agentRid = _navigationAgent.GetRid();
 			_navigationAgent.Connect( NavigationAgent2D.SignalName.TargetReached, Callable.From( OnTargetReached ) );

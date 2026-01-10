@@ -69,7 +69,6 @@ sprite_frames = SubResource("SpriteFrames_awn2u")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(0.43478262, -1.7391305)
 shape = SubResource("RectangleShape2D_eppw5")
 
