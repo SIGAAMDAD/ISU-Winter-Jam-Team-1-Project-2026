@@ -129,11 +129,7 @@ namespace Game.Mobs {
 			_flags |= FlagBits.Hurt;
 			_takeDamage.Publish( new MobTakeDamageEventArgs( _mobId, amount ) );
 
-			var damageNumber = new DamageNumberLabel() {
-				GlobalPosition = GlobalPosition,
-				Value = amount
-			};
-			GetTree().Root.CallDeferred( MethodName.AddChild, damageNumber );
+			GetTree().Root.GetNode<DamageNumberFactory>( nameof( DamageNumberFactory ) ).CallDeferred( DamageNumberFactory.MethodName.Add, GlobalPosition, amount );
 		}
 
 		/*

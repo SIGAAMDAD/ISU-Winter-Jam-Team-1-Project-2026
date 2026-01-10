@@ -15,7 +15,43 @@ namespace Game.Player.UserInterface {
 	public sealed partial class DamageNumberLabel : Label {
 		private static readonly NodePath @ModulateNodePath = "modulate";
 
+		private readonly Timer _hideTimer = new Timer() {
+			WaitTime = 0.90f,
+			OneShot = true
+		};
+
 		public float Value { get; set; }
+
+		/*
+		===============
+		Show
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="position"></param>
+		public void Show( float value, Vector2 position ) {
+			Modulate = Colors.White;
+			if ( value > 50.0f ) {
+				Modulate = Colors.Yellow;
+			}
+			if ( value > 100.0f ) {
+				Modulate = Colors.Red;
+			}
+
+			Text = value.ToString();
+			GlobalPosition = position;
+
+			_hideTimer.Start();
+
+			var fadeTween = CreateTween();
+			fadeTween.CallDeferred( Tween.MethodName.TweenInterval, _hideTimer.WaitTime * 0.75f );
+			fadeTween.CallDeferred( Tween.MethodName.TweenProperty, this, ModulateNodePath, Colors.Transparent, _hideTimer.WaitTime * 0.25f );
+
+			Show();
+		}
 
 		/*
 		===============
@@ -28,28 +64,10 @@ namespace Game.Player.UserInterface {
 		public override void _Ready() {
 			base._Ready();
 
-			SetDeferred( PropertyName.Modulate, Colors.White );
-			if ( Value > 50.0f ) {
-				SetDeferred( PropertyName.Modulate,Modulate = Colors.Yellow );
-			}
-			if ( Value > 100.0f ) {
-				SetDeferred( PropertyName.Modulate,Modulate = Colors.Red );
-			}
+			_hideTimer.Connect( Timer.SignalName.Timeout, Callable.From( Hide ) );
+			AddChild( _hideTimer );
 
-			SetDeferred( PropertyName.Visible, true );
-			SetDeferred( PropertyName.Text, Value.ToString() );
-
-			var hideTimer = new Timer() {
-				WaitTime = 0.90f,
-				OneShot = true
-			};
-			hideTimer.Connect( Timer.SignalName.Timeout, Callable.From( QueueFree ) );
-			CallDeferred( MethodName.AddChild, hideTimer );
-			hideTimer.CallDeferred( Timer.MethodName.Start );
-
-			var fadeTween = CreateTween();
-			fadeTween.CallDeferred( Tween.MethodName.TweenInterval, hideTimer.WaitTime * 0.75f );
-			fadeTween.CallDeferred( Tween.MethodName.TweenProperty, this, ModulateNodePath, Colors.Transparent, hideTimer.WaitTime * 0.25f );
+			Visible = false;
 		}
 	};
 };

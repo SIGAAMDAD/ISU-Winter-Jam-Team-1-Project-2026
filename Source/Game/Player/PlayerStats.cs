@@ -181,16 +181,11 @@ namespace Game.Player {
 			ref float health = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, HEALTH, out _ );
 			health -= args.Amount;
 			if ( health <= 0.0f ) {
-				_playerDeath.Publish( new EmptyEventArgs() );
+				_playerDeath.Publish( EmptyEventArgs.Args );
 			}
 
 			_statChanged.Publish( new StatChangedEventArgs( HEALTH, health ) );
-
-			var damageNumber = new DamageNumberLabel() {
-				GlobalPosition = _owner.GlobalPosition,
-				Value = args.Amount
-			};
-			_owner.GetTree().Root.CallDeferred( Node.MethodName.AddChild, damageNumber );
+			_owner.GetTree().Root.GetNode<DamageNumberFactory>( nameof( DamageNumberFactory ) ).CallDeferred( DamageNumberFactory.MethodName.Add, _owner.GlobalPosition, args.Amount );
 		}
 
 		/*
