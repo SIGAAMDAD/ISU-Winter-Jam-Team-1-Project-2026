@@ -17,12 +17,19 @@ namespace Game.Player.UserInterface {
 	/// </summary>
 
 	public sealed class UpgradeButton {
+		private static readonly StringName @HoverStyleName = "hover";
+		private static readonly StringName @PressedStyleName = "pressed";
+		private static readonly StringName @NormalStyleName = "normal";
+
 		private readonly UpgradeManager _manager;
 		private readonly UpgradeButtonNode _owner;
 		private readonly Button _button;
 		private readonly Label _costLabel;
 		private readonly Label _valueLabel;
 		private readonly string _name;
+
+		private readonly Callable _onFocusedCallable;
+		private readonly Callable _onPressedCallable;
 
 		/*
 		===============
@@ -37,9 +44,16 @@ namespace Game.Player.UserInterface {
 		public UpgradeButton( UpgradeButtonNode node, UpgradeType type, string name, UpgradeManager manager, IGameEventRegistryService eventFactory ) {
 			_button = node.GetNode<Button>( "Button" );
 			_button.Icon = node.Icon;
-			_button.Connect( Button.SignalName.FocusEntered, Callable.From( OnFocused ) );
-			_button.Connect( Button.SignalName.MouseEntered, Callable.From( OnFocused ) );
-			_button.Connect( Button.SignalName.Pressed, Callable.From( OnPressed ) );
+
+			_button.AddThemeStyleboxOverride( HoverStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/HoverStyle.tres" ) );
+			_button.AddThemeStyleboxOverride( PressedStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/HoverStyle.tres" ) );
+			_button.AddThemeStyleboxOverride( NormalStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/NormalStyle.tres" ) );
+
+			_onFocusedCallable = Callable.From( OnFocused );
+			_onPressedCallable = Callable.From( OnPressed );
+			_button.Connect( Button.SignalName.FocusEntered, _onFocusedCallable );
+			_button.Connect( Button.SignalName.MouseEntered, _onFocusedCallable );
+			_button.Connect( Button.SignalName.Pressed, _onPressedCallable );
 
 			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
@@ -116,6 +130,20 @@ namespace Game.Player.UserInterface {
 			int tier = _manager.GetUpgradeTier( _owner.Type );
 			_manager.BuyUpgrade( _owner.Type );
 			SetTier( _manager.GetUpgradeTier( _owner.Type ) );
+
+			if ( tier == UpgradeManager.MAX_UPGRADE_TIER ) {
+				_button.Disconnect( Button.SignalName.Pressed, _onPressedCallable );
+				_button.Disconnect( Button.SignalName.FocusEntered, _onFocusedCallable );
+				_button.Disconnect( Button.SignalName.MouseEntered, _onFocusedCallable );
+
+				_button.RemoveThemeStyleboxOverride( NormalStyleName );
+				_button.RemoveThemeStyleboxOverride( HoverStyleName );
+				_button.RemoveThemeStyleboxOverride( PressedStyleName );
+
+				_button.AddThemeStyleboxOverride( HoverStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/MaxedOutStyle.tres" ) );
+				_button.AddThemeStyleboxOverride( PressedStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/MaxedOutStyle.tres" ) );
+				_button.AddThemeStyleboxOverride( NormalStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/MaxedOutStyle.tres" ) );
+			}
 		}
 	};
 };

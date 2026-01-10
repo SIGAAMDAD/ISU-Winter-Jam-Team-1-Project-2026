@@ -54,7 +54,7 @@ namespace Game.Menus {
 		/// </summary>
 		private void OnQuitGame() {
 			GetTree().Paused = false;
-			GameStateManager.Instance.SetGameState( GameState.TitleScreen );
+			GetTree().Quit();
 		}
 
 		/*

@@ -42,4 +42,4 @@ text = "RESUME GAME"
 [node name="ExitGame" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "QUIT TO MAIN MENU"
+text = "QUIT GAME"

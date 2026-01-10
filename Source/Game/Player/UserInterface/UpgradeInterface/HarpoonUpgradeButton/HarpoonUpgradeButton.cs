@@ -15,12 +15,17 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 	/// </summary>
 
 	public sealed class HarpoonUpgradeButton {
-		private static readonly StringName @NormalThemeName = "normal";
-		private static readonly StringName @HoverThemeName = "hover";
+		private static readonly StringName @HoverStyleName = "hover";
+		private static readonly StringName @PressedStyleName = "pressed";
+		private static readonly StringName @NormalStyleName = "normal";
 
 		private readonly UpgradeManager _manager;
 		private readonly HarpoonUpgradeButtonNode _owner;
 		private readonly Label _costLabel;
+		private readonly Button _button;
+
+		private readonly Callable _onFocusedCallable;
+		private readonly Callable _onPressedCallable;
 
 		private bool _owned = false;
 
@@ -36,24 +41,28 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		/// <param name="type"></param>
 		/// <param name="manager"></param>
 		public HarpoonUpgradeButton( HarpoonUpgradeButtonNode node, UpgradeManager manager, IGameEventRegistryService eventFactory ) {
-			var button = node.GetNode<Button>( "Button" );
-			button.Icon = node.Icon;
-			button.Text = node.UpgradeName;
+			_button = node.GetNode<Button>( "Button" );
+			_button.Icon = node.Icon;
+			_button.Text = node.UpgradeName;
 
-			button.AddThemeStyleboxOverride( NormalThemeName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/HarpoonUpgradeButton/NotOwned.tres" ) );
-			button.AddThemeStyleboxOverride( HoverThemeName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/HarpoonUpgradeButton/HoverStyle.tres" ) );
-			
-			button.Connect( Button.SignalName.FocusEntered, Callable.From( OnFocused ) );
-			button.Connect( Button.SignalName.MouseEntered, Callable.From( OnFocused ) );
-			button.Connect( Button.SignalName.Pressed, Callable.From( OnPressed ) );
+			_button.AddThemeStyleboxOverride( HoverStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/HarpoonUpgradeButton/HoverStyle.tres" ) );
+			_button.AddThemeStyleboxOverride( PressedStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/HarpoonUpgradeButton/HoverStyle.tres" ) );
+			_button.AddThemeStyleboxOverride( NormalStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/HarpoonUpgradeButton/NotOwned.tres" ) );
 
-			_costLabel = node.GetNode<Label>( "CostLabel" );
+			_onFocusedCallable = Callable.From( OnFocused );
+			_onPressedCallable = Callable.From( OnPressed );
+			_button.Connect( Button.SignalName.FocusEntered, _onFocusedCallable );
+			_button.Connect( Button.SignalName.MouseEntered, _onFocusedCallable );
+			_button.Connect( Button.SignalName.Pressed, _onPressedCallable );
 
 			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
 			_owner = node;
 			_manager = manager;
+
+			_costLabel = node.GetNode<Label>( "CostLabel" );
+			_costLabel.Text = _manager.GetUpgradeCost( node.Type ).ToString();
 		}
 
 		/*
@@ -101,12 +110,19 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 
 			_owned = _manager.BuyUpgrade( _owner.Type );
 			if ( _owned ) {
-				_owner.RemoveThemeStyleboxOverride( HoverThemeName );
-				_owner.RemoveThemeStyleboxOverride( NormalThemeName );
-				_owner.AddThemeStyleboxOverride( NormalThemeName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/HarpoonUpgradeButton/Owned.tres" ) );
-				_owner.AddThemeStyleboxOverride( HoverThemeName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/HarpoonUpgradeButton/Owned.tres" ) );
+				_costLabel.Text = "OWNED";
 
-				_owner.Modulate = Colors.Green;
+				_button.Disconnect( Button.SignalName.Pressed, _onPressedCallable );
+				_button.Disconnect( Button.SignalName.FocusEntered, _onFocusedCallable );
+				_button.Disconnect( Button.SignalName.MouseEntered, _onFocusedCallable );
+
+				_button.RemoveThemeStyleboxOverride( NormalStyleName );
+				_button.RemoveThemeStyleboxOverride( HoverStyleName );
+				_button.RemoveThemeStyleboxOverride( PressedStyleName );
+
+				_button.AddThemeStyleboxOverride( HoverStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/HarpoonUpgradeButton/Owned.tres" ) );
+				_button.AddThemeStyleboxOverride( PressedStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/HarpoonUpgradeButton/Owned.tres" ) );
+				_button.AddThemeStyleboxOverride( NormalStyleName, ResourceLoader.Load<StyleBoxFlat>( "res://Source/Game/Player/UserInterface/UpgradeInterface/HarpoonUpgradeButton/Owned.tres" ) );
 			}
 		}
 	};

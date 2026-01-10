@@ -13,6 +13,7 @@ config_version=5
 config/name="ISU Winter Jam team 1 Project 2026"
 run/main_scene="uid://b10xxn0ar6ssx"
 config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
+run/max_fps=60
 config/icon="res://icon.svg"
 
 [audio]
@@ -29,6 +30,7 @@ SceneManager="*res://Source/Game/Systems/SceneManager.cs"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/size/mode=3
 window/size/resizable=false
 window/stretch/mode="canvas_items"
 window/vsync/vsync_mode=0

@@ -1,7 +1,5 @@
-[gd_scene load_steps=6 format=3 uid="uid://c5l5fqjcktnqg"]
+[gd_scene load_steps=4 format=3 uid="uid://c5l5fqjcktnqg"]
 
-[ext_resource type="StyleBox" uid="uid://bnkl18jq7qgsa" path="res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/NormalStyle.tres" id="1_acw1j"]
-[ext_resource type="StyleBox" uid="uid://cl28kyf1rkj6i" path="res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/HoverStyle.tres" id="2_34btv"]
 [ext_resource type="Texture2D" uid="uid://bc5yt4a4v7okr" path="res://Assets/Textures/SpriteSheets/SpeedIcon.png" id="2_ddy5p"]
 [ext_resource type="Script" uid="uid://pah181ss2hdt" path="res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/UpgradeButtonNode.cs" id="4_34btv"]
 [ext_resource type="Texture2D" uid="uid://3xf0730eaxae" path="res://Assets/Textures/Icons/Coin.png" id="5_6suru"]
@@ -21,9 +19,6 @@ custom_minimum_size = Vector2(290, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/icon_hover_color = Color(1, 0, 0, 1)
-theme_override_styles/normal = ExtResource("1_acw1j")
-theme_override_styles/pressed = ExtResource("2_34btv")
-theme_override_styles/hover = ExtResource("2_34btv")
 icon = ExtResource("2_ddy5p")
 alignment = 2
 metadata/_edit_use_anchors_ = true
