@@ -1,6 +1,5 @@
 using Godot;
 using Nomad.Core.Events;
-using Prefabs;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
@@ -21,33 +20,31 @@ namespace Game.Player.Upgrades {
 		private readonly record struct UpgradeData(
 			float Cost,
 			float AddAmount
-		);
+		) {
+			public static readonly UpgradeData Default = new UpgradeData( 0.0f, 0.0f );
+		};
 
-		public const int MAX_UPGRADE_TIER = 4;
-
-		private const float UPGRADE_TIER1_MULTIPLIER = 2.0f;
-		private const float UPGRADE_TIER2_MULTIPLIER = 3.0f;
-		private const float UPGRADE_TIER3_MULTIPLIER = 4.0f;
-		private const float UPGRADE_TIER4_MULTIPLIER = 5.0f;
+		public const int MAX_UPGRADE_TIER = 5;
 
 		private const float UPGRADE_TIER1_COST = 4.0f;
-		private const float UPGRADE_TIER2_COST = 12.0f;
-		private const float UPGRADE_TIER3_COST = 36.0f;
-		private const float UPGRADE_TIER4_COST = 108.0f;
+		private const float UPGRADE_TIER1_MULTIPLIER = 2.0f;
 
 		private float _moneyAmount = 0.0f;
 
 		private readonly Dictionary<UpgradeType, int> _upgrades = new();
-		private readonly ImmutableDictionary<UpgradeType, ImmutableDictionary<int, UpgradeData>> _upgradeData;
+		private readonly ImmutableDictionary<UpgradeType, ImmutableArray<UpgradeData>> _upgradeData;
 
 		private readonly HashSet<HarpoonType> _harpoonUpgrades = new();
 		private readonly ImmutableDictionary<HarpoonType, float> _harpoonData;
 
 		public IGameEvent<UpgradeBoughtEventArgs> UpgradeBought => _upgradeBought;
-		private IGameEvent<UpgradeBoughtEventArgs> _upgradeBought;
+		private readonly IGameEvent<UpgradeBoughtEventArgs> _upgradeBought;
 
 		public IGameEvent<HarpoonTypeUpgradeBoughtEventArgs> HarpoonBought => _harpoonBought;
-		private IGameEvent<HarpoonTypeUpgradeBoughtEventArgs> _harpoonBought;
+		private readonly IGameEvent<HarpoonTypeUpgradeBoughtEventArgs> _harpoonBought;
+
+		public IGameEvent<EmptyEventArgs> BuyFailed => _buyFailed;
+		private readonly IGameEvent<EmptyEventArgs> _buyFailed;
 
 		/*
 		===============
@@ -61,54 +58,18 @@ namespace Game.Player.Upgrades {
 		public UpgradeManager( IGameEventRegistryService eventFactory ) {
 			_upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeBought ) );
 			_harpoonBought = eventFactory.GetEvent<HarpoonTypeUpgradeBoughtEventArgs>( nameof( HarpoonBought ) );
+			_buyFailed = eventFactory.GetEvent<EmptyEventArgs>( nameof( BuyFailed ) );
 
 			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
-			//...
-			_upgradeData = new Dictionary<UpgradeType, ImmutableDictionary<int, UpgradeData>> {
-				[ UpgradeType.Armor ] = new Dictionary<int, UpgradeData> {
-					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
-					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
-					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
-					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
-					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER )
-				}.ToImmutableDictionary(),
-				[ UpgradeType.MaxHealth ] = new Dictionary<int, UpgradeData> {
-					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
-					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
-					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
-					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
-					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER )
-				}.ToImmutableDictionary(),
-				[ UpgradeType.HealthRegen ] = new Dictionary<int, UpgradeData> {
-					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
-					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
-					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
-					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
-					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER )
-				}.ToImmutableDictionary(),
-				[ UpgradeType.Speed ] = new Dictionary<int, UpgradeData> {
-					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
-					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, 1.05f ),
-					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, 1.5f ),
-					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, 2.75f ),
-					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, 3.5f )
-				}.ToImmutableDictionary(),
-				[ UpgradeType.AttackDamage ] = new Dictionary<int, UpgradeData> {
-					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
-					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, UPGRADE_TIER1_MULTIPLIER ),
-					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, UPGRADE_TIER2_MULTIPLIER ),
-					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, UPGRADE_TIER3_MULTIPLIER ),
-					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, UPGRADE_TIER4_MULTIPLIER )
-				}.ToImmutableDictionary(),
-				[ UpgradeType.AttackSpeed ] = new Dictionary<int, UpgradeData> {
-					[ 0 ] = new UpgradeData( 0.0f, 0.0f ),
-					[ 1 ] = new UpgradeData( UPGRADE_TIER1_COST, 0.75f ),
-					[ 2 ] = new UpgradeData( UPGRADE_TIER2_COST, 0.60f ),
-					[ 3 ] = new UpgradeData( UPGRADE_TIER3_COST, 0.45f ),
-					[ 4 ] = new UpgradeData( UPGRADE_TIER4_COST, 0.15f )
-				}.ToImmutableDictionary()
+			_upgradeData = new Dictionary<UpgradeType, ImmutableArray<UpgradeData>> {
+				[ UpgradeType.Armor ] = PopulateDefaultUpgradeData(),
+				[ UpgradeType.MaxHealth ] = PopulateDefaultUpgradeData(),
+				[ UpgradeType.HealthRegen ] = PopulateDefaultUpgradeData(),
+				[ UpgradeType.Speed ] = PopulateDefaultUpgradeCostData( [ 0.0f, 1.05f, 1.5f, 2.75f, 3.5f ] ),
+				[ UpgradeType.AttackDamage ] = PopulateDefaultUpgradeData(),
+				[ UpgradeType.AttackSpeed ] = PopulateDefaultUpgradeCostData( [ 0.0f, 0.90f, 0.75f, 0.60f, 0.45f, 0.15f ] )
 			}.ToImmutableDictionary();
 
 			_harpoonData = new Dictionary<HarpoonType, float> {
@@ -116,6 +77,50 @@ namespace Game.Player.Upgrades {
 				[ HarpoonType.IcyHarpoon ] = 24.0f,
 				[ HarpoonType.StationaryHarpoon ] = 28.0f,
 			}.ToImmutableDictionary();
+		}
+
+		/*
+		===============
+		PopulateDefaultUpgradeData
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		private ImmutableArray<UpgradeData> PopulateDefaultUpgradeData() {
+			var data = new UpgradeData[ MAX_UPGRADE_TIER ];
+			data[ 0 ] = UpgradeData.Default;
+
+			float lastCost = UPGRADE_TIER1_COST;
+			for ( int i = 1; i < data.Length; i++ ) {
+				data[ i ] = new UpgradeData( lastCost, UPGRADE_TIER1_MULTIPLIER * i );
+				GD.Print( $"Added upgrade data: {lastCost}, {UPGRADE_TIER1_MULTIPLIER * i}" );
+				lastCost = data[ i ].Cost * 4.0f;
+			}
+			return [ ..data ];
+		}
+
+		/*
+		===============
+		PopulateDefaultUpgradeCostData
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="multipliers"></param>
+		/// <returns></returns>
+		private ImmutableArray<UpgradeData> PopulateDefaultUpgradeCostData( float[] multipliers ) {
+			var data = new UpgradeData[ MAX_UPGRADE_TIER ];
+			data[ 0 ] = UpgradeData.Default;
+
+			float lastCost = UPGRADE_TIER1_COST;
+			for ( int i = 1; i < data.Length; i++ ) {
+				data[ i ] = new UpgradeData( lastCost, multipliers[ i ] );
+				lastCost = data[ i ].Cost * 4.0f;
+			}
+			return [ ..data ];
 		}
 
 		/*
@@ -197,6 +202,37 @@ namespace Game.Player.Upgrades {
 
 		/*
 		===============
+		CanBuyUpgrade
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="tier"></param>
+		/// <returns></returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public bool CanBuyUpgrade( UpgradeType type, int tier ) {
+			return !( _moneyAmount - _upgradeData[ type ][ tier ].Cost < 0.0f );
+		}
+
+		/*
+		===============
+		CanBuyUpgrade
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		public bool CanBuyUpgrade( HarpoonType type ) {
+			return !( _moneyAmount - _harpoonData[ type ] < 0.0f );
+		}
+
+		/*
+		===============
 		BuyUpgrade
 		===============
 		*/
@@ -210,16 +246,18 @@ namespace Game.Player.Upgrades {
 					// already at max
 					return false;
 				}
+				tier++;
 			} else {
 				tier = 1;
 			}
 
-			float cost = GetUpgradeCost( type, tier );
-			if ( _moneyAmount - cost < 0.0f ) {
+			if ( !CanBuyUpgrade( type, tier ) ) {
+				_buyFailed.Publish( new EmptyEventArgs() );
 				return false;
 			}
 
-			_upgrades[ type ] = tier + 1;
+			float cost = GetUpgradeCost( type, tier );
+			_upgrades[ type ] = tier;
 			_upgradeBought.Publish( new UpgradeBoughtEventArgs( type, tier, cost, _upgradeData[ type ][ tier ].AddAmount ) );
 
 			return true;
@@ -237,6 +275,12 @@ namespace Game.Player.Upgrades {
 		/// <returns></returns>
 		public bool BuyUpgrade( HarpoonType type ) {
 			if ( _harpoonUpgrades.TryGetValue( type, out var bought ) ) {
+				return false;
+			}
+
+			float cost = GetUpgradeCost( type );
+			if ( _moneyAmount - cost < 0.0f ) {
+				_buyFailed.Publish( new EmptyEventArgs() );
 				return false;
 			}
 

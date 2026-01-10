@@ -3,6 +3,8 @@ using Game.Player.Upgrades;
 using Game.Systems;
 using Nomad.Core.Events;
 using System.Collections.Generic;
+using Game.Systems.Caching;
+using Nomad.Core.Util;
 
 namespace Game.Player.UserInterface.UpgradeInterface {
 	/*
@@ -22,6 +24,11 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		private readonly Dictionary<UpgradeType, UpgradeButton> _statButtons = new();
 		private readonly Dictionary<HarpoonType, HarpoonUpgradeButton> _harpoonButtons = new();
 
+		private readonly AudioStreamPlayer _audioPlayer;
+
+		private readonly AudioStream _buySound;
+		private readonly AudioStream _cantBuySound;
+
 		private readonly Label _moneyLabel;
 
 		/*
@@ -39,11 +46,49 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
+			var upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeManager.UpgradeBought ) );
+			upgradeBought.Subscribe( this, OnUpgradeBought );
+
+			var upgradeBuyFailed = eventFactory.GetEvent<EmptyEventArgs>( nameof( UpgradeManager.BuyFailed ) );
+			upgradeBuyFailed.Subscribe( this, OnUpgradeBuyFailed );
+
 			_moneyLabel = _node.GetNode<Label>( "%MoneyLabel" );
+			_audioPlayer = _node.GetNode<AudioStreamPlayer>( nameof( AudioStreamPlayer ) );
+
+			AudioCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Audio/SoundEffects/BuyUpgrade.wav" ) ).Get( out _buySound );
+			AudioCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Audio/SoundEffects/CantBuyUpgrade.wav" ) ).Get( out _cantBuySound );
 
 			GameStateManager.GameStateChanged.Subscribe( this, OnGameStateChanged );
 
 			HookButtons();
+		}
+
+		/*
+		===============
+		OnUpgradeBought
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnUpgradeBought( in UpgradeBoughtEventArgs args ) {
+			_audioPlayer.Stream = _buySound;
+			_audioPlayer.Play();
+		}
+
+		/*
+		===============
+		OnUpgradeBuyFailed
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnUpgradeBuyFailed( in EmptyEventArgs args ) {
+			_audioPlayer.Stream = _cantBuySound;
+			_audioPlayer.Play();
 		}
 
 		/*
@@ -99,17 +144,23 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		HookButtons
 		===============
 		*/
+		/// <summary>
+		/// 
+		/// </summary>
 		private void HookButtons() {
 			var statUpgradeList = _node.GetNode<VBoxContainer>( "%StatUpgradeList" );
 			var statButtons = statUpgradeList.GetChildren();
 			_statButtons.EnsureCapacity( statButtons.Count );
+
+			var eventFactory = _node.GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			for ( int i = 0; i < statButtons.Count; i++ ) {
 				if ( statButtons[ i ] is UpgradeButtonNode node ) {
 					_statButtons[ node.Type ] = new UpgradeButton(
 						node,
 						node.Type,
 						node.StatName,
-						_manager
+						_manager,
+						eventFactory
 					);
 				}
 			}
@@ -121,7 +172,8 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 				if ( harpoonButtons[ i ] is HarpoonUpgradeButtonNode node ) {
 					_harpoonButtons[ node.Type ] = new HarpoonUpgradeButton(
 						node,
-						_manager
+						_manager,
+						eventFactory
 					);
 				}
 			}

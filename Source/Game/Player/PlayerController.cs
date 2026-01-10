@@ -5,7 +5,6 @@ using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Util;
-using Prefabs;
 using System;
 using Systems.Caching;
 
@@ -24,14 +23,16 @@ namespace Game.Player {
 	/// </summary>
 
 	public sealed class PlayerController {
-		private const float BASE_WEAPON_COOLDOWN_TIME = 1.15f;
+		public const float BASE_WEAPON_COOLDOWN_TIME = 1.5f;
 
 		[Flags]
 		private enum FlagBits : byte {
 			CanMove = 1 << 0,
 			CanAttack = 1 << 1,
 
-			WaveActive = 1 << 2
+			WaveActive = 1 << 2,
+
+			Dead = 1 << 3
 		};
 
 		private static readonly StringName @MoveEastBind = "move_east";
@@ -47,7 +48,7 @@ namespace Game.Player {
 		private readonly PlayerAnimator _animator;
 		private readonly Timer _weaponCooldown;
 
-		private UpgradeType _harpoonType;
+		private HarpoonType _harpoonType;
 
 		private FlagBits _flags = FlagBits.CanAttack | FlagBits.CanMove | FlagBits.WaveActive;
 		private Vector2 _frameVelocity = Vector2.Zero;
@@ -82,7 +83,7 @@ namespace Game.Player {
 			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
-			var harpoonType = eventFactory.GetEvent<UpgradeType>( nameof( PlayerStats.HarpoonTypeChanged ) );
+			var harpoonType = eventFactory.GetEvent<HarpoonTypeChangedEventArgs>( nameof( PlayerStats.HarpoonTypeChanged ) );
 			harpoonType.Subscribe( this, OnHarpoonTypeChanged );
 
 			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
@@ -90,6 +91,9 @@ namespace Game.Player {
 
 			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
 			waveStarted.Subscribe( this, OnWaveStarted );
+
+			var playerDeath = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerStats.PlayerDeath ) );
+			playerDeath.Subscribe( this, OnPlayerDeath );
 
 			_weaponCooldown = new Timer() {
 				WaitTime = 1.5f
@@ -114,16 +118,39 @@ namespace Game.Player {
 		/// 
 		/// </summary>
 		/// <param name="delta"></param>
+		public void Update( float delta ) {
+			// if we're not in an active wave, just ignore the call
+			if ( ( _flags & FlagBits.WaveActive ) == 0 || ( _flags & FlagBits.Dead ) != 0 ) {
+				return;
+			}
+			if ( ( _flags & FlagBits.CanAttack ) != 0 ) {
+				OnUseWeapon();
+				_flags &= ~FlagBits.CanAttack;
+				_weaponCooldown.Start();
+			}
+		}
+
+		/*
+		===============
+		FixedUpdate
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="delta"></param>
 		/// <param name="inputWasActive"></param>
-		public void Update( float delta, out bool inputWasActive ) {
+		public void FixedUpdate( float delta, out bool inputWasActive ) {
 			inputWasActive = false;
 
-			// if we're not in an active wave, just ignore the call
-			if ( ( _flags & FlagBits.WaveActive ) == 0 ) {
+			if ( ( _flags & FlagBits.WaveActive ) == 0 || ( _flags & FlagBits.Dead ) != 0 ) {
 				return;
 			}
 			if ( ( _flags & FlagBits.CanMove ) != 0 ) {
-				Vector2 inputVelocity = Input.GetVector( MoveWestBind, MoveEastBind, MoveNorthBind, MoveSouthBind );
+				Vector2 inputVelocity = new Vector2(
+					Input.GetAxis( MoveWestBind, MoveEastBind ),
+					Input.GetAxis( MoveNorthBind, MoveSouthBind )
+				);
 				inputWasActive = inputVelocity != Vector2.Zero;
 
 				EntityUtils.CalcSpeed( ref _frameVelocity, new Vector2( _movementSpeed, _movementSpeed ), delta, inputVelocity );
@@ -132,11 +159,19 @@ namespace Game.Player {
 				_owner.MoveAndSlide();
 				_frameVelocity = _owner.Velocity;
 			}
-			if ( ( _flags & FlagBits.CanAttack ) != 0 ) {
-				OnUseWeapon();
-				_flags &= ~FlagBits.CanAttack;
-				_weaponCooldown.Start();
-			}
+		}
+
+		/*
+		===============
+		OnPlayerDeath
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnPlayerDeath( in EmptyEventArgs args ) {
+			_flags |= FlagBits.Dead;
 		}
 
 		/*
@@ -149,7 +184,7 @@ namespace Game.Player {
 		/// </summary>
 		private void OnWeaponCooldownFinished() {
 			_flags |= FlagBits.CanAttack;
-			_weaponCooldownFinished.Publish( new EmptyEventArgs() );
+			_weaponCooldownFinished.Publish( EmptyEventArgs.Args );
 		}
 
 		/*
@@ -162,8 +197,8 @@ namespace Game.Player {
 		/// </summary>
 		/// <param name="type"></param>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
-		private void OnHarpoonTypeChanged( in UpgradeType type ) {
-			_harpoonType = type;
+		private void OnHarpoonTypeChanged( in HarpoonTypeChangedEventArgs args ) {
+			_harpoonType = args.Type;
 		}
 
 		/*
@@ -175,15 +210,14 @@ namespace Game.Player {
 		/// 
 		/// </summary>
 		private void OnUseWeapon() {
-			float angle = _owner.GlobalPosition.DirectionTo( _owner.GetGlobalMousePosition() ).Angle();
-
 			Projectile harpoon = _harpoonPrefabs[ (int)_harpoonType ].Instantiate<Projectile>();
 			harpoon.Direction = _animator.Direction;
-			harpoon.GlobalPosition = _owner.GlobalPosition;
-			harpoon.Rotation = angle;
+			harpoon.GlobalPosition = _animator.AimPosition;
+			harpoon.RotationDegrees = _animator.AimAngle;
+			harpoon.MoveDirection = _owner.GlobalPosition.DirectionTo( _owner.GetGlobalMousePosition() );
 			_owner.GetTree().Root.AddChild( harpoon );
 
-			_useWeapon.Publish( new EmptyEventArgs() );
+			_useWeapon.Publish( EmptyEventArgs.Args );
 		}
 
 		/*
@@ -210,7 +244,7 @@ namespace Game.Player {
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
-			_flags &= ~( FlagBits.CanMove | FlagBits.WaveActive );
+			_flags &= ~FlagBits.WaveActive;
 		}
 
 		/*

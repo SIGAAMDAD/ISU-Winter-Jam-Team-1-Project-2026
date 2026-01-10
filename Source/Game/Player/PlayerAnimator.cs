@@ -18,10 +18,15 @@ namespace Game.Player {
 	/// </summary>
 
 	public sealed class PlayerAnimator {
+		[Flags]
+		private enum AnimatorFlags : byte {
+			IsAttacking = 1 << 0,
+			IsMoving = 1 << 1,
+			IsGunLoaded = 1 << 2
+		};
+
 		private static readonly StringName @UpHarpoonAnimation = "up_harpoon";
 		private static readonly StringName @UpNoHarpoonAnimation = "up_noharpoon";
-		private static readonly StringName @DownHarpoonAnimation = "down_harpoon";
-		private static readonly StringName @DownNoHarpoonAnimation = "down_noharpoon";
 		private static readonly StringName @HorizontalHarpoonAnimation = "horizontal_harpoon";
 		private static readonly StringName @HorizontalNoHarpoonAnimation = "horizontal_noharpoon";
 
@@ -38,6 +43,9 @@ namespace Game.Player {
 		private const float LEFT_MIN = 225.0f;
 		private const float LEFT_MAX = 315.0f;
 
+		public Vector2 AimPosition => _harpoonAnimation.GlobalPosition;
+		public float AimAngle => _harpoonAnimation.RotationDegrees;
+
 		public PlayerDirection Direction => _direction;
 		private PlayerDirection _direction;
 
@@ -50,10 +58,10 @@ namespace Game.Player {
 		private readonly Marker2D[] _foamPositions;
 		private readonly Marker2D[] _harpoonPositions;
 
-		private bool _playerIsMoving = false;
-		private bool _isPlayerAttacking = false;
+		private readonly Timer _reloadTimer;
 
-		private float _prevMouseAngle = 0.0f;
+		private AnimatorFlags _flags = AnimatorFlags.IsGunLoaded;
+		
 		private PlayerDirection _harpoonDirection;
 
 		public IGameEvent<EmptyEventArgs> PlayerStartMoving => _playerStartMoving;
@@ -61,6 +69,9 @@ namespace Game.Player {
 
 		public IGameEvent<EmptyEventArgs> PlayerStopMoving => _playerStopMoving;
 		private readonly IGameEvent<EmptyEventArgs> _playerStopMoving;
+
+		public IGameEvent<EmptyEventArgs> GunReloaded => _gunReloaded;
+		private readonly IGameEvent<EmptyEventArgs> _gunReloaded;
 
 		/*
 		===============
@@ -70,6 +81,12 @@ namespace Game.Player {
 		public PlayerAnimator( PlayerManager owner ) {
 			_owner = owner;
 			_animations = owner.GetNode<AnimatedSprite2D>( "AnimatedSprite2D" );
+
+			_reloadTimer = new Timer() {
+				OneShot = true
+			};
+			_reloadTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnReloadTimerTimeout ) );
+			owner.AddChild( _reloadTimer );
 
 			_foamParticles = _animations.GetNode<GpuParticles2D>( "UpFoamMarker/FoamParticles" );
 			_harpoonAnimation = _animations.GetNode<AnimatedSprite2D>( "HarpoonSpawnUp/HarpoonCannon" );
@@ -90,6 +107,9 @@ namespace Game.Player {
 
 			var eventFactory = owner.GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 
+			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
+			statChanged.Subscribe( this, OnStatChanged );
+
 			var useWeapon = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerController.UseWeapon ) );
 			useWeapon.Subscribe( this, OnUseWeapon );
 
@@ -98,6 +118,21 @@ namespace Game.Player {
 
 			_playerStartMoving = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerStartMoving ) );
 			_playerStopMoving = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerStopMoving ) );
+			_gunReloaded = eventFactory.GetEvent<EmptyEventArgs>( nameof( GunReloaded ) );
+		}
+
+		/*
+		===============
+		Dispose
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Dispose() {
+			_playerStartMoving.Dispose();
+			_playerStopMoving.Dispose();
+			_gunReloaded.Dispose();
 		}
 
 		/*
@@ -110,17 +145,17 @@ namespace Game.Player {
 		/// </summary>
 		/// <param name="delta"></param>
 		/// <param name="inputWasActive"></param>
-		public void Update( float delta, bool inputWasActive ) {
+		public void FixedUpdate( float delta, bool inputWasActive ) {
 			CalcCannonTransform();
 			CalcFoamPosition();
 
 			_foamParticles.Emitting = inputWasActive;
-			if ( inputWasActive && !_playerIsMoving ) {
-				_playerIsMoving = true;
+			if ( inputWasActive && ( _flags & AnimatorFlags.IsMoving ) == 0 ) {
+				_flags |= AnimatorFlags.IsMoving;
 				_playerStartMoving.Publish( new EmptyEventArgs() );
-			} else if ( !inputWasActive && _playerIsMoving ) {
+			} else if ( !inputWasActive && ( _flags & AnimatorFlags.IsMoving ) != 0 ) {
+				_flags &= ~AnimatorFlags.IsMoving;
 				_playerStopMoving.Publish( new EmptyEventArgs() );
-				_playerIsMoving = false;
 			}
 		}
 
@@ -176,22 +211,23 @@ namespace Game.Player {
 		===============
 		*/
 		private void AimHarpoon( PlayerDirection quadrant, float length ) {
+			bool isAttacking = ( _flags & AnimatorFlags.IsGunLoaded ) == 0;
 			switch ( quadrant ) {
 				case PlayerDirection.North:
-					_harpoonAnimation.Play( _isPlayerAttacking ? UpNoHarpoonAnimation : UpHarpoonAnimation );
+					_harpoonAnimation.Play( isAttacking ? UpNoHarpoonAnimation : UpHarpoonAnimation );
 					_harpoonAnimation.FlipV = false;
 					break;
 				case PlayerDirection.East:
-					_harpoonAnimation.Play( _isPlayerAttacking ? HorizontalNoHarpoonAnimation : HorizontalHarpoonAnimation );
-					_harpoonAnimation.FlipH = false;
+					_harpoonAnimation.Play( isAttacking ? HorizontalNoHarpoonAnimation : HorizontalHarpoonAnimation );
+					_harpoonAnimation.FlipH = true;
 					break;
 				case PlayerDirection.South:
-					_harpoonAnimation.Play( _isPlayerAttacking ? UpNoHarpoonAnimation : UpHarpoonAnimation );
+					_harpoonAnimation.Play( isAttacking ? UpNoHarpoonAnimation : UpHarpoonAnimation );
 					_harpoonAnimation.FlipV = true;
 					break;
 				case PlayerDirection.West:
-					_harpoonAnimation.Play( _isPlayerAttacking ? HorizontalNoHarpoonAnimation : HorizontalHarpoonAnimation );
-					_harpoonAnimation.FlipH = true;
+					_harpoonAnimation.Play( isAttacking ? HorizontalNoHarpoonAnimation : HorizontalHarpoonAnimation );
+					_harpoonAnimation.FlipH = false;
 					break;
 			}
 		}
@@ -285,8 +321,12 @@ namespace Game.Player {
 		OnWeaponCooldownFinished
 		===============
 		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
 		private void OnWeaponCooldownFinished( in EmptyEventArgs args ) {
-			_isPlayerAttacking = false;
+			_flags &= ~AnimatorFlags.IsAttacking;
 		}
 
 		/*
@@ -299,7 +339,37 @@ namespace Game.Player {
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnUseWeapon( in EmptyEventArgs args ) {
-			_isPlayerAttacking = true;
+			_flags |= AnimatorFlags.IsAttacking;
+			_flags &= ~AnimatorFlags.IsGunLoaded;
+			_reloadTimer.Start();
+		}
+
+		/*
+		===============
+		OnStatChanged
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnStatChanged( in StatChangedEventArgs args ) {
+			if ( args.StatId == PlayerStats.ATTACK_SPEED ) {
+				_reloadTimer.WaitTime = args.Value / 2.0f;
+			}
+		}
+
+		/*
+		===============
+		OnReloadTimerTimeout
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		private void OnReloadTimerTimeout() {
+			_flags |= AnimatorFlags.IsGunLoaded;
+			_gunReloaded.Publish( new EmptyEventArgs() );
 		}
 	};
 };

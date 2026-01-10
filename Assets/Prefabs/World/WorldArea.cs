@@ -17,7 +17,7 @@ namespace Prefabs {
 	/// 
 	/// </summary>
 	
-	public partial class WorldArea : Area2D {
+	public sealed partial class WorldArea : Area2D {
 		[Export]
 		private CollisionPolygon2D _bounds;
 		[Export]
@@ -66,7 +66,6 @@ namespace Prefabs {
 			size.X += _incrementSize.X;
 			size.Y += _incrementSize.Y;
 			_rectangleShape.Size = size;
-			_shape.GlobalPosition += size / 2.0f;
 
 			_polygon[ 1 ].X += _incrementSize.X;
 
@@ -105,6 +104,8 @@ namespace Prefabs {
 			_incrementSize = ( _water.Size - _rectangleShape.Size ) / 20.0f;
 
 			Connect( SignalName.AreaShapeExited, Callable.From<Rid, Area2D, int, int>( OnAreaShapeExited ) );
+
+			_arenaSizeChanged.Publish( new ArenaSizeChangedEventArgs( _rectangleShape.Size, _incrementSize ) );
 		}
 	};
 };

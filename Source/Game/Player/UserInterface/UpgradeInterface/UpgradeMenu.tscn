@@ -198,3 +198,5 @@ size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "START NEXT WAVE"
 metadata/_edit_use_anchors_ = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dkml08sjkleg4"]
+[gd_scene load_steps=22 format=3 uid="uid://dkml08sjkleg4"]
 
 [ext_resource type="Script" uid="uid://dgvw5sls61mdb" path="res://Source/Game/Player/PlayerManager.cs" id="1_43ce2"]
 [ext_resource type="Texture2D" uid="uid://cuju45rl2efen" path="res://Assets/Textures/SpriteSheets/Boat.png" id="2_278ex"]
@@ -91,14 +91,6 @@ linear_accel_max = 67.049995
 radial_accel_min = -42.350002
 radial_accel_max = 36.469997
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_htbi3"]
-atlas = ExtResource("3_b2bpv")
-region = Rect2(0, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_358il"]
-atlas = ExtResource("3_xhomw")
-region = Rect2(0, 64, 64, 64)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_5bvdo"]
 atlas = ExtResource("3_b2bpv")
 region = Rect2(64, 0, 64, 64)
@@ -117,22 +109,6 @@ region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_42cni"]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_htbi3")
-}],
-"loop": true,
-"name": &"down_harpoon",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_358il")
-}],
-"loop": true,
-"name": &"down_noharpoon",
-"speed": 5.0
-}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5bvdo")
@@ -213,7 +189,7 @@ position = Vector2(0, -35)
 
 [node name="HarpoonCannon" type="AnimatedSprite2D" parent="AnimatedSprite2D/HarpoonSpawnUp"]
 sprite_frames = SubResource("SpriteFrames_42cni")
-animation = &"down_harpoon"
+animation = &"up_harpoon"
 autoplay = "up_noharpoon"
 
 [node name="HarpoonSpawnDown" type="Marker2D" parent="AnimatedSprite2D"]
@@ -225,3 +201,4 @@ position = Vector2(0, 30)
 
 [node name="ActionStream" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_278ex")
+max_polyphony = 10

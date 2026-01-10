@@ -2,11 +2,9 @@ using Game.Common;
 using Game.Mobs;
 using Game.Player.Upgrades;
 using Game.Player.UserInterface;
-using Game.Player.UserInterface.UpgradeInterface;
 using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Util;
-using Prefabs;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -51,7 +49,7 @@ namespace Game.Player {
 			[ HEALTH_REGEN ] = 1.0f,
 			[ ARMOR ] = 0.0f,
 			[ ATTACK_DAMAGE ] = 10.0f,
-			[ ATTACK_SPEED ] = 1.25f,
+			[ ATTACK_SPEED ] = PlayerController.BASE_WEAPON_COOLDOWN_TIME,
 			[ MAX_HEALTH ] = 100.0f,
 			[ MONEY ] = 0.0f,
 		};
@@ -72,8 +70,16 @@ namespace Game.Player {
 		public IGameEvent<StatChangedEventArgs> StatChanged => _statChanged;
 		private readonly IGameEvent<StatChangedEventArgs> _statChanged;
 
-		public IGameEvent<HarpoonType> HarpoonTypeChanged => _harpoonTypeChanged;
-		private readonly IGameEvent<HarpoonType> _harpoonTypeChanged;
+		public IGameEvent<EmptyEventArgs> PlayerDeath => _playerDeath;
+		private readonly IGameEvent<EmptyEventArgs> _playerDeath;
+
+		public IGameEvent<HarpoonTypeChangedEventArgs> HarpoonTypeChanged => _harpoonTypeChanged;
+		private readonly IGameEvent<HarpoonTypeChangedEventArgs> _harpoonTypeChanged;
+
+		private readonly IDisposable _mobDieSubscription;
+		private readonly IDisposable _upgradeBoughtSubscription;
+		private readonly IDisposable _harpoonTypeBoughtSubscription;
+		private readonly IDisposable _waveStartedSubscription;
 
 		/*
 		===============
@@ -93,19 +99,20 @@ namespace Game.Player {
 			_takeDamage.Subscribe( this, OnDamageReceived );
 
 			_statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( StatChanged ) );
-			_harpoonTypeChanged = eventFactory.GetEvent<HarpoonType>( nameof( HarpoonTypeChanged ) );
+			_harpoonTypeChanged = eventFactory.GetEvent<HarpoonTypeChangedEventArgs>( nameof( HarpoonTypeChanged ) );
+			_playerDeath = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerDeath ) );
 
 			var mobDie = eventFactory.GetEvent<MobDieEventArgs>( nameof( MobBase.MobDie ) );
-			mobDie.Subscribe( this, OnMobKilled );
+			_mobDieSubscription = mobDie.Subscribe( OnMobKilled );
 
 			var upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeManager.UpgradeBought ) );
-			upgradeBought.Subscribe( this, OnUpgradeBought );
+			_upgradeBoughtSubscription = upgradeBought.Subscribe( OnUpgradeBought );
 
 			var harpoonTypeBought = eventFactory.GetEvent<HarpoonTypeUpgradeBoughtEventArgs>( nameof( UpgradeManager.HarpoonBought ) );
-			harpoonTypeBought.Subscribe( this, OnHarpoonTypeChanged );
+			_harpoonTypeBoughtSubscription = harpoonTypeBought.Subscribe( OnHarpoonTypeChanged );
 
 			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
-			waveStarted.Subscribe( this, OnWaveStarted );
+			_waveStartedSubscription = waveStarted.Subscribe( OnWaveStarted );
 
 			_baseStatValues = new Dictionary<UpgradeType, float> {
 				[ UpgradeType.Speed ] = _statCache[ SPEED ],
@@ -131,8 +138,14 @@ namespace Game.Player {
 		/// </summary>
 		public void Dispose() {
 			_statCache.Clear();
+
 			_takeDamage.Dispose();
 			_statChanged.Dispose();
+			_mobDieSubscription.Dispose();
+			_waveStartedSubscription.Dispose();
+			_harpoonTypeChanged.Dispose();
+			_upgradeBoughtSubscription.Dispose();
+			_harpoonTypeBoughtSubscription.Dispose();
 		}
 
 		/*
@@ -151,7 +164,7 @@ namespace Game.Player {
 			if ( health >= maxHealth ) {
 				return;
 			}
-			health = Math.Clamp( health + HealthRegen, 0.0f, maxHealth );
+			health = Math.Clamp( health + HealthRegen * delta, 0.0f, maxHealth );
 		}
 
 		/*
@@ -165,9 +178,11 @@ namespace Game.Player {
 		/// <param name="value"></param>
 		private void OnDamageReceived( in PlayerTakeDamageEventArgs args ) {
 			// TODO: clean this up
-			float health = Health;
+			ref float health = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, HEALTH, out _ );
 			health -= args.Amount;
-			_statCache[ HEALTH ] = health;
+			if ( health <= 0.0f ) {
+				_playerDeath.Publish( new EmptyEventArgs() );
+			}
 
 			_statChanged.Publish( new StatChangedEventArgs( HEALTH, health ) );
 
@@ -223,7 +238,8 @@ namespace Game.Player {
 			ref float money = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, MONEY, out _ );
 			money -= args.Cost;
 
-			_harpoonTypeChanged.Publish( args.Type );
+			_harpoonTypeChanged.Publish( new HarpoonTypeChangedEventArgs( args.Type ) );
+			_statChanged.Publish( new StatChangedEventArgs( MONEY, money ) );
 		}
 
 		/*

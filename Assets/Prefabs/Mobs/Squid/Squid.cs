@@ -33,7 +33,7 @@ namespace Prefabs {
 		public override void Damage( float amount ) {
 			base.Damage( amount );
 
-			_healthBar.Value = amount;
+			_healthBar.Value = _health;
 		}
 
 		/*
@@ -48,6 +48,8 @@ namespace Prefabs {
 			base._Ready();
 
 			_healthBar = GetNode<ProgressBar>( "HealthBar" );
+			_healthBar.MaxValue = _health;
+
 			_grabPlayer = GetNode<AnimatedSprite2D>( "GrabbedPlayer" );
 		}
 	};

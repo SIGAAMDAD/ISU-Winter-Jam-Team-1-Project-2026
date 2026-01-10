@@ -2,7 +2,6 @@ using Game.Mobs;
 using Game.Player.Weapons;
 using Godot;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace Prefabs {
 	/*
@@ -43,8 +42,8 @@ namespace Prefabs {
 		/// <param name="mob"></param>
 		protected override void OnEnemyHit( MobBase mob ) {
 			base.OnEnemyHit( mob );
-
-			SetProcess( false );
+			
+			CallDeferred( MethodName.SetPhysicsProcess, false );
 
 			var freezeArea = GetNode<Area2D>( "FreezeArea" );
 			Godot.Collections.Array<Area2D> bodies = freezeArea.GetOverlappingAreas();
@@ -54,19 +53,14 @@ namespace Prefabs {
 				if ( bodies[ i ] is MobBase enemy ) {
 					_victims.Add( enemy );
 					enemy.SetSpeed( Vector2.Zero );
-
-					var tween = enemy.CreateTween();
-					tween.TweenProperty( enemy, ModulateNodePath, Colors.LightBlue, 1.0f );
+					enemy.CreateTween().CallDeferred( Tween.MethodName.TweenProperty, enemy, ModulateNodePath, Colors.LightBlue, 1.0f );
 				}
 			}
 
-			_killTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnReleaseVictims ) );
-			AddChild( _killTimer );
-			_killTimer.Start();
-
-			_processTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnDamageVictims ) );
-			AddChild( _processTimer );
-			_processTimer.Start();
+			_killTimer.CallDeferred( Timer.MethodName.Start );
+			_processTimer.CallDeferred( Timer.MethodName.Start );
+			
+			SetDeferred( PropertyName.Visible, false );
 		}
 
 		/*
@@ -76,13 +70,15 @@ namespace Prefabs {
 		*/
 		private void OnReleaseVictims() {
 			for ( int i = 0; i < _victims.Count; i++ ) {
-				var enemy = _victims[ i ];				
+				var enemy = _victims[ i ];
+				if ( !IsInstanceValid( enemy ) ) {
+					continue;
+				}
 
 				enemy.Modulate = Colors.White;
 				enemy.ResetSpeed();
 			}
 			_victims.Clear();
-
 			_processTimer.Stop();
 
 			QueueFree();
@@ -98,10 +94,32 @@ namespace Prefabs {
 		/// </summary>
 		private void OnDamageVictims() {
 			for ( int i = 0; i < _victims.Count; i++ ) {
-				if ( _victims[ i ] is MobBase enemy ) {
+				var victim = _victims[ i ];
+				if ( !IsInstanceValid( victim ) ) {
+					continue;
+				}
+				if ( victim is MobBase enemy ) {
 					enemy.Damage( ICE_DAMAGE );
 				}
 			}
+		}
+
+		/*
+		===============
+		_Ready
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		public override void _Ready() {
+			base._Ready();
+
+			_processTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnDamageVictims ) );
+			AddChild( _processTimer );
+
+			_killTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnReleaseVictims ) );
+			AddChild( _killTimer );
 		}
 	};
 };

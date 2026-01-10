@@ -18,6 +18,7 @@ namespace Game.Player.Weapons {
 		public float Damage = 10.0f;
 		public float Speed = 30.0f;
 		public float Piercing = 0.0f;
+		public Vector2 MoveDirection = Vector2.Zero;
 		public PlayerDirection Direction = PlayerDirection.North;
 
 		private Vector2 _frameVelocity = Vector2.Zero;
@@ -65,8 +66,25 @@ namespace Game.Player.Weapons {
 		public override void _Ready() {
 			base._Ready();
 
+			float angleDeg = RotationDegrees;
+			switch ( Direction ) {
+				case PlayerDirection.South:
+					angleDeg -= 180.0f;
+					break;
+				case PlayerDirection.West:
+					angleDeg += 90.0f;
+					break;
+				case PlayerDirection.East:
+					angleDeg -= 90.0f;
+					break;
+			}
+			RotationDegrees = angleDeg;
+
 			var collisionArea = GetNode<Area2D>( "Area2D" );
 			collisionArea.Connect( Area2D.SignalName.AreaShapeEntered, Callable.From<Rid, Area2D, int, int>( OnAreaShapeEntered ) );
+
+			ProcessThreadGroup = ProcessThreadGroupEnum.SubThread;
+			ProcessThreadGroupOrder = 2;
 		}
 
 		/*
@@ -81,9 +99,9 @@ namespace Game.Player.Weapons {
 		public override void _PhysicsProcess( double delta ) {
 			base._PhysicsProcess( delta );
 
-			Vector2 inputVelocity = Vector2.Right.Rotated( GlobalRotation );
+			Vector2 inputVelocity = MoveDirection;
 
-			EntityUtils.CalcSpeed( ref _frameVelocity, new Vector2( Speed, Speed ),(float)delta, inputVelocity );
+			EntityUtils.CalcSpeed( ref _frameVelocity, new Vector2( Speed, Speed ), (float)delta, inputVelocity );
 			GlobalPosition += _frameVelocity;
 		}
 	};

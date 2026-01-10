@@ -32,7 +32,7 @@ namespace Game.Mobs {
 		protected override void OnPlayerEntered( PlayerManager player ) {
 			_damagePlayer.Publish( new PlayerTakeDamageEventArgs( 25.0f ) );
 			// TODO: add particle effect
-			QueueFree();
+			_effectFinished.Publish( _effectId );
 		}
 
 		/*

@@ -53,9 +53,25 @@ namespace Game.Player {
 			base._Process( delta );
 
 			float _delta = (float)delta;
-			_controller.Update( _delta, out bool inputWasActive );
-			_animator.Update( _delta, inputWasActive );
+			_controller.Update( _delta );
 			_stats.Update( _delta );
+		}
+
+		/*
+		===============
+		_PhysicsProcess
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="delta"></param>
+		public override void _PhysicsProcess( double delta ) {
+			base._PhysicsProcess( delta );
+
+			float _delta = (float)delta;
+			_controller.FixedUpdate( _delta, out bool inputWasActive );
+			_animator.FixedUpdate( _delta, inputWasActive );
 		}
 	};
 };

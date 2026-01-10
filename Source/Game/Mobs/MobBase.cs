@@ -25,7 +25,8 @@ namespace Game.Mobs {
 		[Flags]
 		protected enum FlagBits : uint {
 			Dead = 1 << 0,
-			Hurt = 1 << 1
+			Hurt = 1 << 1,
+			PlayerIsInRange = 1 << 3
 		};
 
 		[Export]
@@ -34,6 +35,8 @@ namespace Game.Mobs {
 		private float _damageAmount = 0.0f;
 		[Export]
 		protected float _health = 100.0f;
+		[Export]
+		protected float _attackCooldown = 1.5f;
 		[Export]
 		protected Vector2 _speed = new Vector2( 10.0f, 10.0f );
 
@@ -53,15 +56,51 @@ namespace Game.Mobs {
 			WaitTime = 0.75f,
 			OneShot = true
 		};
+		private readonly Timer _cooldownTimer = new Timer();
 
 		private Vector2 _frameVelocity;
 		private Vector2 _nextPathPosition;
+
+		private Rid _agentRid;
+		private float _targetDesiredDistance;
 
 		public IGameEvent<MobDieEventArgs> MobDie => _die;
 		private IGameEvent<MobDieEventArgs> _die;
 
 		public IGameEvent<MobTakeDamageEventArgs> TakeDamage => _takeDamage;
 		private IGameEvent<MobTakeDamageEventArgs> _takeDamage;
+
+		/*
+		===============
+		Enable
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Enable() {
+			ProcessMode = ProcessModeEnum.Pausable;
+			_cooldownTimer.Start();
+			_animation.Play( DefaultAnimationName );
+			_navigationAgent.TargetPosition = _target.GlobalPosition;
+			_collisionShape.Disabled = false;
+			Visible = true;
+
+			_flags &= ~FlagBits.Dead;
+		}
+
+		/*
+		===============
+		Disable
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Disable() {
+			Visible = false;
+			ProcessMode = ProcessModeEnum.Disabled;
+		}
 
 		/*
 		===============
@@ -78,6 +117,7 @@ namespace Game.Mobs {
 			}
 
 			_health -= amount;
+
 			if ( _health <= 0.0f ) {
 				_flags |= FlagBits.Dead;
 				_animation.CallDeferred( AnimatedSprite2D.MethodName.Play, DieAnimationName );
@@ -107,6 +147,7 @@ namespace Game.Mobs {
 		/// <param name="speed"></param>
 		public void SetSpeed( Vector2 speed ) {
 			_currentSpeed = speed;
+			NavigationServer2D.AgentSetMaxSpeed( _agentRid, _currentSpeed.Length() );
 		}
 
 		/*
@@ -119,6 +160,7 @@ namespace Game.Mobs {
 		/// </summary>
 		public void ResetSpeed() {
 			_currentSpeed = _speed;
+			NavigationServer2D.AgentSetMaxSpeed( _agentRid, _currentSpeed.Length() );
 		}
 
 		/*
@@ -133,7 +175,7 @@ namespace Game.Mobs {
 			if ( ( _flags & FlagBits.Dead ) != 0 ) {
 				return;
 			}
-			_damagePlayer.Publish( new PlayerTakeDamageEventArgs( _damageAmount ) );
+			_flags |= FlagBits.PlayerIsInRange;
 		}
 
 		/*
@@ -145,12 +187,15 @@ namespace Game.Mobs {
 		/// Resets the "hurt" color back to white.
 		/// </summary>
 		private void OnResetColor() {
-			_animation.SetDeferred( AnimatedSprite2D.PropertyName.Modulate, Colors.White );
-			_animation.SetDeferred( AnimatedSprite2D.PropertyName.SpeedScale, 1.0f );
+			_animation.Modulate = Colors.White;
+			_animation.SpeedScale = 1.0f;
 			_flags &= ~FlagBits.Hurt;
 			if ( ( _flags & FlagBits.Dead ) != 0 ) {
 				_die.Publish( new MobDieEventArgs( _mobId, _xpKillAmount ) );
-				CallDeferred( MethodName.QueueFree );
+				_navigationAgent.TargetPosition = GlobalPosition;
+				NavigationServer2D.AgentSetVelocityForced( _agentRid, Vector2.Zero );
+
+				ProcessMode = ProcessModeEnum.Disabled;
 			}
 		}
 
@@ -169,14 +214,40 @@ namespace Game.Mobs {
 
 		/*
 		===============
-		UpdateTargetPosition
+		OnCooldownTimerTimeout
 		===============
 		*/
 		/// <summary>
 		/// 
 		/// </summary>
-		private void UpdateTargetPosition() {
-			_navigationAgent.TargetPosition = _target.GlobalPosition;
+		private void OnCooldownTimerTimeout() {
+			if ( GlobalPosition.DistanceTo( _navigationAgent.TargetPosition ) < _targetDesiredDistance ) {
+				_damagePlayer.Publish( new PlayerTakeDamageEventArgs( _damageAmount ) );
+			}
+		}
+
+		/*
+		===============
+		OnVelocityComputed
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="velocity"></param>
+		private void OnVelocityComputed( Vector2 velocity ) {
+			GlobalPosition += velocity;
+		}
+
+		/*
+		===============
+		UpdateNextPath
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		private void UpdateNextPath() {
 			_nextPathPosition = _navigationAgent.GetNextPathPosition();
 		}
 
@@ -191,6 +262,10 @@ namespace Game.Mobs {
 		public override void _Ready() {
 			base._Ready();
 
+			_cooldownTimer.WaitTime = _attackCooldown;
+			_cooldownTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnCooldownTimerTimeout ) );
+			AddChild( _cooldownTimer );
+
 			_mobId = GetPath().GetHashCode();
 			_target = GetNode<PlayerManager>( "/root/World/Player" );
 			_collisionShape = GetNode<CollisionShape2D>( "CollisionShape2D" );
@@ -204,8 +279,16 @@ namespace Game.Mobs {
 			waveCompleted.Subscribe( this, OnWaveCompleted );
 
 			_navigationAgent = GetNode<NavigationAgent2D>( "NavigationAgent2D" );
-			_navigationAgent.Connect( NavigationAgent2D.SignalName.TargetReached, Callable.From( OnTargetReached ) );
+			_navigationAgent.AvoidanceEnabled = true;
+			_navigationAgent.MaxNeighbors = MobSpawner.MAX_WAVE_ENEMIES;
+			_navigationAgent.MaxSpeed = _speed.LengthSquared();
+			_navigationAgent.TimeHorizonAgents = 0.5f;
 			_navigationAgent.ProcessThreadGroup = ProcessThreadGroupEnum.MainThread;
+			_agentRid = _navigationAgent.GetRid();
+			_navigationAgent.Connect( NavigationAgent2D.SignalName.TargetReached, Callable.From( OnTargetReached ) );
+			_navigationAgent.Connect( NavigationAgent2D.SignalName.VelocityComputed, Callable.From<Vector2>( OnVelocityComputed ) );
+
+			_targetDesiredDistance = _navigationAgent.TargetDesiredDistance;
 
 			_animation = GetNode<AnimatedSprite2D>( "AnimatedSprite2D" );
 
@@ -231,11 +314,11 @@ namespace Game.Mobs {
 			base._Process( delta );
 
 			// only process every 10 frames in case we've got a lot of baddies
-			if ( ( _flags & FlagBits.Dead ) != 0 || ( Engine.GetProcessFrames() % 20 ) != 0 ) {
+			if ( ( _flags & FlagBits.Dead ) != 0 ) {
 				return;
 			}
 
-			CallDeferred( MethodName.UpdateTargetPosition );
+			CallDeferred( MethodName.UpdateNextPath );
 		}
 
 		/*
@@ -254,7 +337,8 @@ namespace Game.Mobs {
 
 			// NOTE: could just set the agent speed...
 			EntityUtils.CalcSpeed( ref _frameVelocity, _currentSpeed, (float)delta, position.DirectionTo( _nextPathPosition ) );
-			NavigationServer2D.AgentSetVelocityForced( _navigationAgent.GetRid(), _frameVelocity );
+			_navigationAgent.SetDeferred( NavigationAgent2D.PropertyName.TargetPosition, _target.GlobalPosition );
+			NavigationServer2D.AgentSetVelocity( _agentRid, _frameVelocity );
 			position += _frameVelocity;
 			SetDeferred( PropertyName.GlobalPosition, position );
 		}
@@ -271,6 +355,12 @@ namespace Game.Mobs {
 			base._ExitTree();
 
 			_target = null;
+
+			_takeDamage.Dispose();
+			_takeDamage = null;
+
+			_damagePlayer.Dispose();
+			_damagePlayer = null;
 		}
 	};
 };

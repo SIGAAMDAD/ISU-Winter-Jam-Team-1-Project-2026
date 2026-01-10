@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://q3d8f588rgns"]
+[gd_scene load_steps=27 format=3 uid="uid://q3d8f588rgns"]
 
 [ext_resource type="Script" uid="uid://c0j83efpa6svk" path="res://Assets/Prefabs/World/World.cs" id="1_yd2wk"]
 [ext_resource type="Script" uid="uid://c43nx6mgcq070" path="res://Source/Game/Common/WaveManager.cs" id="2_oturc"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dxuxfcosntln8" path="res://Assets/Prefabs/World/WorldArea.cs" id="3_t3kjs"]
 [ext_resource type="PackedScene" uid="uid://dkml08sjkleg4" path="res://Source/Game/Player/Player.tscn" id="4_623ao"]
 [ext_resource type="PackedScene" uid="uid://ci45mqkirclcs" path="res://Source/Game/Player/UserInterface/HeadsUpDisplay.tscn" id="4_e7xia"]
+[ext_resource type="Texture2D" uid="uid://cq1t40fvsl5qw" path="res://Assets/Textures/SpriteSheets/SandTile.png" id="5_1kdbj"]
 [ext_resource type="Script" uid="uid://cwio4re8cg5yy" path="res://Source/Game/Mobs/TideSpawner.cs" id="6_623ao"]
 [ext_resource type="PackedScene" uid="uid://djyxbr83svaxk" path="res://Assets/Prefabs/EnvironmentalEffects/Tide/Tide.tscn" id="7_el5su"]
 [ext_resource type="Script" uid="uid://ckum0efkn2yxu" path="res://Source/Game/Mobs/MobSpawner.cs" id="7_nap3e"]
@@ -18,13 +19,15 @@
 [ext_resource type="PackedScene" uid="uid://bxx2uro5uusm8" path="res://Assets/Prefabs/Mobs/Squid/Squid.tscn" id="14_r0y47"]
 [ext_resource type="Script" uid="uid://c4hau6on8128m" path="res://Assets/Prefabs/World/NavigationRegion2d.cs" id="15_06g14"]
 [ext_resource type="PackedScene" uid="uid://b1luavxt1vbwu" path="res://Source/Game/Menus/PauseMenu.tscn" id="16_el5su"]
+[ext_resource type="PackedScene" uid="uid://cva0u7ipnqfff" path="res://Assets/Prefabs/Mobs/MobyDick/MobyDick.tscn" id="17_xnn71"]
 [ext_resource type="Script" uid="uid://dvghxmu71ww70" path="res://Assets/Prefabs/World/Camera2d.cs" id="18_80nep"]
+[ext_resource type="AudioStream" uid="uid://cysxmuymj7l7q" path="res://Assets/Audio/SoundEffects/thunderstorm.wav" id="21_umx5j"]
 
 [sub_resource type="Gradient" id="Gradient_623ao"]
 interpolation_mode = 2
 interpolation_color_space = 1
-offsets = PackedFloat32Array(0.23333333, 0.46, 0.75333333)
-colors = PackedColorArray(0.12949139, 0.36538237, 1, 1, 0, 0.14528143, 0.77687883, 1, 6.1366705e-07, 1.2032687e-07, 0.33234078, 1)
+offsets = PackedFloat32Array(0.14666666, 0.34666666, 0.75333333)
+colors = PackedColorArray(0, 0.08078883, 0.99999183, 1, 0, 0.14528143, 0.77687883, 1, 0, 0, 0.30980393, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_nap3e"]
 gradient = SubResource("Gradient_623ao")
@@ -47,6 +50,14 @@ offset_right = 3840.0
 offset_bottom = 2160.0
 texture = SubResource("GradientTexture1D_nap3e")
 metadata/_edit_use_anchors_ = true
+
+[node name="WorldBorder" type="Polygon2D" parent="."]
+modulate = Color(0.65012825, 0.6501283, 0.65012825, 1)
+z_index = 1
+texture_repeat = 2
+antialiased = true
+texture = ExtResource("5_1kdbj")
+polygon = PackedVector2Array(4083, -119, 3956, 2300, 26, 2208, 1, 2158, 135, 2123, 290, 2157, 704, 2135, 1337, 2168, 1639, 2124, 1952, 2148, 2578, 2163, 2895, 2156, 3229, 2131, 3632, 2140, 3821, 2160, 3766, 1949, 3842, 1691, 3828, 1276, 3821, 1106, 3838, 567, 3830, 132, 3768, 27, 2258, -5, 1425, 24, 998, 17, 576, 12, 161, 28, 126, 22, 12, 28, 21, 79, 6, 139, 10, 182, 21, 411, 9, 623, 9, 1200, 21, 1873, 1, 2158, 26, 2208, -60, 2169, -171, 1172, -248, -230)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 0
@@ -86,10 +97,10 @@ autostart = true
 [node name="MobSpawner" type="Node2D" parent="WaveManager" node_paths=PackedStringArray("_worldBounds")]
 script = ExtResource("7_nap3e")
 _worldBounds = NodePath("../../CanvasLayer/WorldArea/CollisionShape2D")
-_enemyTypes = Array[PackedScene]([ExtResource("9_r0y47"), ExtResource("12_6tp7i"), ExtResource("11_yrfwb"), ExtResource("13_6tp7i"), ExtResource("14_r0y47")])
+_enemyTypes = Array[PackedScene]([ExtResource("9_r0y47"), ExtResource("12_6tp7i"), ExtResource("11_yrfwb"), ExtResource("13_6tp7i"), ExtResource("14_r0y47"), ExtResource("17_xnn71")])
 
 [node name="SpawnInterval" type="Timer" parent="WaveManager/MobSpawner"]
-wait_time = 3.5
+wait_time = 2.5
 autostart = true
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="WaveManager/MobSpawner"]
@@ -123,3 +134,8 @@ limit_top = 0
 limit_right = 1280
 limit_bottom = 720
 script = ExtResource("18_80nep")
+
+[node name="WorldAmbience" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("21_umx5j")
+volume_db = -5.0
+autoplay = true

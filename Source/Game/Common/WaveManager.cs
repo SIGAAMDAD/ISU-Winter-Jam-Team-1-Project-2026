@@ -1,4 +1,5 @@
 using Game.Mobs;
+using Game.Player;
 using Game.Player.UserInterface;
 using Game.Systems;
 using Godot;
@@ -26,7 +27,7 @@ namespace Game.Common {
 		private MobSpawner _mobSpawner;
 
 		public int CurrentWave => _currentWave;
-		private int _currentWave = 1;
+		private int _currentWave = 0;
 
 		private ILoggerCategory _category;
 		private ILoggerService _logger;
@@ -49,11 +50,8 @@ namespace Game.Common {
 			int oldWave = _currentWave;
 			_currentWave++;
 			_waveCompleted.Publish( new WaveChangedEventArgs( oldWave, _currentWave ) );
-			SetProcess( false );
 
 			_logger.PrintLine( $"Wave completed, showing upgrade menu..." );
-
-			GameStateManager.Instance.SetGameState( GameState.UpgradeMenu );
 		}
 
 		/*
@@ -67,8 +65,7 @@ namespace Game.Common {
 		/// <param name="args"></param>
 		private void OnGameStateChanged( in GameStateChangedEventArgs args ) {
 			if ( args.NewState == GameState.Level && args.OldState == GameState.UpgradeMenu ) {
-				_waveStarted.Publish( new EmptyEventArgs() );
-				SetProcess( true );
+				_waveStarted.Publish( EmptyEventArgs.Args );
 
 				_logger.PrintLine( $"Upgrade shopping finished, resuming game loop & spawning new wave..." );
 			}
@@ -94,7 +91,7 @@ namespace Game.Common {
 			var waveTimeout = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveTimer.WaveTimeout ) );
 			waveTimeout.Subscribe( this, OnWaveTimerTimeout );
 
-			_waveStarted.Publish( new EmptyEventArgs() );
+			_waveStarted.Publish( EmptyEventArgs.Args );
 
 			GameStateManager.GameStateChanged.Subscribe( this, OnGameStateChanged );
 

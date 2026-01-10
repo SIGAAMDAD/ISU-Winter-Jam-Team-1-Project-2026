@@ -1,5 +1,7 @@
 using Game.Player;
+using Game.Systems;
 using Godot;
+using Nomad.Core.Events;
 
 namespace Game.Mobs {
 	/*
@@ -12,8 +14,40 @@ namespace Game.Mobs {
 	/// <summary>
 	/// 
 	/// </summary>
-	
+
 	public partial class EffectBase : AnimatedSprite2D {
+		public int EffectId => _effectId;
+		protected int _effectId;
+
+		public IGameEvent<int> EffectFinished => _effectFinished;
+		protected IGameEvent<int> _effectFinished;
+
+		/*
+		===============
+		Enable
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Enable() {
+			Visible = true;
+			ProcessMode = ProcessModeEnum.Pausable;
+		}
+
+		/*
+		===============
+		Disable
+		===============
+		*/
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Disable() {
+			Visible = false;
+			ProcessMode = ProcessModeEnum.Disabled;
+		}
+
 		/*
 		===============
 		OnPlayerEntered
@@ -85,6 +119,9 @@ namespace Game.Mobs {
 			var collisionArea = GetNode<Area2D>( "Area2D" );
 			collisionArea.Connect( Area2D.SignalName.BodyShapeEntered, Callable.From<Rid, Node2D, int, int>( OnBodyEntered ) );
 			collisionArea.Connect( Area2D.SignalName.BodyShapeExited, Callable.From<Rid, Node2D, int, int>( OnBodyExited ) );
+
+			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
+			_effectFinished = eventFactory.GetEvent<int>( nameof( EffectFinished ) );
 		}
 	};
 };

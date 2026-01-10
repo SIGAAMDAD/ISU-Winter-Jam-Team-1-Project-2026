@@ -18,8 +18,8 @@ namespace Prefabs {
 		private static readonly StringName @WindupAnimationName = "windup";
 		private static readonly NodePath @ModulateNodePath = "modulate";
 
-		private const float CHARGE_WINDUP_TIME = 3.0f;
-		private const float CHARGE_COOLDOWN_TIME = 6.0f;
+		private const float CHARGE_WINDUP_TIME = 2.0f;
+		private const float CHARGE_COOLDOWN_TIME = 4.0f;
 
 		[Flags]
 		private enum SharkFlags : byte {
@@ -104,7 +104,8 @@ namespace Prefabs {
 				return;
 			}
 
-			_currentSpeed = new Vector2( _currentSpeed.X * 2.0f, 0.0f );
+			_currentSpeed = new Vector2( _currentSpeed.X * 6.0f, 0.0f );
+			SetDeferred( PropertyName.Modulate, Colors.White );
 			_navigationAgent.SetDeferred( NavigationAgent2D.PropertyName.TargetPosition, _target.GlobalPosition );
 		}
 

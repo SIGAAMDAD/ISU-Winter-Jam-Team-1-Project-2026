@@ -70,12 +70,14 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_omqpl"]
 
 [node name="WhirlPool" type="AnimatedSprite2D"]
+scale = Vector2(6, 6)
 sprite_frames = SubResource("SpriteFrames_5yb71")
 autoplay = "default"
-frame_progress = 0.99787885
+frame_progress = 0.93331
 script = ExtResource("1_tlqtg")
 
 [node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_omqpl")

@@ -1,3 +1,4 @@
+using Game.Mobs;
 using Game.Player;
 using Game.Systems;
 using Godot;
@@ -15,7 +16,7 @@ namespace Prefabs {
 	/// 
 	/// </summary>
 	
-	public partial class WhirlPool : AnimatedSprite2D {
+	public partial class WhirlPool : EffectBase {
 		private readonly Timer _activeTimer = new Timer() {
 			WaitTime = 7.5f,
 			OneShot = true,
@@ -35,7 +36,7 @@ namespace Prefabs {
 		/// Called when the whirlpool's timer ends.
 		/// </summary>
 		private void OnKill() {
-			QueueFree();
+			_effectFinished.Publish( _effectId );
 		}
 
 		/*

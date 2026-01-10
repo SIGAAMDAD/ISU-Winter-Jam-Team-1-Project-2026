@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://ci45mqkirclcs"]
+[gd_scene load_steps=14 format=3 uid="uid://ci45mqkirclcs"]
 
 [ext_resource type="Script" uid="uid://c1oaidojbjp3t" path="res://Source/Game/Player/UserInterface/HeadsUpDisplay.cs" id="1_ggood"]
 [ext_resource type="PackedScene" uid="uid://bp7tu6bkhlxep" path="res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeMenu.tscn" id="2_qifin"]
@@ -18,6 +18,14 @@ border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
 border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Gradient" id="Gradient_mub6a"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(1, 0, 0, 0.019607844)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5k620"]
+gradient = SubResource("Gradient_mub6a")
+width = 1
 
 [node name="HeadsUpDisplay" type="CanvasLayer"]
 script = ExtResource("1_ggood")
@@ -161,16 +169,39 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AnnouncmentLabel" type="Label" parent="MainHUD"]
+[node name="AnnouncementLabel" type="Label" parent="MainHUD"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 0)
 layout_mode = 1
 anchors_preset = -1
+anchor_left = 0.28100002
 anchor_top = 0.48400003
-anchor_right = 1.0
+anchor_right = 0.71900004
 anchor_bottom = 0.51600003
+offset_left = 0.3199768
 offset_top = 0.019989014
+offset_right = -0.32006836
 offset_bottom = -0.020019531
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="QuitGameButton" type="Button" parent="MainHUD/AnnouncementLabel"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.462
+anchor_top = 1.0
+anchor_right = 0.53800005
+anchor_bottom = 2.3040001
+offset_left = 0.14001465
+offset_top = -1.0
+offset_right = -0.14007568
+offset_bottom = 0.0079956055
+grow_horizontal = 2
+grow_vertical = 2
+text = "QUIT GAME"
 metadata/_edit_use_anchors_ = true
 
 [node name="BossHealthBar" type="VBoxContainer" parent="MainHUD"]
@@ -191,3 +222,14 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 show_percentage = false
+
+[node name="HurtBox" type="TextureRect" parent="MainHUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture1D_5k620")
+metadata/_edit_use_anchors_ = true
