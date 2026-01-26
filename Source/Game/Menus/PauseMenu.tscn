@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://b1luavxt1vbwu"]
+[gd_scene format=3 uid="uid://b1luavxt1vbwu"]
 
 [ext_resource type="Script" uid="uid://dneewf3h02j1r" path="res://Source/Game/Menus/PauseMenu.cs" id="1_eluw3"]
 [ext_resource type="Shader" uid="uid://clpmiq0rf1yoh" path="res://Assets/Shaders/GaussianBlur.gdshader" id="2_2ffs4"]
@@ -8,10 +8,10 @@ shader = ExtResource("2_2ffs4")
 shader_parameter/samples = 16
 shader_parameter/blur_amount = 0.3
 
-[node name="PauseMenu" type="CanvasLayer"]
+[node name="PauseMenu" type="CanvasLayer" unique_id=82568018]
 script = ExtResource("1_eluw3")
 
-[node name="Blur" type="ColorRect" parent="."]
+[node name="Blur" type="ColorRect" parent="." unique_id=2086377599]
 material = SubResource("ShaderMaterial_d5nev")
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1939758609]
 anchors_preset = -1
 anchor_left = 0.43300003
 anchor_top = 0.45400003
@@ -34,12 +34,12 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="ResumeGame" type="Button" parent="VBoxContainer"]
+[node name="ResumeGame" type="Button" parent="VBoxContainer" unique_id=291386422]
 unique_name_in_owner = true
 layout_mode = 2
 text = "RESUME GAME"
 
-[node name="ExitGame" type="Button" parent="VBoxContainer"]
+[node name="ExitGame" type="Button" parent="VBoxContainer" unique_id=1784235275]
 unique_name_in_owner = true
 layout_mode = 2
 text = "QUIT GAME"

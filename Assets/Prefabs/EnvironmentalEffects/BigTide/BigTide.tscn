@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://du7figp5hhtgb"]
+[gd_scene format=3 uid="uid://du7figp5hhtgb"]
 
 [ext_resource type="Texture2D" uid="uid://b182sto545vax" path="res://Assets/Textures/SpriteSheets/BigTide.png" id="1_geb60"]
 [ext_resource type="Script" uid="uid://dcwler0s3q4cy" path="res://Assets/Prefabs/EnvironmentalEffects/BigTide/BigTide.cs" id="2_f3s3g"]
@@ -42,14 +42,14 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5pqf4"]
 size = Vector2(68.056335, 31)
 
-[node name="BigTide" type="AnimatedSprite2D"]
+[node name="BigTide" type="AnimatedSprite2D" unique_id=1130952755]
 scale = Vector2(2.21875, 1)
 sprite_frames = SubResource("SpriteFrames_wbj0a")
 autoplay = "default"
 frame_progress = 0.33826977
 script = ExtResource("2_f3s3g")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." unique_id=1651632738]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1539916452]
 shape = SubResource("RectangleShape2D_5pqf4")

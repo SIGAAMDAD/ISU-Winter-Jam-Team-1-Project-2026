@@ -1,20 +1,20 @@
-using Game.Mobs;
+﻿using Game.Mobs;
 using Godot;
 
 namespace Prefabs {
 	/*
 	===================================================================================
-	
+
 	Seagull
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	
+
 	public partial class Seagull : MobBase {
-		private static readonly NodePath @GlobalPositionNodePath = "global_position.y";
+		private static readonly NodePath @GlobalPositionNodePath = "global_position";
 
 		/*
 		===============
@@ -22,12 +22,12 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnAnimationChanged() {
-			if ( _animation.Name == DieAnimationName ) {
+			if ( _animation.Animation == DieAnimationName ) {
 				// make them fall a little bit
-				CreateTween().TweenProperty( this, GlobalPositionNodePath, GlobalPosition.Y - 120.0f, 0.25f );
+				CreateTween().TweenProperty( this, GlobalPositionNodePath, new Vector2( GlobalPosition.X, GlobalPosition.Y + 100.0f ), 0.5f );
 			}
 		}
 
@@ -37,7 +37,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();

@@ -1,18 +1,19 @@
 using Game.Mobs;
 using Godot;
+using Nomad.Core.Events;
 
 namespace Prefabs {
 	/*
 	===================================================================================
-	
+
 	Orca
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	
+
 	public partial class Orca : MobBase {
 		private static readonly StringName @SurfaceUpAnimationName = "surface_up";
 		private static readonly StringName @SurfaceDownAnimationName = "surface_down";
@@ -34,7 +35,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnSurfaceTimerTimeout() {
 			_animation.Play( SurfaceDownAnimationName );
@@ -48,7 +49,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnSwimTimerTimeout() {
 			_animation.Play( SurfaceUpAnimationName );
@@ -62,12 +63,12 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnAnimationFinished() {
-			if ( _animation.Name == SurfaceUpAnimationName ) {
+			if ( _animation.Animation == SurfaceUpAnimationName ) {
 				_surfaceTimer.Start();
-			} else if ( _animation.Name == SurfaceDownAnimationName ) {
+			} else if ( _animation.Animation == SurfaceDownAnimationName ) {
 				_swimTimer.Start();
 				_animation.Play( DefaultAnimationName );
 			}
@@ -79,7 +80,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();

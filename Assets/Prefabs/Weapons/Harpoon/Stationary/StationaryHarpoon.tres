@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3 uid="uid://bq7oexusvadxn"]
+
+[ext_resource type="Script" uid="uid://bjiigd1vgl3yr" path="res://Source/Game/Player/Weapons/ProjectileResource.cs" id="1_qyx70"]
+
+[resource]
+script = ExtResource("1_qyx70")
+CooldownTime = 2.5
+Speed = 4.0
+Damage = 100.0
+HasSpriteOverride = true
+HasAutoAttackOverride = true

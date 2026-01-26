@@ -2,17 +2,19 @@ using Game.Player.UserInterface.UpgradeInterface;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
+using Nomad.Events;
+using Game.Player.UserInterface.Components;
 
 namespace Game.Player.UserInterface {
 	/*
 	===================================================================================
-	
+
 	HeadsUpDisplay
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
 	public partial class HeadsUpDisplay : CanvasLayer {
@@ -23,8 +25,12 @@ namespace Game.Player.UserInterface {
 		private StatsList _statsList;
 		private MoneyCounter _moneyCounter;
 		private AnnouncementLabel _announcementLabel;
+		private WeaponSlotContainer _slotContainer;
 
 		private TextureRect _hurtBox;
+
+		private DisposableSubscription<StatChangedEventArgs> _playerStatChangedEvent;
+		private DisposableSubscription<GameStateChangedEventArgs> _gameStateChangedEvent;
 
 		/*
 		===============
@@ -32,7 +38,7 @@ namespace Game.Player.UserInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnGameStateChanged( in GameStateChangedEventArgs args ) {
@@ -45,7 +51,7 @@ namespace Game.Player.UserInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnStatChanged( in StatChangedEventArgs args ) {
@@ -60,14 +66,16 @@ namespace Game.Player.UserInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
-			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
-			statChanged.Subscribe( this, OnStatChanged );
+			_playerStatChangedEvent = new DisposableSubscription<StatChangedEventArgs>(
+				eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats ), nameof( PlayerStats.StatChanged ) ),
+				OnStatChanged
+			);
 
 			_healthBar = new HealthBar( GetNode<ProgressBar>( "%HealthBar" ), eventFactory );
 			_waveUI = new WaveUI( GetNode<VBoxContainer>( "WaveDataContainer" ), eventFactory );
@@ -75,24 +83,14 @@ namespace Game.Player.UserInterface {
 			_statsList = new StatsList( GetNode<VBoxContainer>( "%StatsList" ), eventFactory );
 			_moneyCounter = new MoneyCounter( GetNode<Label>( "%MoneyLabel" ), eventFactory );
 			_announcementLabel = new AnnouncementLabel( GetNode<Label>( "%AnnouncementLabel" ), eventFactory );
+			_slotContainer = new WeaponSlotContainer( GetNode<VBoxContainer>( "%WeaponSlotContainer" ), eventFactory );
 
-			GameStateManager.GameStateChanged.Subscribe( this, OnGameStateChanged );
+			_gameStateChangedEvent = new DisposableSubscription<GameStateChangedEventArgs>(
+				GameStateManager.GameStateChanged,
+				OnGameStateChanged
+			);
 
 			_hurtBox = GetNode<TextureRect>( "MainHUD/HurtBox" );
-		}
-
-		/*
-		===============
-		_ExitTree
-		===============
-		*/
-		/// <summary>
-		/// 
-		/// </summary>
-		public override void _ExitTree() {
-			base._ExitTree();
-
-			GameStateManager.GameStateChanged.Unsubscribe( this, OnGameStateChanged );
 		}
 	};
 };

@@ -7,15 +7,15 @@ using System;
 namespace Game.Mobs {
 	/*
 	===================================================================================
-	
+
 	Tide
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	
+
 	public partial class Tide : EffectBase {
 		private Vector2 _velocity = Vector2.Zero;
 		private IGameEvent<PlayerTakeDamageEventArgs> _damagePlayer;
@@ -26,13 +26,13 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="player"></param>
 		protected override void OnPlayerEntered( PlayerManager player ) {
 			_damagePlayer.Publish( new PlayerTakeDamageEventArgs( 25.0f ) );
 			// TODO: add particle effect
-			QueueFree();
+			_effectFinished.Publish( _effectId );
 		}
 
 		/*
@@ -41,13 +41,13 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
-			_damagePlayer = eventFactory.GetEvent<PlayerTakeDamageEventArgs>( nameof( PlayerStats.TakeDamage ) );
+			_damagePlayer = eventFactory.GetEvent<PlayerTakeDamageEventArgs>( nameof( PlayerStats ), nameof( PlayerStats.TakeDamage ) );
 		}
 
 		/*
@@ -56,7 +56,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="delta"></param>
 		public override void _PhysicsProcess( double delta ) {

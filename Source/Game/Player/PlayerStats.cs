@@ -1,28 +1,35 @@
-using Game.Common;
+﻿using Game.Common;
 using Game.Mobs;
 using Game.Player.Upgrades;
 using Game.Player.UserInterface;
 using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Util;
+using Nomad.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Game.Player {
 	/*
 	===================================================================================
-	
+
 	PlayerStats
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
 	public sealed class PlayerStats : IPlayerStatsProvider {
+		[Flags]
+		private enum FlagBits : byte {
+			CanDamage = 1 << 0
+		};
+
 		public static readonly InternString HEALTH = new( nameof( Health ) );
 		public static readonly InternString SPEED = new( nameof( Speed ) );
 		public static readonly InternString ATTACK_DAMAGE = new( nameof( AttackDamage ) );
@@ -48,8 +55,8 @@ namespace Game.Player {
 			[ HEALTH ] = 100.0f,
 			[ HEALTH_REGEN ] = 1.0f,
 			[ ARMOR ] = 0.0f,
-			[ ATTACK_DAMAGE ] = 10.0f,
-			[ ATTACK_SPEED ] = PlayerController.BASE_WEAPON_COOLDOWN_TIME,
+			[ ATTACK_DAMAGE ] = PlayerAttackController.BASE_WEAPON_DAMAGE,
+			[ ATTACK_SPEED ] = PlayerAttackController.BASE_WEAPON_COOLDOWN_TIME,
 			[ MAX_HEALTH ] = 100.0f,
 			[ MONEY ] = 0.0f,
 		};
@@ -64,6 +71,16 @@ namespace Game.Player {
 
 		private readonly ImmutableDictionary<UpgradeType, float> _baseStatValues;
 
+		private readonly DisposableSubscription<MobDieEventArgs> _mobDieSubscription;
+		private readonly DisposableSubscription<UpgradeBoughtEventArgs> _upgradeBoughtSubscription;
+		private readonly DisposableSubscription<HarpoonTypeUpgradeBoughtEventArgs> _harpoonTypeBoughtSubscription;
+		private readonly DisposableSubscription<EmptyEventArgs> _waveStartedSubscription;
+
+		private readonly Timer _healTimer;
+
+		private FlagBits _flags = FlagBits.CanDamage;
+		private DamageNumberFactory _numberFactory;
+
 		public IGameEvent<PlayerTakeDamageEventArgs> TakeDamage => _takeDamage;
 		private readonly IGameEvent<PlayerTakeDamageEventArgs> _takeDamage;
 
@@ -76,18 +93,13 @@ namespace Game.Player {
 		public IGameEvent<HarpoonTypeChangedEventArgs> HarpoonTypeChanged => _harpoonTypeChanged;
 		private readonly IGameEvent<HarpoonTypeChangedEventArgs> _harpoonTypeChanged;
 
-		private readonly IDisposable _mobDieSubscription;
-		private readonly IDisposable _upgradeBoughtSubscription;
-		private readonly IDisposable _harpoonTypeBoughtSubscription;
-		private readonly IDisposable _waveStartedSubscription;
-
 		/*
 		===============
 		PlayerStats
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="player"></param>
 		/// <param name="upgradeManager"></param>
@@ -95,24 +107,42 @@ namespace Game.Player {
 		public PlayerStats( PlayerManager player, IGameEventRegistryService eventFactory ) {
 			_owner = player;
 
-			_takeDamage = eventFactory.GetEvent<PlayerTakeDamageEventArgs>( nameof( TakeDamage ) );
+			_healTimer = new Timer() {
+				WaitTime = 1.0f,
+				OneShot = false
+			};
+			_healTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnHealTimerTimeout ) );
+			_owner.AddChild( _healTimer );
+			_healTimer.Start();
+
+			_takeDamage = eventFactory.GetEvent<PlayerTakeDamageEventArgs>( nameof( PlayerStats ), nameof( TakeDamage ) );
 			_takeDamage.Subscribe( this, OnDamageReceived );
 
-			_statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( StatChanged ) );
-			_harpoonTypeChanged = eventFactory.GetEvent<HarpoonTypeChangedEventArgs>( nameof( HarpoonTypeChanged ) );
-			_playerDeath = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerDeath ) );
+			_statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats ), nameof( StatChanged ) );
+			_harpoonTypeChanged = eventFactory.GetEvent<HarpoonTypeChangedEventArgs>( nameof( PlayerStats ), nameof( HarpoonTypeChanged ) );
+			_playerDeath = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerStats ), nameof( PlayerDeath ) );
 
-			var mobDie = eventFactory.GetEvent<MobDieEventArgs>( nameof( MobBase.MobDie ) );
-			_mobDieSubscription = mobDie.Subscribe( OnMobKilled );
+			_mobDieSubscription = new DisposableSubscription<MobDieEventArgs>(
+				eventFactory.GetEvent<MobDieEventArgs>( nameof( MobBase ), nameof( MobBase.MobDie ) ),
+				OnMobKilled
+			);
+			_upgradeBoughtSubscription = new DisposableSubscription<UpgradeBoughtEventArgs>(
+				eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( PlayerStats ), nameof( UpgradeManager.UpgradeBought ) ),
+				OnUpgradeBought
+			);
+			_harpoonTypeBoughtSubscription = new DisposableSubscription<HarpoonTypeUpgradeBoughtEventArgs>(
+				eventFactory.GetEvent<HarpoonTypeUpgradeBoughtEventArgs>( nameof( PlayerStats ), nameof( UpgradeManager.HarpoonBought ) ),
+				OnHarpoonTypeBought
+			);
+			_waveStartedSubscription = new DisposableSubscription<EmptyEventArgs>(
+				eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager ), nameof( WaveManager.WaveStarted ) ),
+				OnWaveStarted
+			);
 
-			var upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeManager.UpgradeBought ) );
-			_upgradeBoughtSubscription = upgradeBought.Subscribe( OnUpgradeBought );
+			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager ), nameof( WaveManager.WaveCompleted ) );
+			waveCompleted.Subscribe( this, OnWaveCompleted );
 
-			var harpoonTypeBought = eventFactory.GetEvent<HarpoonTypeUpgradeBoughtEventArgs>( nameof( UpgradeManager.HarpoonBought ) );
-			_harpoonTypeBoughtSubscription = harpoonTypeBought.Subscribe( OnHarpoonTypeChanged );
-
-			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
-			_waveStartedSubscription = waveStarted.Subscribe( OnWaveStarted );
+			Callable.From( GetDamageFactory ).CallDeferred();
 
 			_baseStatValues = new Dictionary<UpgradeType, float> {
 				[ UpgradeType.Speed ] = _statCache[ SPEED ],
@@ -134,7 +164,7 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public void Dispose() {
 			_statCache.Clear();
@@ -150,21 +180,34 @@ namespace Game.Player {
 
 		/*
 		===============
-		Update
+		OnHealTimerTimeout
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		/// <param name="delta"></param>
-		public void Update( float delta ) {
+		private void OnHealTimerTimeout() {
 			ref float health = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, HEALTH, out _ );
 			float maxHealth = MaxHealth;
 
 			if ( health >= maxHealth ) {
 				return;
 			}
-			health = Math.Clamp( health + HealthRegen * delta, 0.0f, maxHealth );
+
+			health = Math.Clamp( health + HealthRegen, 0.0f, maxHealth );
+			_statChanged.Publish( new StatChangedEventArgs( HEALTH, health ) );
+		}
+
+		/*
+		===============
+		GetDamageFactory
+		===============
+		*/
+		/// <summary>
+		///
+		/// </summary>
+		private void GetDamageFactory() {
+			_numberFactory = _owner.GetTree().Root.GetNode<DamageNumberFactory>( nameof( DamageNumberFactory ) );
 		}
 
 		/*
@@ -173,19 +216,47 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="value"></param>
 		private void OnDamageReceived( in PlayerTakeDamageEventArgs args ) {
+			if ( ( _flags & FlagBits.CanDamage ) == 0 ) {
+				return;
+			}
+
+			float armor = Armor;
+			float amount = armor > 0.0f ? args.Amount / armor : args.Amount;
+
 			// TODO: clean this up
 			ref float health = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, HEALTH, out _ );
-			health -= args.Amount;
+			health -= amount;
 			if ( health <= 0.0f ) {
 				_playerDeath.Publish( EmptyEventArgs.Args );
 			}
 
+			if ( args.Amount > 10.0f ) {
+				HitStop( 0.1f );
+			}
+
 			_statChanged.Publish( new StatChangedEventArgs( HEALTH, health ) );
-			_owner.GetTree().Root.GetNode<DamageNumberFactory>( nameof( DamageNumberFactory ) ).CallDeferred( DamageNumberFactory.MethodName.Add, _owner.GlobalPosition, args.Amount );
+			_numberFactory.Add( _owner.GlobalPosition, amount );
+		}
+
+		/*
+		===============
+		HitStop
+		===============
+		*/
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="duration"></param>
+		/// <returns></returns>
+		private async ValueTask HitStop( float duration ) {
+			double originalTimeScale = Engine.TimeScale;
+			Engine.TimeScale = 0.1f;
+			await _owner.ToSignal( _owner.GetTree().CreateTimer( duration ), SceneTreeTimer.SignalName.Timeout );
+			Engine.TimeScale = originalTimeScale;
 		}
 
 		/*
@@ -194,13 +265,30 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnWaveStarted( in EmptyEventArgs args ) {
 			ref float health = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, HEALTH, out _ );
 			health = MaxHealth;
 			_statChanged.Publish( new StatChangedEventArgs( HEALTH, health ) );
+
+			_flags |= FlagBits.CanDamage;
+			_healTimer.Start();
+		}
+
+		/*
+		===============
+		OnWaveCompleted
+		===============
+		*/
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name=""></param>
+		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
+			_healTimer.Stop();
+			_flags &= ~FlagBits.CanDamage;
 		}
 
 		/*
@@ -209,27 +297,26 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnMobKilled( in MobDieEventArgs args ) {
-			float money = Money;
+			ref float money = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, MONEY, out _ );
 			money += args.XPAmount;
-			_statCache[ MONEY ] = money;
 
 			_statChanged.Publish( new StatChangedEventArgs( MONEY, money ) );
 		}
 
 		/*
 		===============
-		OnHarpoonTypeChanged
+		OnHarpoonTypeBought
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
-		private void OnHarpoonTypeChanged( in HarpoonTypeUpgradeBoughtEventArgs args ) {
+		private void OnHarpoonTypeBought( in HarpoonTypeUpgradeBoughtEventArgs args ) {
 			ref float money = ref CollectionsMarshal.GetValueRefOrAddDefault( _statCache, MONEY, out _ );
 			money -= args.Cost;
 
@@ -243,7 +330,7 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnUpgradeBought( in UpgradeBoughtEventArgs args ) {

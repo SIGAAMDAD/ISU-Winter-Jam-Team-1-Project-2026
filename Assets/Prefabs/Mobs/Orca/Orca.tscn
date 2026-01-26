@@ -1,6 +1,7 @@
-[gd_scene load_steps=22 format=3 uid="uid://bxxge54kolwnt"]
+[gd_scene format=3 uid="uid://bxxge54kolwnt"]
 
 [ext_resource type="Script" uid="uid://d211pk2ykops5" path="res://Assets/Prefabs/Mobs/Orca/Orca.cs" id="1_8xrhf"]
+[ext_resource type="Resource" uid="uid://c5wy4gx0wgvit" path="res://Assets/Prefabs/Mobs/Orca/Orca.tres" id="2_43f65"]
 [ext_resource type="Texture2D" uid="uid://cbnmjb4680knt" path="res://Assets/Textures/SpriteSheets/Orca.png" id="2_lj82f"]
 [ext_resource type="Texture2D" uid="uid://cr3q3x6wnetm8" path="res://Assets/Textures/SpriteSheets/OrcaDie.png" id="3_7a8lv"]
 [ext_resource type="Texture2D" uid="uid://11ximh565qmr" path="res://Assets/Textures/SpriteSheets/OrcaSurface.png" id="4_43f65"]
@@ -136,7 +137,7 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7a8lv"]
 size = Vector2(72.17392, 52.173912)
 
-[node name="Orca" type="Area2D"]
+[node name="Orca" type="Area2D" unique_id=1622118914]
 scale = Vector2(1.15, 1.15)
 collision_layer = 0
 collision_mask = 3
@@ -145,20 +146,21 @@ _xpKillAmount = 80.0
 _damageAmount = 30.0
 _health = 50.0
 _speed = Vector2(0.3, 0.3)
+_tierData = ExtResource("2_43f65")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=888667191]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_8fuud")
 autoplay = "default"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=455380083]
 z_index = -2
 position = Vector2(0, -15.652174)
 scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_7a8lv")
 disabled = true
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1962095212]
 target_desired_distance = 20.0
 path_max_distance = 1000.0
 avoidance_enabled = true

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3 uid="uid://0a2wjt102lxt"]
+
+[ext_resource type="Script" uid="uid://bwwpe6u14dncc" path="res://Source/Game/Mobs/MobTierDefinition.cs" id="1_7b6an"]
+
+[resource]
+script = ExtResource("1_7b6an")
+Tier = 1
+MinWaveToAppear = 3
+MaxInConcurrent = 100
+BaseWeight = 0.7
+GrowthMultiplier = 1.25

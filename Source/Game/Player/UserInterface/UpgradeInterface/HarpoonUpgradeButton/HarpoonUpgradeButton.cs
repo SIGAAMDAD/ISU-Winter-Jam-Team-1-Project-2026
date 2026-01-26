@@ -1,20 +1,22 @@
+using System;
 using Game.Player.Upgrades;
 using Godot;
 using Nomad.Core.Events;
+using Nomad.Events;
 
 namespace Game.Player.UserInterface.UpgradeInterface {
 	/*
 	===================================================================================
-	
+
 	HarpoonUpgradeButton
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
-	public sealed class HarpoonUpgradeButton {
+	public sealed class HarpoonUpgradeButton : IDisposable {
 		private static readonly StringName @HoverStyleName = "hover";
 		private static readonly StringName @PressedStyleName = "pressed";
 		private static readonly StringName @NormalStyleName = "normal";
@@ -23,6 +25,8 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		private readonly HarpoonUpgradeButtonNode _owner;
 		private readonly Label _costLabel;
 		private readonly Button _button;
+
+		private readonly DisposableSubscription<StatChangedEventArgs> _statChangedEvent;
 
 		private readonly Callable _onFocusedCallable;
 		private readonly Callable _onPressedCallable;
@@ -35,7 +39,7 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="node"></param>
 		/// <param name="type"></param>
@@ -55,8 +59,10 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 			_button.Connect( Button.SignalName.MouseEntered, _onFocusedCallable );
 			_button.Connect( Button.SignalName.Pressed, _onPressedCallable );
 
-			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
-			statChanged.Subscribe( this, OnStatChanged );
+			_statChangedEvent = new DisposableSubscription<StatChangedEventArgs>(
+				eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats ), nameof( PlayerStats.StatChanged ) ),
+				OnStatChanged
+			);
 
 			_owner = node;
 			_manager = manager;
@@ -67,11 +73,23 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 
 		/*
 		===============
+		Dispose
+		===============
+		*/
+		/// <summary>
+		///
+		/// </summary>
+		public void Dispose() {
+			_statChangedEvent.Dispose();
+		}
+
+		/*
+		===============
 		OnStatChanged
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnStatChanged( in StatChangedEventArgs args ) {

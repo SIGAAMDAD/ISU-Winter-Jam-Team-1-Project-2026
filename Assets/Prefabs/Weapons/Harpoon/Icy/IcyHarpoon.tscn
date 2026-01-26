@@ -1,8 +1,24 @@
-[gd_scene load_steps=6 format=3 uid="uid://dkm5qcqjip1p3"]
+[gd_scene format=3 uid="uid://dkm5qcqjip1p3"]
 
 [ext_resource type="Texture2D" uid="uid://cupv18d4ln482" path="res://Assets/Textures/SpriteSheets/IcyHarpoon.png" id="1_qvaai"]
 [ext_resource type="Script" uid="uid://b7jj1bshlophu" path="res://Assets/Prefabs/Weapons/Harpoon/Icy/IcyHarpoon.cs" id="2_qvaai"]
 [ext_resource type="Material" uid="uid://b7qus8k8s84iq" path="res://Assets/Prefabs/Weapons/Harpoon/HarpoonTrail.tres" id="3_axfah"]
+[ext_resource type="Resource" uid="uid://cxdihagmv72p7" path="res://Assets/Prefabs/Weapons/Harpoon/Icy/IcyHarpoon.tres" id="3_h5n3b"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qvaai"]
+atlas = ExtResource("1_qvaai")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_h5n3b"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qvaai")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gvynp"]
 radius = 5.0
@@ -11,21 +27,21 @@ height = 20.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_h5n3b"]
 radius = 117.01709
 
-[node name="IcyHarpoon" type="Sprite2D"]
-texture = ExtResource("1_qvaai")
-region_enabled = true
-region_rect = Rect2(64, 0, 64, 64)
+[node name="IcyHarpoon" type="AnimatedSprite2D" unique_id=2010661534]
+sprite_frames = SubResource("SpriteFrames_h5n3b")
+autoplay = "default"
 script = ExtResource("2_qvaai")
+_resource = ExtResource("3_h5n3b")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." unique_id=528989119]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=670299863]
 position = Vector2(-1, -1)
 shape = SubResource("CapsuleShape2D_gvynp")
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1725319302]
 modulate = Color(0, 0.59607846, 1, 1)
 position = Vector2(0, -2)
 amount = 20
@@ -34,9 +50,9 @@ speed_scale = 4.0
 local_coords = true
 process_material = ExtResource("3_axfah")
 
-[node name="FreezeArea" type="Area2D" parent="."]
+[node name="FreezeArea" type="Area2D" parent="." unique_id=1074302031]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="FreezeArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FreezeArea" unique_id=2136448139]
 shape = SubResource("CircleShape2D_h5n3b")

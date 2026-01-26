@@ -8,15 +8,15 @@ using System;
 namespace Prefabs {
 	/*
 	===================================================================================
-	
+
 	WorldArea
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	
+
 	public sealed partial class WorldArea : Area2D {
 		[Export]
 		private CollisionPolygon2D _bounds;
@@ -39,7 +39,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="areaRid"></param>
 		/// <param name="area"></param>
@@ -47,7 +47,6 @@ namespace Prefabs {
 		/// <param name="localShapeIndex"></param>
 		private void OnAreaShapeExited( Rid areaRid, Area2D area, int areaShapeIndex, int localShapeIndex ) {
 			if ( area is not null && area.GetParent() is Projectile projectile ) {
-				// make sure we don't have any memory leaks
 				projectile.QueueFree();
 			}
 		}
@@ -58,7 +57,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
@@ -83,16 +82,16 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
-			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
+			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager ), nameof( WaveManager.WaveCompleted ) );
 			waveCompleted.Subscribe( this, OnWaveCompleted );
 
-			_arenaSizeChanged = eventFactory.GetEvent<ArenaSizeChangedEventArgs>( nameof( ArenaSizeChanged ) );
+			_arenaSizeChanged = eventFactory.GetEvent<ArenaSizeChangedEventArgs>( nameof( WorldArea ), nameof( ArenaSizeChanged ) );
 
 			if ( _shape.Shape is RectangleShape2D rect ) {
 				_rectangleShape = rect;

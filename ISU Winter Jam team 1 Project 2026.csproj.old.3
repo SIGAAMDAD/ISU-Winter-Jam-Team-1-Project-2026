@@ -1,0 +1,42 @@
+<Project Sdk="Godot.NET.Sdk/4.6.0-rc.2">
+  <PropertyGroup>
+    <!-- Build Configuration -->
+    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net10.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <EnforceCodeStyleInBuilds>true</EnforceCodeStyleInBuilds>
+    <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+    <BuildInParallel>true</BuildInParallel>
+
+    <!-- Performance -->
+    <PubishAOT>true</PubishAOT>
+    <TieredCompilation>true</TieredCompilation>
+    <Deterministic>true</Deterministic>
+    <UseSharedCompilation>true</UseSharedCompilation>
+    <Optimize>true</Optimize>
+    <SkipLocalsInit>true</SkipLocalsInit>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Godot.NET.Sdk" Version="4.6.0-rc.2" />
+    <PackageReference Include="Godot.SourceGenerators" Version="4.6.0-rc.2" />
+    <PackageReference Include="GodotSharp" Version="4.6.0-rc.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Source\NomadFramework\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Source\NomadFramework\Source\Nomad.GodotServer.Rendering\Nomad.GodotServer.Rendering.csproj" />
+    <ProjectReference Include="Source\NomadFramework\Source\Nomad.Core\Nomad.Core.csproj" />
+    <ProjectReference Include="Source\NomadFramework\Source\Nomad.Logger\Nomad.Logger.csproj" />
+    <ProjectReference Include="Source\NomadFramework\Source\Nomad.CVars\Nomad.CVars.csproj" />
+    <ProjectReference Include="Source\NomadFramework\Source\Nomad.Events\Nomad.Events.csproj" />
+    <ProjectReference Include="Source\NomadFramework\Source\Nomad.Console\Nomad.Console.csproj" />
+    <ProjectReference Include="Source\NomadFramework\Source\Nomad.ResourceCache\Nomad.ResourceCache.csproj" />
+    <ProjectReference Include="Source\NomadFramework\Source\Nomad.Rendering\Nomad.Rendering.csproj" />
+  </ItemGroup>
+</Project>

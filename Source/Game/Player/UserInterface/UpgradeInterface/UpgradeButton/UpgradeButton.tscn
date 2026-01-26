@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://c5l5fqjcktnqg"]
+[gd_scene format=3 uid="uid://c5l5fqjcktnqg"]
 
 [ext_resource type="Texture2D" uid="uid://bc5yt4a4v7okr" path="res://Assets/Textures/SpriteSheets/SpeedIcon.png" id="2_ddy5p"]
 [ext_resource type="Script" uid="uid://pah181ss2hdt" path="res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/UpgradeButtonNode.cs" id="4_34btv"]
 [ext_resource type="Texture2D" uid="uid://3xf0730eaxae" path="res://Assets/Textures/Icons/Coin.png" id="5_6suru"]
 
-[node name="UpgradeButton" type="HBoxContainer"]
+[node name="UpgradeButton" type="HBoxContainer" unique_id=457319161]
 anchors_preset = -1
 anchor_right = 0.47700003
 anchor_bottom = 0.1
@@ -14,7 +14,7 @@ theme_override_constants/separation = 24
 script = ExtResource("4_34btv")
 metadata/_edit_use_anchors_ = true
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="Button" parent="." unique_id=916759253]
 custom_minimum_size = Vector2(290, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -23,24 +23,24 @@ icon = ExtResource("2_ddy5p")
 alignment = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="VSeparator" type="VSeparator" parent="."]
+[node name="VSeparator" type="VSeparator" parent="." unique_id=1472124744]
 layout_mode = 2
 
-[node name="StatValueLabel" type="Label" parent="."]
+[node name="StatValueLabel" type="Label" parent="." unique_id=849234612]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "+0"
 horizontal_alignment = 1
 
-[node name="VSeparator2" type="VSeparator" parent="."]
+[node name="VSeparator2" type="VSeparator" parent="." unique_id=1729000765]
 layout_mode = 2
 
-[node name="CoinIcon" type="TextureRect" parent="."]
+[node name="CoinIcon" type="TextureRect" parent="." unique_id=1252203520]
 layout_mode = 2
 texture = ExtResource("5_6suru")
 
-[node name="CostLabel" type="Label" parent="."]
+[node name="CostLabel" type="Label" parent="." unique_id=2137584503]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 horizontal_alignment = 1

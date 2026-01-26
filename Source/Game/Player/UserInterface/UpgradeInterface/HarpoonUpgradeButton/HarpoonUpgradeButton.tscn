@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://cm6nhgmhbua58"]
+[gd_scene format=3 uid="uid://cm6nhgmhbua58"]
 
 [ext_resource type="Script" uid="uid://cucddsue5f2u8" path="res://Source/Game/Player/UserInterface/UpgradeInterface/HarpoonUpgradeButton/HarpoonUpgradeButtonNode.cs" id="1_hjhdi"]
 [ext_resource type="Texture2D" uid="uid://5sc241m2gigr" path="res://Assets/Textures/Icons/IcyHarpoonIcon.png" id="3_60krh"]
 [ext_resource type="Texture2D" uid="uid://3xf0730eaxae" path="res://Assets/Textures/Icons/Coin.png" id="5_6sx5l"]
 
-[node name="HarpoonUpgradeButton" type="HBoxContainer"]
+[node name="HarpoonUpgradeButton" type="HBoxContainer" unique_id=1122696149]
 anchors_preset = -1
 anchor_right = 0.337
 anchor_bottom = 0.1
@@ -15,20 +15,20 @@ theme_override_constants/separation = 24
 script = ExtResource("1_hjhdi")
 metadata/_edit_use_anchors_ = true
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="Button" parent="." unique_id=1273341910]
 custom_minimum_size = Vector2(290, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 icon = ExtResource("3_60krh")
 
-[node name="VSeparator" type="VSeparator" parent="."]
+[node name="VSeparator" type="VSeparator" parent="." unique_id=84909794]
 layout_mode = 2
 
-[node name="CoinIcon" type="TextureRect" parent="."]
+[node name="CoinIcon" type="TextureRect" parent="." unique_id=994424818]
 layout_mode = 2
 texture = ExtResource("5_6sx5l")
 
-[node name="CostLabel" type="Label" parent="."]
+[node name="CostLabel" type="Label" parent="." unique_id=2076312049]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 horizontal_alignment = 1

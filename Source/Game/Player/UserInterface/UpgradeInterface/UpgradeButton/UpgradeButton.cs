@@ -7,13 +7,13 @@ using System;
 namespace Game.Player.UserInterface {
 	/*
 	===================================================================================
-	
+
 	UpgradeButton
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
 	public sealed class UpgradeButton {
@@ -37,7 +37,7 @@ namespace Game.Player.UserInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="button"></param>
 		/// <param name="manager"></param>
@@ -55,7 +55,7 @@ namespace Game.Player.UserInterface {
 			_button.Connect( Button.SignalName.MouseEntered, _onFocusedCallable );
 			_button.Connect( Button.SignalName.Pressed, _onPressedCallable );
 
-			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
+			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats ), nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
 			_owner = node;
@@ -72,7 +72,7 @@ namespace Game.Player.UserInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnStatChanged( in StatChangedEventArgs args ) {
@@ -91,7 +91,7 @@ namespace Game.Player.UserInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="tier"></param>
 		public void SetTier( int tier ) {

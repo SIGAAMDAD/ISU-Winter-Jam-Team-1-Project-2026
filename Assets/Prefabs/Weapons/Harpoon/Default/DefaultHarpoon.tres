@@ -1,0 +1,6 @@
+[gd_resource type="Resource" format=3 uid="uid://bkdfn86ebynxj"]
+
+[ext_resource type="Script" uid="uid://bjiigd1vgl3yr" path="res://Source/Game/Player/Weapons/ProjectileResource.cs" id="1_3h7rr"]
+
+[resource]
+script = ExtResource("1_3h7rr")

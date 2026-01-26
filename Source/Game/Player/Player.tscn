@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dkml08sjkleg4"]
+[gd_scene format=3 uid="uid://dkml08sjkleg4"]
 
 [ext_resource type="Script" uid="uid://dgvw5sls61mdb" path="res://Source/Game/Player/PlayerManager.cs" id="1_43ce2"]
 [ext_resource type="Texture2D" uid="uid://cuju45rl2efen" path="res://Assets/Textures/SpriteSheets/Boat.png" id="2_278ex"]
@@ -142,25 +142,25 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" unique_id=899781739]
 motion_mode = 1
 script = ExtResource("1_43ce2")
 metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
 
-[node name="CollisionShape" type="CollisionShape2D" parent="."]
+[node name="CollisionShape" type="CollisionShape2D" parent="." unique_id=691876240]
 visible = false
 position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_278ex")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1279473305]
 sprite_frames = SubResource("SpriteFrames_b2bpv")
 animation = &"down"
 autoplay = "up"
 
-[node name="UpFoamMarker" type="Marker2D" parent="AnimatedSprite2D"]
+[node name="UpFoamMarker" type="Marker2D" parent="AnimatedSprite2D" unique_id=2056795788]
 position = Vector2(0, 30)
 
-[node name="FoamParticles" type="GPUParticles2D" parent="AnimatedSprite2D/UpFoamMarker"]
+[node name="FoamParticles" type="GPUParticles2D" parent="AnimatedSprite2D/UpFoamMarker" unique_id=1966421270]
 emitting = false
 amount = 90
 texture = SubResource("GradientTexture1D_xhomw")
@@ -169,36 +169,36 @@ speed_scale = 4.0
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_278ex")
 
-[node name="DownFoamMarker" type="Marker2D" parent="AnimatedSprite2D"]
+[node name="DownFoamMarker" type="Marker2D" parent="AnimatedSprite2D" unique_id=34869291]
 position = Vector2(0, -31)
 
-[node name="RightFoamMarker" type="Marker2D" parent="AnimatedSprite2D"]
+[node name="RightFoamMarker" type="Marker2D" parent="AnimatedSprite2D" unique_id=1297601657]
 position = Vector2(-33, 5)
 
-[node name="LeftFoamMarker" type="Marker2D" parent="AnimatedSprite2D"]
+[node name="LeftFoamMarker" type="Marker2D" parent="AnimatedSprite2D" unique_id=1551369134]
 position = Vector2(33, 6)
 
-[node name="HarpoonSpawnRight" type="Marker2D" parent="AnimatedSprite2D"]
+[node name="HarpoonSpawnRight" type="Marker2D" parent="AnimatedSprite2D" unique_id=2050580002]
 position = Vector2(33, -10)
 
-[node name="HarpoonSpawnLeft" type="Marker2D" parent="AnimatedSprite2D"]
+[node name="HarpoonSpawnLeft" type="Marker2D" parent="AnimatedSprite2D" unique_id=247592897]
 position = Vector2(-33, -10)
 
-[node name="HarpoonSpawnUp" type="Marker2D" parent="AnimatedSprite2D"]
+[node name="HarpoonSpawnUp" type="Marker2D" parent="AnimatedSprite2D" unique_id=1992668762]
 position = Vector2(0, -35)
 
-[node name="HarpoonCannon" type="AnimatedSprite2D" parent="AnimatedSprite2D/HarpoonSpawnUp"]
+[node name="HarpoonCannon" type="AnimatedSprite2D" parent="AnimatedSprite2D/HarpoonSpawnUp" unique_id=844822293]
 sprite_frames = SubResource("SpriteFrames_42cni")
 animation = &"up_harpoon"
 autoplay = "up_noharpoon"
 
-[node name="HarpoonSpawnDown" type="Marker2D" parent="AnimatedSprite2D"]
+[node name="HarpoonSpawnDown" type="Marker2D" parent="AnimatedSprite2D" unique_id=116072769]
 position = Vector2(0, 30)
 
-[node name="AudioListener2D" type="AudioListener2D" parent="."]
+[node name="AudioListener2D" type="AudioListener2D" parent="." unique_id=174341653]
 
-[node name="MoveStream" type="AudioStreamPlayer2D" parent="."]
+[node name="MoveStream" type="AudioStreamPlayer2D" parent="." unique_id=1410467409]
 
-[node name="ActionStream" type="AudioStreamPlayer2D" parent="."]
+[node name="ActionStream" type="AudioStreamPlayer2D" parent="." unique_id=739647941]
 stream = ExtResource("3_278ex")
 max_polyphony = 10

@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://3lva0atxtv8f"]
+
+[ext_resource type="Texture2D" uid="uid://b433agw4ipi0t" path="res://Assets/Textures/SpriteSheets/Harpoon.png" id="1_r0ep8"]
+[ext_resource type="Script" uid="uid://dvjcye8p3u1s5" path="res://Assets/Prefabs/Weapons/Harpoon/Default/Harpoon.cs" id="2_hlxfw"]
+[ext_resource type="Material" uid="uid://b7qus8k8s84iq" path="res://Assets/Prefabs/Weapons/Harpoon/HarpoonTrail.tres" id="3_ghmv8"]
+[ext_resource type="Resource" uid="uid://bkdfn86ebynxj" path="res://Assets/Prefabs/Weapons/Harpoon/Default/DefaultHarpoon.tres" id="3_hlxfw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r0ep8"]
+atlas = ExtResource("1_r0ep8")
+region = Rect2(0, 0, 21, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hlxfw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r0ep8")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gvynp"]
+radius = 5.0
+height = 20.0
+
+[node name="DefaultHarpoon" type="AnimatedSprite2D" unique_id=1803415612]
+sprite_frames = SubResource("SpriteFrames_hlxfw")
+autoplay = "default"
+script = ExtResource("2_hlxfw")
+_resource = ExtResource("3_hlxfw")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1827649941]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1746331927]
+shape = SubResource("CapsuleShape2D_gvynp")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1123277427]
+position = Vector2(0, -2)
+amount = 20
+lifetime = 0.9
+speed_scale = 4.0
+local_coords = true
+process_material = ExtResource("3_ghmv8")

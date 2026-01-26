@@ -1,49 +1,58 @@
-using Game.Common;
+﻿using Game.Common;
+using Game.Player;
 using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
 using Nomad.Core.Logger;
 using Nomad.Core.Memory;
 using Prefabs;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Game.Mobs {
 	/*
 	===================================================================================
-	
+
 	MobSpawner
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
 	public sealed partial class MobSpawner : Node2D {
 		public const int FIRST_WAVE_ENEMY_COUNT = 5;
 		public const int MAX_WAVE_ENEMIES = 1200;
-		private const float MIN_MOB_DISTANCE = 80.0f;
+		private const float MIN_MOB_DISTANCE = 40.0f;
 
 		[Export]
 		private CollisionShape2D _worldBounds;
 		[Export]
 		private PackedScene[] _enemyTypes;
+		[Export]
+		private MobTierDefinition[] _tierDefinitions;
 
-		private int _maxEnemies = FIRST_WAVE_ENEMY_COUNT;
 		private int _waveNumber = 0;
-		private int _enemyCount = 0;
+		private int _batchCount = 0;
 
 		private Vector2 _worldSize;
 
 		private ILoggerCategory _category;
 		private ILoggerService _logger;
 
-		private Timer _spawnTimer;
 		private NavigationRegion2D _navRegion;
 		private SpatialPartition _spatialPartition;
 
+		private MobWaveCalculator _waveCalculator;
+
 		private BasicObjectPool<MobBase>[] _pools;
+
+		private MobWaveCalculator.WaveSpawnData _currentWave;
+
+		private readonly Timer _spawnTimer = new Timer();
 		private readonly Dictionary<int, MobBase> _mobCache = new Dictionary<int, MobBase>( MAX_WAVE_ENEMIES );
 
 		/*
@@ -52,7 +61,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
@@ -68,50 +77,11 @@ namespace Game.Mobs {
 
 		/*
 		===============
-		OnSpawnEnemies
-		===============
-		*/
-		/// <summary>
-		/// 
-		/// </summary>
-		private void OnSpawnEnemies() {
-			if ( _enemyCount > _maxEnemies ) {
-				return;
-			}
-
-			int enemyCount = _waveNumber > 0 ? _maxEnemies / _waveNumber : _maxEnemies;
-			int mobTier = 1;
-			if ( _waveNumber >= 3 ) {
-				mobTier++;
-			}
-			if ( _waveNumber >= 7 ) {
-				mobTier++;
-			}
-			if ( _waveNumber >= 15 ) {
-				mobTier++;
-			}
-
-			_logger.PrintLine( in _category, $"Spawning {enemyCount} enemies in wave {_waveNumber}" );
-
-			for ( int t = 0; t < mobTier; t++ ) {
-				int numEnemies = enemyCount / ( t + 1 );
-
-				for ( int i = 0; i < numEnemies; i++ ) {
-					if ( TrySpawnSingleMob( t, out MobBase mob ) ) {
-						_mobCache[ mob.GetPath().GetHashCode() ] = mob;
-						_enemyCount++;
-					}
-				}
-			}
-		}
-
-		/*
-		===============
 		TrySpawnSingleMob
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="enemyType"></param>
 		/// <param name="mob"></param>
@@ -140,7 +110,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="position"></param>
 		/// <returns></returns>
@@ -167,12 +137,12 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <returns></returns>
 		private Vector2 GetRandomPositionInBounds() {
-			float x = GD.Randf() * _worldSize.X + _worldBounds.Position.X;
-			float y = GD.Randf() * _worldSize.Y + _worldBounds.Position.Y;
+			float x = ( float )GD.RandRange( 0.0f, _worldSize.X );
+			float y = ( float )GD.RandRange( 0.0f, _worldSize.Y );
 
 			return new Vector2( x, y );
 		}
@@ -183,23 +153,66 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnWaveStarted( in EmptyEventArgs args ) {
+			_currentWave = _waveCalculator.GenerateWave( _waveNumber + 1 );
+			_waveCalculator.PrintWaveData( _currentWave );
+
 			_spawnTimer.Start();
 		}
 
 		/*
 		===============
-		OnWaveCompleted
+		SpawnWave
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		/// <param name="args"></param>
-		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
+		private void SpawnWave() {
+			_waveCalculator.PrintWaveData( _currentWave );
+			var batch = _currentWave.SpawnBatches[ _batchCount ];
+
+			for ( int m = 0; m < batch.Mobs.Count; m++ ) {
+				var mob = batch.Mobs[ m ];
+
+				SpawnBatch( mob.Tier - 1, mob.Count );
+			}
+
+			if ( ++_batchCount >= _currentWave.SpawnBatches.Count ) {
+				_spawnTimer.Stop();
+			}
+		}
+
+		/*
+		===============
+		SpawnBatch
+		===============
+		*/
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="tier"></param>
+		/// <param name="count"></param>
+		private void SpawnBatch( int tier, int count ) {
+			for ( int i = 0; i < count; i++ ) {
+				if ( TrySpawnSingleMob( tier, out MobBase mob ) ) {
+					_mobCache[ mob.GetPath().GetHashCode() ] = mob;
+				}
+			}
+		}
+
+		/*
+		===============
+		ClearMobs
+		===============
+		*/
+		/// <summary>
+		///
+		/// </summary>
+		private void ClearMobs() {
 			_logger.PrintLine( in _category, $"Clearing mob cache..." );
 
 			var children = _navRegion.GetChildren();
@@ -214,11 +227,35 @@ namespace Game.Mobs {
 					}
 				}
 			}
-			_enemyCount = 0;
 			_spawnTimer.Stop();
+			_batchCount = 0;
+		}
 
+		/*
+		===============
+		OnWaveCompleted
+		===============
+		*/
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
+			ClearMobs();
 			_waveNumber = args.NewWave;
-			_maxEnemies += (int)( _waveNumber * 0.0625f + _maxEnemies );
+		}
+
+		/*
+		===============
+		OnPlayerDeath
+		===============
+		*/
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnPlayerDeath( in EmptyEventArgs args) {
+			ClearMobs();
 		}
 
 		/*
@@ -227,7 +264,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnArenaSizeChanged( in ArenaSizeChangedEventArgs args ) {
@@ -240,7 +277,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnMobDie( in MobDieEventArgs args ) {
@@ -248,8 +285,6 @@ namespace Game.Mobs {
 			_spatialPartition.Remove( mob );
 			_mobCache.Remove( args.MobId );
 			mob.Disable();
-
-			_enemyCount--;
 		}
 
 		/*
@@ -258,7 +293,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();
@@ -270,24 +305,35 @@ namespace Game.Mobs {
 
 			var eventFactory = serviceLocator.GetService<IGameEventRegistryService>();
 
-			var arenaSizeChanged = eventFactory.GetEvent<ArenaSizeChangedEventArgs>( nameof( WorldArea.ArenaSizeChanged ) );
+			var arenaSizeChanged = eventFactory.GetEvent<ArenaSizeChangedEventArgs>( nameof( WorldArea ), nameof( WorldArea.ArenaSizeChanged ) );
 			arenaSizeChanged.Subscribe( this, OnArenaSizeChanged );
 
-			var mobDie = eventFactory.GetEvent<MobDieEventArgs>( nameof( MobBase.MobDie ) );
+			var mobDie = eventFactory.GetEvent<MobDieEventArgs>( nameof( MobBase ), nameof( MobBase.MobDie ) );
 			mobDie.Subscribe( this, OnMobDie );
 
-			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
+			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager ), nameof( WaveManager.WaveCompleted ) );
 			waveCompleted.Subscribe( this, OnWaveCompleted );
 
-			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
+			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager ), nameof( WaveManager.WaveStarted ) );
 			waveStarted.Subscribe( this, OnWaveStarted );
 
-			_spawnTimer = GetNode<Timer>( "SpawnInterval" );
-			_spawnTimer.Connect( Timer.SignalName.Timeout, Callable.From( OnSpawnEnemies ) );
+			var playerDie = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerStats ), nameof( PlayerStats.PlayerDeath ) );
+			playerDie.Subscribe( this, OnPlayerDeath );
 
 			_navRegion = GetNode<NavigationRegion2D>( "NavigationRegion2D" );
 
-			_spatialPartition = new SpatialPartition( new Vector2( 1280, 720 ), MIN_MOB_DISTANCE, eventFactory );
+			if ( _worldBounds.Shape is RectangleShape2D rectangleShape ) {
+				_worldSize = rectangleShape.Size;
+			} else {
+				throw new InvalidCastException();
+			}
+
+			_waveCalculator = new MobWaveCalculator( _tierDefinitions );
+
+			_spawnTimer.Connect( Timer.SignalName.Timeout, Callable.From( SpawnWave ) );
+			AddChild( _spawnTimer );
+
+			_spatialPartition = new SpatialPartition( _worldSize, MIN_MOB_DISTANCE, eventFactory );
 
 			_pools = new BasicObjectPool<MobBase>[ _enemyTypes.Length ];
 			for ( int i = 0; i < _enemyTypes.Length; i++ ) {

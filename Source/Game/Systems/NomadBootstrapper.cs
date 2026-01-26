@@ -30,6 +30,7 @@ using Nomad.Events;
 using Nomad.Console;
 using Nomad.CVars;
 using Nomad.Logger.Private.Sinks;
+using Nomad.GodotServer.Rendering;
 
 namespace Game.Systems {
 	/*
@@ -40,7 +41,7 @@ namespace Game.Systems {
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
 	public sealed partial class NomadBootstrapper : Node {
@@ -56,7 +57,7 @@ namespace Game.Systems {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();
@@ -93,7 +94,7 @@ namespace Game.Systems {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="delta"></param>
 		public override void _Process( double delta ) {

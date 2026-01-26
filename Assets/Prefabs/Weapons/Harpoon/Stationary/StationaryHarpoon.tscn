@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://8n4taoy8pknu"]
+
+[ext_resource type="Texture2D" uid="uid://ctewrb7faq48y" path="res://Assets/Textures/SpriteSheets/StationaryHarpoon.png" id="1_6a4iq"]
+[ext_resource type="Script" uid="uid://b5yx7olfg8syo" path="res://Assets/Prefabs/Weapons/Harpoon/Stationary/StationaryHarpoon.cs" id="1_6b7bi"]
+[ext_resource type="Resource" uid="uid://bq7oexusvadxn" path="res://Assets/Prefabs/Weapons/Harpoon/Stationary/StationaryHarpoon.tres" id="3_48r60"]
+[ext_resource type="Texture2D" uid="uid://b433agw4ipi0t" path="res://Assets/Textures/SpriteSheets/Harpoon.png" id="3_dapjd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dapjd"]
+atlas = ExtResource("1_6a4iq")
+region = Rect2(192, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_48r60"]
+atlas = ExtResource("1_6a4iq")
+region = Rect2(256, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bbtlo"]
+atlas = ExtResource("1_6a4iq")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yn8jp"]
+atlas = ExtResource("1_6a4iq")
+region = Rect2(64, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l8r6v"]
+atlas = ExtResource("1_6a4iq")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lhycm"]
+atlas = ExtResource("1_6a4iq")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1s3yy"]
+atlas = ExtResource("1_6a4iq")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdfmf"]
+atlas = ExtResource("1_6a4iq")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ujrp4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dapjd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_48r60")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bbtlo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yn8jp")
+}],
+"loop": false,
+"name": &"use_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l8r6v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lhycm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1s3yy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gdfmf")
+}],
+"loop": false,
+"name": &"use_horizontal",
+"speed": 2.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6a4iq"]
+radius = 5.0
+height = 20.0
+
+[node name="StationaryHarpoon" type="AnimatedSprite2D" unique_id=976160418]
+sprite_frames = SubResource("SpriteFrames_ujrp4")
+animation = &"use_horizontal"
+autoplay = "use_horizontal"
+frame = 3
+frame_progress = 1.0
+script = ExtResource("1_6b7bi")
+_resource = ExtResource("3_48r60")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=2089920837]
+collision_layer = 2
+collision_mask = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=240630487]
+position = Vector2(-1, -2)
+texture = ExtResource("3_dapjd")
+region_enabled = true
+region_rect = Rect2(0, 0, 21.84948, 25.606827)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1426649228]
+position = Vector2(-1, -1)
+shape = SubResource("CapsuleShape2D_6a4iq")

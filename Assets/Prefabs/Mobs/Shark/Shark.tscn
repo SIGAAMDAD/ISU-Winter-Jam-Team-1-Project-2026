@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://by5pr3oyf568c"]
+[gd_scene format=3 uid="uid://by5pr3oyf568c"]
 
 [ext_resource type="Script" uid="uid://brlesti85vf0p" path="res://Assets/Prefabs/Mobs/Shark/Shark.cs" id="1_byjlf"]
+[ext_resource type="Resource" uid="uid://cggpr84jerywt" path="res://Assets/Prefabs/Mobs/Shark/Shark.tres" id="2_dx6yr"]
 [ext_resource type="Texture2D" uid="uid://bi2igixnrqu03" path="res://Assets/Textures/SpriteSheets/Shark.png" id="2_eppw5"]
 [ext_resource type="Texture2D" uid="uid://chmp3qe0xc8n5" path="res://Assets/Textures/SpriteSheets/SharkWindup.png" id="3_2x1uq"]
 [ext_resource type="Texture2D" uid="uid://det23t3p1vorm" path="res://Assets/Textures/SpriteSheets/SharkDeath.png" id="3_sliwx"]
@@ -89,27 +90,31 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eppw5"]
 size = Vector2(69, 60)
 
-[node name="Shark" type="Area2D"]
+[node name="Shark" type="Area2D" unique_id=531440171]
 collision_layer = 0
 collision_mask = 3
 script = ExtResource("1_byjlf")
-_xpKillAmount = 30.0
+_xpKillAmount = 20.0
 _damageAmount = 40.0
-_health = 20.0
-_speed = Vector2(0.4, 0.4)
+_health = 70.0
+_attackCooldown = 0.1
+_speed = Vector2(0.4, 1)
+_tierData = ExtResource("2_dx6yr")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=438778176]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_dpq8m")
 autoplay = "default"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=855968168]
 scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_eppw5")
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-path_desired_distance = 10.0
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1253577515]
+path_desired_distance = 40.0
+target_desired_distance = 40.0
 path_max_distance = 1000.0
+path_postprocessing = 2
 avoidance_enabled = true
 radius = 80.0
 max_neighbors = 1000

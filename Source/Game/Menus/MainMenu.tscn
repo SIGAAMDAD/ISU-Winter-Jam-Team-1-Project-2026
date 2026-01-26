@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b10xxn0ar6ssx"]
+[gd_scene format=3 uid="uid://b10xxn0ar6ssx"]
 
 [ext_resource type="Script" uid="uid://dn10c2obr7hsn" path="res://Source/Game/Menus/MainMenu.cs" id="1_v3fht"]
 [ext_resource type="Texture2D" uid="uid://b7bch6q8npnjy" path="res://Assets/Textures/StartGame.webp" id="2_43rut"]
@@ -41,7 +41,7 @@ gravity = Vector3(0, 2000, 0)
 linear_accel_min = 1.1699977
 linear_accel_max = 65.88
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=1073870729]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -51,7 +51,7 @@ grow_vertical = 2
 script = ExtResource("1_v3fht")
 metadata/_edit_use_anchors_ = true
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=689577406]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -61,7 +61,7 @@ grow_vertical = 2
 color = Color(0.19434929, 0.19434926, 0.19434926, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="ButtonPressed" type="TextureRect" parent="."]
+[node name="ButtonPressed" type="TextureRect" parent="." unique_id=638305945]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -74,7 +74,7 @@ texture = ExtResource("2_43rut")
 expand_mode = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1809398285]
 position = Vector2(0, 3)
 amount = 375
 texture = SubResource("GradientTexture2D_lgjx7")
@@ -85,12 +85,12 @@ trail_sections = 2
 trail_section_subdivisions = 1
 process_material = SubResource("ParticleProcessMaterial_rufj5")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1206845400]
 stream = ExtResource("3_avssa")
 volume_db = -6.0
 autoplay = true
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=778371126]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -102,7 +102,7 @@ text = "MAIN MENU"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1949944779]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -117,22 +117,22 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="StartGame" type="Button" parent="VBoxContainer"]
+[node name="StartGame" type="Button" parent="VBoxContainer" unique_id=941198834]
 unique_name_in_owner = true
 layout_mode = 2
 text = "NEW GAME"
 
-[node name="Credits" type="Button" parent="VBoxContainer"]
+[node name="Credits" type="Button" parent="VBoxContainer" unique_id=1206041944]
 unique_name_in_owner = true
 layout_mode = 2
 text = "CREDITS"
 
-[node name="QuitGame" type="Button" parent="VBoxContainer"]
+[node name="QuitGame" type="Button" parent="VBoxContainer" unique_id=1416568939]
 unique_name_in_owner = true
 layout_mode = 2
 text = "QUIT"
 
-[node name="DynamicWater2D" type="Control" parent="." node_paths=PackedStringArray("top_left_marker", "bottom_right_marker")]
+[node name="DynamicWater2D" type="Control" parent="." unique_id=840316758 node_paths=PackedStringArray("top_left_marker", "bottom_right_marker")]
 layout_mode = 1
 anchor_top = 0.794
 anchor_right = 1.0
@@ -145,14 +145,14 @@ top_left_marker = NodePath("Control")
 bottom_right_marker = NodePath("Control2")
 metadata/_custom_type_script = "uid://bpyt5meqpw8je"
 
-[node name="Control" type="Control" parent="DynamicWater2D"]
+[node name="Control" type="Control" parent="DynamicWater2D" unique_id=782310270]
 anchors_preset = 0
 offset_left = -1.0
 offset_top = -2.0
 offset_right = -1.0
 offset_bottom = -2.0
 
-[node name="Control2" type="Control" parent="DynamicWater2D"]
+[node name="Control2" type="Control" parent="DynamicWater2D" unique_id=662408198]
 layout_mode = 1
 anchor_left = 1.003
 anchor_top = 1.0270001
@@ -163,4 +163,4 @@ offset_top = 0.003982544
 offset_right = 0.15991211
 offset_bottom = 0.003982544
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=10517213]

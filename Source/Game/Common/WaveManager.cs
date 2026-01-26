@@ -1,4 +1,4 @@
-using Game.Mobs;
+﻿using Game.Mobs;
 using Game.Player;
 using Game.Player.UserInterface;
 using Game.Systems;
@@ -9,13 +9,13 @@ using Nomad.Core.Logger;
 namespace Game.Common {
 	/*
 	===================================================================================
-	
+
 	WaveManager
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
 	public partial class WaveManager : Node {
@@ -38,18 +38,25 @@ namespace Game.Common {
 		public IGameEvent<EmptyEventArgs> WaveStarted => _waveStarted;
 		private IGameEvent<EmptyEventArgs> _waveStarted;
 
+		public IGameEvent<EmptyEventArgs> GameCompleted => _gameCompleted;
+		private IGameEvent<EmptyEventArgs> _gameCompleted;
+
 		/*
 		===============
 		OnWaveTimerTimeout
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnWaveTimerTimeout( in EmptyEventArgs args ) {
 			int oldWave = _currentWave;
 			_currentWave++;
-			_waveCompleted.Publish( new WaveChangedEventArgs( oldWave, _currentWave ) );
+			if ( _currentWave >= MAX_WAVES ) {
+
+			} else {
+				_waveCompleted.Publish( new WaveChangedEventArgs( oldWave, _currentWave ) );
+			}
 
 			_logger.PrintLine( $"Wave completed, showing upgrade menu..." );
 		}
@@ -60,7 +67,7 @@ namespace Game.Common {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnGameStateChanged( in GameStateChangedEventArgs args ) {
@@ -77,7 +84,7 @@ namespace Game.Common {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();
@@ -85,10 +92,11 @@ namespace Game.Common {
 			var serviceLocator = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator;
 
 			var eventFactory = serviceLocator.GetService<IGameEventRegistryService>();
-			_waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveCompleted ) );
-			_waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveStarted ) );
+			_waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager ), nameof( WaveCompleted ) );
+			_waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager ), nameof( WaveStarted ) );
+			_gameCompleted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager ), nameof( GameCompleted ) );
 
-			var waveTimeout = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveTimer.WaveTimeout ) );
+			var waveTimeout = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveTimer ), nameof( WaveTimer.WaveTimeout ) );
 			waveTimeout.Subscribe( this, OnWaveTimerTimeout );
 
 			_waveStarted.Publish( EmptyEventArgs.Args );

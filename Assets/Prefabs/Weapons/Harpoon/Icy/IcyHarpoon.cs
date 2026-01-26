@@ -1,26 +1,29 @@
 using Game.Mobs;
+using Game.Player;
 using Game.Player.Weapons;
+using Game.Systems.Caching;
 using Godot;
+using Nomad.Core.Util;
 using System.Collections.Generic;
 
 namespace Prefabs {
 	/*
 	===================================================================================
-	
+
 	IcyHarpoon
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
-	public partial class IcyHarpoon : Projectile {
+	public sealed partial class IcyHarpoon : Projectile {
 		private static readonly NodePath @ModulateNodePath = "modulate";
 
 		private const float ICE_DAMAGE = 2.0f;
 
-		private readonly List<MobBase> _victims = new List<MobBase>();
+		private MobBase[] _victims;
 
 		private readonly Timer _killTimer = new Timer() {
 			WaitTime = 2.0f,
@@ -37,30 +40,37 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="mob"></param>
 		protected override void OnEnemyHit( MobBase mob ) {
 			base.OnEnemyHit( mob );
-			
-			CallDeferred( MethodName.SetPhysicsProcess, false );
+
+			CallDeferred( ProjectileNode.MethodName.SetPhysicsProcess, false );
 
 			var freezeArea = GetNode<Area2D>( "FreezeArea" );
 			Godot.Collections.Array<Area2D> bodies = freezeArea.GetOverlappingAreas();
 
-			_victims.EnsureCapacity( bodies.Count );
+			_victims = new MobBase[ bodies.Count ];
 			for ( int i = 0; i < bodies.Count; i++ ) {
 				if ( bodies[ i ] is MobBase enemy ) {
-					_victims.Add( enemy );
+					_victims[ i ] = enemy;
 					enemy.SetSpeed( Vector2.Zero );
 					enemy.CreateTween().CallDeferred( Tween.MethodName.TweenProperty, enemy, ModulateNodePath, Colors.LightBlue, 1.0f );
 				}
 			}
 
+			AudioCache.Instance.GetCached( FilePath.FromResourcePath( "res://Assets/Audio/SoundEffects/ice_harpoon_freeze.wav" ) ).Get( out var freezeSound );
+			var audioStream = new AudioStreamPlayer2D() {
+				Stream = freezeSound
+			};
+			AddChild( audioStream );
+			audioStream.Play();
+
 			_killTimer.CallDeferred( Timer.MethodName.Start );
 			_processTimer.CallDeferred( Timer.MethodName.Start );
-			
-			SetDeferred( PropertyName.Visible, false );
+
+			SetDeferred( ProjectileNode.PropertyName.Visible, false );
 		}
 
 		/*
@@ -68,17 +78,19 @@ namespace Prefabs {
 		OnReleaseVictims
 		===============
 		*/
+		/// <summary>
+		///
+		/// </summary>
 		private void OnReleaseVictims() {
-			for ( int i = 0; i < _victims.Count; i++ ) {
+			for ( int i = 0; i < _victims.Length; i++ ) {
 				var enemy = _victims[ i ];
-				if ( !IsInstanceValid( enemy ) ) {
+				if ( !ProjectileNode.IsInstanceValid( enemy ) ) {
 					continue;
 				}
 
 				enemy.Modulate = Colors.White;
 				enemy.ResetSpeed();
 			}
-			_victims.Clear();
 			_processTimer.Stop();
 
 			QueueFree();
@@ -90,12 +102,12 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnDamageVictims() {
-			for ( int i = 0; i < _victims.Count; i++ ) {
+			for ( int i = 0; i < _victims.Length; i++ ) {
 				var victim = _victims[ i ];
-				if ( !IsInstanceValid( victim ) ) {
+				if ( !ProjectileNode.IsInstanceValid( victim ) ) {
 					continue;
 				}
 				if ( victim is MobBase enemy ) {
@@ -110,7 +122,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();

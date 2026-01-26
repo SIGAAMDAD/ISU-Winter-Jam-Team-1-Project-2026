@@ -1,0 +1,9 @@
+[gd_resource type="Resource" format=3 uid="uid://cxdihagmv72p7"]
+
+[ext_resource type="Script" uid="uid://bjiigd1vgl3yr" path="res://Source/Game/Player/Weapons/ProjectileResource.cs" id="1_7m8ab"]
+
+[resource]
+script = ExtResource("1_7m8ab")
+CooldownTime = 3.0
+Speed = 4.0
+Damage = 4.0

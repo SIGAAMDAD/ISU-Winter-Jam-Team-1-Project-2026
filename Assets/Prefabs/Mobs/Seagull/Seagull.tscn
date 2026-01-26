@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://dd1txusb8iduc"]
+[gd_scene format=3 uid="uid://dd1txusb8iduc"]
 
 [ext_resource type="Script" uid="uid://bf6t7euesj3vr" path="res://Assets/Prefabs/Mobs/Seagull/Seagull.cs" id="1_vnl8o"]
 [ext_resource type="Texture2D" uid="uid://x32ibu487cdl" path="res://Assets/Textures/SpriteSheets/Seagull.png" id="2_2mmui"]
+[ext_resource type="Resource" uid="uid://cu0fveekgl5av" path="res://Assets/Prefabs/Mobs/Seagull/Seagull.tres" id="2_3nahn"]
 [ext_resource type="Texture2D" uid="uid://l0iftogqui1t" path="res://Assets/Textures/SpriteSheets/SeagullDie.png" id="3_2mmui"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3nahn"]
@@ -55,25 +56,28 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eppw5"]
 size = Vector2(42.608696, 31.304348)
 
-[node name="Seagull" type="Area2D"]
+[node name="Seagull" type="Area2D" unique_id=1219914303]
 scale = Vector2(1.15, 1.15)
 collision_layer = 0
 collision_mask = 3
 script = ExtResource("1_vnl8o")
 _damageAmount = 2.0
 _health = 5.0
-_speed = Vector2(0.6, 0.6)
+_attackCooldown = 0.5
+_speed = Vector2(1.5, 1.2)
+_tierData = ExtResource("2_3nahn")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=949425910]
 sprite_frames = SubResource("SpriteFrames_awn2u")
 autoplay = "default"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1360996590]
 position = Vector2(0.43478262, -1.7391305)
 shape = SubResource("RectangleShape2D_eppw5")
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-target_desired_distance = 20.0
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=201071835]
+path_desired_distance = 40.0
+target_desired_distance = 40.0
 path_max_distance = 1000.0
 avoidance_enabled = true
 radius = 80.0

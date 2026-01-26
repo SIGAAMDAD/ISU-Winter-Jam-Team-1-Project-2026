@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3 uid="uid://1akyjrtujjkn"]
+
+[ext_resource type="Script" uid="uid://bjiigd1vgl3yr" path="res://Source/Game/Player/Weapons/ProjectileResource.cs" id="1_8ytwx"]
+[ext_resource type="AudioStream" uid="uid://dpm64gmivmqbw" path="res://Assets/Audio/SoundEffects/shoot_explosive_harpoon.wav" id="1_yymcc"]
+
+[resource]
+script = ExtResource("1_8ytwx")
+FlySound = ExtResource("1_yymcc")
+CooldownTime = 6.0
+Speed = 8.0
+Damage = 30.0

@@ -6,13 +6,13 @@ using Nomad.Core.Events;
 namespace Game.Mobs {
 	/*
 	===================================================================================
-	
+
 	EffectBase
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
 	public partial class EffectBase : AnimatedSprite2D {
@@ -28,7 +28,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public void Enable() {
 			Visible = true;
@@ -41,11 +41,11 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public void Disable() {
-			Visible = false;
-			ProcessMode = ProcessModeEnum.Disabled;
+			SetDeferred( PropertyName.Visible, false );
+			SetDeferred( PropertyName.ProcessMode, (long)ProcessModeEnum.Disabled );
 		}
 
 		/*
@@ -54,7 +54,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="player"></param>
 		protected virtual void OnPlayerEntered( PlayerManager player ) {
@@ -66,7 +66,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="player"></param>
 		protected virtual void OnPlayerExited( PlayerManager player ) {
@@ -78,7 +78,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="bodyRid"></param>
 		/// <param name="body"></param>
@@ -96,7 +96,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="bodyRid"></param>
 		/// <param name="body"></param>
@@ -121,7 +121,7 @@ namespace Game.Mobs {
 			collisionArea.Connect( Area2D.SignalName.BodyShapeExited, Callable.From<Rid, Node2D, int, int>( OnBodyExited ) );
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
-			_effectFinished = eventFactory.GetEvent<int>( nameof( EffectFinished ) );
+			_effectFinished = eventFactory.GetEvent<int>( nameof( EffectBase ), nameof( EffectFinished ) );
 		}
 	};
 };

@@ -5,15 +5,15 @@ using System;
 namespace Prefabs {
 	/*
 	===================================================================================
-	
+
 	MobyDick
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	
+
 	public partial class MobyDick : MobBase {
 		private static readonly StringName @WindupAnimationName = "windup";
 		private static readonly NodePath @ModulateNodePath = "modulate";
@@ -48,14 +48,14 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected override void OnTargetReached() {
 			if ( ( _flags & FlagBits.Dead ) != 0 || ( _sharkFlags & SharkFlags.IsAttacking ) == 0 ) {
 				return;
 			}
 
-			_animation.CallDeferred( AnimatedSprite2D.MethodName.Play, DefaultAnimationName );
+			_animation.Play( DefaultAnimationName );
 			_currentSpeed = _speed;
 			_sharkFlags &= ~( SharkFlags.IsAttacking | SharkFlags.CanAttack );
 
@@ -72,14 +72,14 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnCheckAttackTimeout() {
 			if ( ( _flags & FlagBits.Dead ) != 0 || ( _sharkFlags & SharkFlags.CanAttack ) == 0 || GlobalPosition.DistanceTo( _target.GlobalPosition ) > 400.0f ) {
 				return;
 			}
 
-			_animation.CallDeferred( AnimatedSprite2D.MethodName.Play, WindupAnimationName );
+			_animation.Play( WindupAnimationName );
 			_sharkFlags |= SharkFlags.IsAttacking;
 			_windupTimer.CallDeferred( Timer.MethodName.Start );
 			_checkAttackTimer.CallDeferred( Timer.MethodName.Start );
@@ -97,7 +97,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnWindupTimerTimeout() {
 			if ( ( _flags & FlagBits.Dead ) != 0 ) {
@@ -114,7 +114,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnAttackCooldownTimerTimeout() {
 			_sharkFlags |= SharkFlags.CanAttack;
@@ -127,7 +127,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();

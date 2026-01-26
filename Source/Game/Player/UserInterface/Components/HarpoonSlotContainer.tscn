@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://cqklao5ornbvx"]
+
+[ext_resource type="Script" uid="uid://b1no21ph6slwu" path="res://Source/Game/Player/UserInterface/Components/HarpoonSlotContainer.cs" id="1_astih"]
+[ext_resource type="Texture2D" uid="uid://ddf2uvfod1oef" path="res://Assets/Textures/Icons/AttackDamageIcon.png" id="1_rxjm2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rxjm2"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_astih"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+
+[node name="HarpoonSlotContainer" type="HBoxContainer" unique_id=865029587]
+anchors_preset = -1
+anchor_right = 0.13100001
+anchor_bottom = 0.089
+offset_right = -127.68002
+offset_bottom = -24.080002
+size_flags_horizontal = 3
+script = ExtResource("1_astih")
+metadata/_edit_use_anchors_ = true
+
+[node name="Icon" type="TextureRect" parent="." unique_id=367571475]
+layout_mode = 2
+texture = ExtResource("1_rxjm2")
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=308018995]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_rxjm2")
+theme_override_styles/fill = SubResource("StyleBoxFlat_astih")
+show_percentage = false

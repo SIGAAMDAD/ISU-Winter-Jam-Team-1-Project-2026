@@ -1,25 +1,23 @@
-using Game.Systems;
+﻿using Game.Systems;
 using Godot;
 using Nomad.Core.Events;
 
 namespace Game.Player {
 	/*
 	===================================================================================
-	
+
 	PlayerManager
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	
-	public partial class PlayerManager : CharacterBody2D {
-		public IGameEvent<PlayerTakeDamageEventArgs> TakeDamage => _stats.TakeDamage;
-		public IGameEvent<StatChangedEventArgs> StatChanged => _stats.StatChanged;
 
+	public sealed partial class PlayerManager : CharacterBody2D {
 		private PlayerStats _stats;
-		private PlayerController _controller;
+		private PlayerMovementController _movementController;
+		private PlayerAttackController _attackController;
 		private PlayerAnimator _animator;
 		private PlayerAudioPlayer _audioPlayer;
 
@@ -29,7 +27,7 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();
@@ -37,8 +35,9 @@ namespace Game.Player {
 			var serviceRegistry = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServicesFactory;
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 			_animator = new PlayerAnimator( this );
-			_controller = new PlayerController( this, _animator );
-			_audioPlayer = new PlayerAudioPlayer( this, _controller, _animator );
+			_movementController = new PlayerMovementController( this, _animator );
+			_attackController = new PlayerAttackController( this, _animator, eventFactory );
+			_audioPlayer = new PlayerAudioPlayer( this, _attackController, _animator, eventFactory );
 
 			_stats = new PlayerStats( this, eventFactory );
 			serviceRegistry.RegisterSingleton<IPlayerStatsProvider>( _stats );
@@ -49,12 +48,15 @@ namespace Game.Player {
 		_Process
 		===============
 		*/
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="delta"></param>
 		public override void _Process( double delta ) {
 			base._Process( delta );
 
-			float _delta = (float)delta;
-			_controller.Update( _delta );
-			_stats.Update( _delta );
+			float fixedDelta = (float)delta;
+			_movementController.Update( fixedDelta );
 		}
 
 		/*
@@ -63,15 +65,16 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="delta"></param>
 		public override void _PhysicsProcess( double delta ) {
 			base._PhysicsProcess( delta );
 
-			float _delta = (float)delta;
-			_controller.FixedUpdate( _delta, out bool inputWasActive );
-			_animator.FixedUpdate( _delta, inputWasActive );
+			float fixedDelta = (float)delta;
+			_movementController.FixedUpdate( fixedDelta, out bool inputWasActive );
+			_attackController.FixedUpdate( fixedDelta );
+			_animator.FixedUpdate( fixedDelta, inputWasActive );
 		}
 	};
 };

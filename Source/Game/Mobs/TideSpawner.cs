@@ -12,13 +12,13 @@ using System.Runtime.CompilerServices;
 namespace Game.Mobs {
 	/*
 	===================================================================================
-	
+
 	TideSpawner
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
 	public sealed partial class TideSpawner : Node2D {
@@ -47,7 +47,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnSpawnEnvironmentalEffects() {
 			int effectTier = 1;
@@ -84,7 +84,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="effectType"></param>
 		/// <returns></returns>
@@ -104,7 +104,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnWaveStarted( in EmptyEventArgs args ) {
@@ -117,7 +117,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnWaveCompleted( in WaveChangedEventArgs args ) {
@@ -146,7 +146,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnArenaSizeChanged( in ArenaSizeChangedEventArgs args ) {
@@ -160,7 +160,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnEffectFinished( in int args ) {
@@ -180,7 +180,7 @@ namespace Game.Mobs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();
@@ -207,16 +207,16 @@ namespace Game.Mobs {
 
 			var eventFactory = GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 
-			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager.WaveCompleted ) );
+			var waveCompleted = eventFactory.GetEvent<WaveChangedEventArgs>( nameof( WaveManager ), nameof( WaveManager.WaveCompleted ) );
 			waveCompleted.Subscribe( this, OnWaveCompleted );
 
-			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager.WaveStarted ) );
+			var waveStarted = eventFactory.GetEvent<EmptyEventArgs>( nameof( WaveManager ), nameof( WaveManager.WaveStarted ) );
 			waveStarted.Subscribe( this, OnWaveStarted );
 
-			var arenaSizeChanged = eventFactory.GetEvent<ArenaSizeChangedEventArgs>( nameof( WorldArea.ArenaSizeChanged ) );
+			var arenaSizeChanged = eventFactory.GetEvent<ArenaSizeChangedEventArgs>( nameof( WorldArea ), nameof( WorldArea.ArenaSizeChanged ) );
 			arenaSizeChanged.Subscribe( this, OnArenaSizeChanged );
 
-			var effectFinished = eventFactory.GetEvent<int>( nameof( EffectBase.EffectFinished ) );
+			var effectFinished = eventFactory.GetEvent<int>( nameof( EffectBase ), nameof( EffectBase.EffectFinished ) );
 			effectFinished.Subscribe( this, OnEffectFinished );
 
 			_spawnTimer = GetNode<Timer>( "SpawnTimer" );

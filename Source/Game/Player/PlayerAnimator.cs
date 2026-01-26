@@ -6,15 +6,15 @@ using System;
 namespace Game.Player {
 	/*
 	===================================================================================
-	
+
 	PlayerAnimator
-	
+
 	Description
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
 	public sealed class PlayerAnimator {
@@ -61,7 +61,7 @@ namespace Game.Player {
 		private readonly Timer _reloadTimer;
 
 		private AnimatorFlags _flags = AnimatorFlags.IsGunLoaded;
-		
+
 		private PlayerDirection _harpoonDirection;
 
 		public IGameEvent<EmptyEventArgs> PlayerStartMoving => _playerStartMoving;
@@ -78,6 +78,10 @@ namespace Game.Player {
 		PlayerAnimator
 		===============
 		*/
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="owner"></param>
 		public PlayerAnimator( PlayerManager owner ) {
 			_owner = owner;
 			_animations = owner.GetNode<AnimatedSprite2D>( "AnimatedSprite2D" );
@@ -107,18 +111,18 @@ namespace Game.Player {
 
 			var eventFactory = owner.GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator.GetService<IGameEventRegistryService>();
 
-			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
+			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats ), nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
-			var useWeapon = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerController.UseWeapon ) );
+			var useWeapon = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerStats ), nameof( PlayerAttackController.UseWeapon ) );
 			useWeapon.Subscribe( this, OnUseWeapon );
 
-			var weaponCooldownFinished = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerController.WeaponCooldownFinished ) );
+			var weaponCooldownFinished = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerStats ), nameof( PlayerAttackController.WeaponCooldownFinished ) );
 			weaponCooldownFinished.Subscribe( this, OnWeaponCooldownFinished );
 
-			_playerStartMoving = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerStartMoving ) );
-			_playerStopMoving = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerStopMoving ) );
-			_gunReloaded = eventFactory.GetEvent<EmptyEventArgs>( nameof( GunReloaded ) );
+			_playerStartMoving = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerAnimator ), nameof( PlayerStartMoving ) );
+			_playerStopMoving = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerAnimator ), nameof( PlayerStopMoving ) );
+			_gunReloaded = eventFactory.GetEvent<EmptyEventArgs>( nameof( PlayerAnimator ), nameof( GunReloaded ) );
 		}
 
 		/*
@@ -127,7 +131,7 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public void Dispose() {
 			_playerStartMoving.Dispose();
@@ -141,7 +145,7 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="delta"></param>
 		/// <param name="inputWasActive"></param>
@@ -165,7 +169,7 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="direction"></param>
 		/// <param name="newPosition"></param>
@@ -259,7 +263,7 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="rotation"></param>
 		/// <param name="newPosition"></param>
@@ -322,7 +326,7 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnWeaponCooldownFinished( in EmptyEventArgs args ) {
@@ -335,7 +339,7 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnUseWeapon( in EmptyEventArgs args ) {
@@ -350,7 +354,7 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnStatChanged( in StatChangedEventArgs args ) {
@@ -365,7 +369,7 @@ namespace Game.Player {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnReloadTimerTimeout() {
 			_flags |= AnimatorFlags.IsGunLoaded;

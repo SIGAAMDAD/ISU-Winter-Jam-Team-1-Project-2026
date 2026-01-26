@@ -5,16 +5,16 @@ using Godot;
 namespace Prefabs {
 	/*
 	===================================================================================
-	
+
 	ExplosiveHarpoon
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	
-	public partial class ExplosiveHarpoon : Projectile {
+
+	public sealed partial class ExplosiveHarpoon : Projectile {
 		private static readonly StringName @DefaultAnimationName = "default";
 
 		private AnimatedSprite2D _explosionAnimation;
@@ -27,7 +27,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="mob"></param>
 		protected override void OnEnemyHit( MobBase mob ) {
@@ -57,7 +57,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnExplosionFinished() {
 			QueueFree();
@@ -69,7 +69,7 @@ namespace Prefabs {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();

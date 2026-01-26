@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dgx2nfjme5vr2"]
+[gd_scene format=3 uid="uid://dgx2nfjme5vr2"]
 
 [ext_resource type="Script" uid="uid://6xdcqy2i2a50" path="res://Assets/Prefabs/Mobs/Jellyfish/Jellyfish.cs" id="1_l68b0"]
 [ext_resource type="Texture2D" uid="uid://cdw383uxifpd5" path="res://Assets/Textures/SpriteSheets/Jellyfish.png" id="2_pb0ve"]
@@ -54,16 +54,16 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_p108e"]
 radius = 17.0
 
-[node name="Jellyfish" type="Area2D"]
+[node name="Jellyfish" type="Area2D" unique_id=935847631]
 collision_layer = 0
 collision_mask = 3
 script = ExtResource("1_l68b0")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1140874331]
 sprite_frames = SubResource("SpriteFrames_s6iuj")
 animation = &"die"
 autoplay = "default"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1116408963]
 position = Vector2(0, -9)
 shape = SubResource("CircleShape2D_p108e")

@@ -1,7 +1,8 @@
-[gd_scene load_steps=28 format=3 uid="uid://bxx2uro5uusm8"]
+[gd_scene format=3 uid="uid://bxx2uro5uusm8"]
 
 [ext_resource type="Script" uid="uid://b43snt0sswaqk" path="res://Assets/Prefabs/Mobs/Squid/Squid.cs" id="1_bgroo"]
 [ext_resource type="Texture2D" uid="uid://6t5bau38yd33" path="res://Assets/Textures/SpriteSheets/Squid.png" id="2_eyq8v"]
+[ext_resource type="Resource" uid="uid://cximyjf5l6kf0" path="res://Assets/Prefabs/Mobs/Squid/Squid.tres" id="2_u8ryw"]
 [ext_resource type="Texture2D" uid="uid://d7ah2ju7o8ab" path="res://Assets/Textures/SpriteSheets/SquidDeath.png" id="3_eyq8v"]
 [ext_resource type="Texture2D" uid="uid://c6x8efjvycg37" path="res://Assets/Textures/SpriteSheets/GiantSquidGrab.png" id="4_733kn"]
 
@@ -54,7 +55,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eppw5"]
-size = Vector2(56.899994, 52.300003)
+size = Vector2(56.899994, 46.2)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eyq8v"]
 bg_color = Color(0, 0, 0, 1)
@@ -166,7 +167,10 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Squid" type="Area2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u8ryw"]
+size = Vector2(533, 193)
+
+[node name="Squid" type="Area2D" unique_id=1785885413]
 collision_layer = 0
 collision_mask = 3
 script = ExtResource("1_bgroo")
@@ -174,19 +178,19 @@ _xpKillAmount = 200.0
 _damageAmount = 20.0
 _health = 900.0
 _speed = Vector2(0.1, 0.1)
+_tierData = ExtResource("2_u8ryw")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=902502426]
 scale = Vector2(10, 10)
 sprite_frames = SubResource("SpriteFrames_qlj56")
 autoplay = "default"
-frame_progress = 0.10062488
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.50000024, -35.500008)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1797425093]
+position = Vector2(0.50000024, -66.000015)
 scale = Vector2(10, 10)
 shape = SubResource("RectangleShape2D_eppw5")
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=726776629]
 target_desired_distance = 20.0
 path_max_distance = 1000.0
 avoidance_enabled = true
@@ -195,7 +199,7 @@ max_neighbors = 1000
 time_horizon_agents = 1.5
 max_speed = 1000.0
 
-[node name="HealthBar" type="ProgressBar" parent="."]
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=1882166850]
 offset_left = -237.0
 offset_top = 175.0
 offset_right = 237.0
@@ -206,10 +210,17 @@ value = 100.0
 show_percentage = false
 metadata/_edit_use_anchors_ = true
 
-[node name="GrabbedPlayer" type="AnimatedSprite2D" parent="."]
+[node name="GrabbedPlayer" type="AnimatedSprite2D" parent="." unique_id=301386225]
 visible = false
 position = Vector2(-2, 291)
 sprite_frames = SubResource("SpriteFrames_wkhj6")
 animation = &"release"
 frame = 3
 frame_progress = 1.0
+
+[node name="CaptureArea" type="Area2D" parent="." unique_id=1220688293]
+position = Vector2(0, 229)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CaptureArea" unique_id=334125977]
+position = Vector2(0, 36.5)
+shape = SubResource("RectangleShape2D_u8ryw")

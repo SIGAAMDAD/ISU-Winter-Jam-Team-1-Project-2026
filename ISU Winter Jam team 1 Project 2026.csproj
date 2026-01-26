@@ -1,4 +1,4 @@
-<Project Sdk="Godot.NET.Sdk/4.5.1">
+<Project Sdk="Godot.NET.Sdk/4.6.0">
   <PropertyGroup>
     <!-- Build Configuration -->
     <TargetFramework>net10.0</TargetFramework>
@@ -21,13 +21,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Godot.NET.Sdk" Version="4.6.0" />
+    <PackageReference Include="Godot.SourceGenerators" Version="4.6.0" />
+    <PackageReference Include="GodotSharp" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Source\NomadFramework\**" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Source\NomadFramework\Source\Nomad.GodotServer.Rendering\Nomad.GodotServer.Rendering.csproj" />
     <ProjectReference Include="Source\NomadFramework\Source\Nomad.Core\Nomad.Core.csproj" />
     <ProjectReference Include="Source\NomadFramework\Source\Nomad.Logger\Nomad.Logger.csproj" />
     <ProjectReference Include="Source\NomadFramework\Source\Nomad.CVars\Nomad.CVars.csproj" />
-	<ProjectReference Include="Source\NomadFramework\Source\Nomad.Events\Nomad.Events.csproj" />
+    <ProjectReference Include="Source\NomadFramework\Source\Nomad.Events\Nomad.Events.csproj" />
     <ProjectReference Include="Source\NomadFramework\Source\Nomad.Console\Nomad.Console.csproj" />
     <ProjectReference Include="Source\NomadFramework\Source\Nomad.ResourceCache\Nomad.ResourceCache.csproj" />
     <ProjectReference Include="Source\NomadFramework\Source\Nomad.Rendering\Nomad.Rendering.csproj" />

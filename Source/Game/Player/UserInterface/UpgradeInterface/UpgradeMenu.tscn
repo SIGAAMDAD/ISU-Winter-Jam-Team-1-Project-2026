@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bp7tu6bkhlxep"]
+[gd_scene format=3 uid="uid://bp7tu6bkhlxep"]
 
 [ext_resource type="PackedScene" uid="uid://c5l5fqjcktnqg" path="res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeButton/UpgradeButton.tscn" id="2_v8nt4"]
 [ext_resource type="Texture2D" uid="uid://diro2587u143n" path="res://Assets/Textures/Icons/MaxHealthIcon.png" id="3_2kjoo"]
@@ -13,10 +13,10 @@
 [ext_resource type="Texture2D" uid="uid://bqw0dw1jcx4ff" path="res://Assets/Textures/Icons/ExplosiveHarpoonIcon.png" id="10_pdvey"]
 [ext_resource type="Texture2D" uid="uid://btngl6pk040mf" path="res://Assets/Textures/Icons/StationaryHarpoonIcon.png" id="11_1xa78"]
 
-[node name="UpgradeMenu" type="CanvasLayer"]
+[node name="UpgradeMenu" type="CanvasLayer" unique_id=1764087211]
 metadata/_edit_use_anchors_ = true
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=106322941]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -29,10 +29,10 @@ theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 20
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1063970982]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=685046244]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 48
@@ -40,158 +40,158 @@ text = "BUY UPGRADES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="UpgradeContainers" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="UpgradeContainers" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=498787870]
 layout_mode = 2
 
-[node name="StatUpgradeList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/UpgradeContainers"]
+[node name="StatUpgradeList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/UpgradeContainers" unique_id=1593351151]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="Legend" type="HBoxContainer" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList"]
+[node name="Legend" type="HBoxContainer" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=1952717033]
 layout_mode = 2
 
-[node name="UpgradeLabel" type="Label" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList/Legend"]
+[node name="UpgradeLabel" type="Label" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList/Legend" unique_id=775520287]
 custom_minimum_size = Vector2(290, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "UPGRADE"
 horizontal_alignment = 1
 
-[node name="StatValueLabel" type="Label" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList/Legend"]
+[node name="StatValueLabel" type="Label" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList/Legend" unique_id=722239090]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "BONUS"
 horizontal_alignment = 1
 
-[node name="CostLabel" type="Label" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList/Legend"]
+[node name="CostLabel" type="Label" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList/Legend" unique_id=1597322056]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "COST"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=457937266]
 layout_mode = 2
 
-[node name="ArmorButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" instance=ExtResource("2_v8nt4")]
+[node name="ArmorButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=1318617391 instance=ExtResource("2_v8nt4")]
 layout_mode = 2
 Type = 3
 StatName = "ARMOR"
 Icon = ExtResource("3_uciwc")
 
-[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList"]
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=1495816818]
 layout_mode = 2
 
-[node name="SpeedButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" instance=ExtResource("2_v8nt4")]
+[node name="SpeedButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=1419056839 instance=ExtResource("2_v8nt4")]
 layout_mode = 2
 Type = null
 StatName = "SPEED"
 Icon = ExtResource("3_8r11l")
 
-[node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList"]
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=1434388745]
 layout_mode = 2
 
-[node name="MaxHealthButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" instance=ExtResource("2_v8nt4")]
+[node name="MaxHealthButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=1934059897 instance=ExtResource("2_v8nt4")]
 layout_mode = 2
 Type = 4
 StatName = "MAX HEALTH"
 Icon = ExtResource("3_2kjoo")
 
-[node name="HSeparator4" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList"]
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=2004268305]
 layout_mode = 2
 
-[node name="HealthRegenButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" instance=ExtResource("2_v8nt4")]
+[node name="HealthRegenButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=1161569130 instance=ExtResource("2_v8nt4")]
 layout_mode = 2
 Type = 5
 StatName = "HEALTH REGENERATION"
 Icon = ExtResource("5_x5gbg")
 
-[node name="HSeparator5" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList"]
+[node name="HSeparator5" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=215588379]
 layout_mode = 2
 
-[node name="AttackDamageButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" instance=ExtResource("2_v8nt4")]
+[node name="AttackDamageButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=242549157 instance=ExtResource("2_v8nt4")]
 layout_mode = 2
 Type = 1
 StatName = "ATTACK DAMAGE"
 Icon = ExtResource("6_omusq")
 
-[node name="HSeparator6" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList"]
+[node name="HSeparator6" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=1197115472]
 layout_mode = 2
 
-[node name="AttackSpeedButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" instance=ExtResource("2_v8nt4")]
+[node name="AttackSpeedButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/StatUpgradeList" unique_id=21311469 instance=ExtResource("2_v8nt4")]
 layout_mode = 2
 Type = 2
 StatName = "ATTACK SPEED"
 Icon = ExtResource("7_73cac")
 
-[node name="HarpoonUpgradeList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/UpgradeContainers"]
+[node name="HarpoonUpgradeList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/UpgradeContainers" unique_id=1398715450]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 0
 
-[node name="Legend" type="HBoxContainer" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList"]
+[node name="Legend" type="HBoxContainer" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList" unique_id=1148113985]
 layout_mode = 2
 
-[node name="UpgradeLabel" type="Label" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList/Legend"]
+[node name="UpgradeLabel" type="Label" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList/Legend" unique_id=1988345145]
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "UPGRADE"
 horizontal_alignment = 1
 
-[node name="CostLabel" type="Label" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList/Legend"]
+[node name="CostLabel" type="Label" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList/Legend" unique_id=1364757818]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "COST"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList" unique_id=680028272]
 layout_mode = 2
 
-[node name="IcyHarpoonButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList" instance=ExtResource("8_f3euy")]
+[node name="IcyHarpoonButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList" unique_id=1933499107 instance=ExtResource("8_f3euy")]
 layout_mode = 2
 Type = 1
 UpgradeName = "Icy Harpoon"
 Icon = ExtResource("9_1xa78")
 
-[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList"]
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList" unique_id=674516076]
 layout_mode = 2
 
-[node name="ExplosiveHarpoonButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList" instance=ExtResource("8_f3euy")]
+[node name="ExplosiveHarpoonButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList" unique_id=898785848 instance=ExtResource("8_f3euy")]
 layout_mode = 2
 tooltip_text = "The harpoon will explode upon first impact."
 Type = 2
 UpgradeName = "Explosive Harpoon"
 Icon = ExtResource("10_pdvey")
 
-[node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList"]
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList" unique_id=658906794]
 layout_mode = 2
 
-[node name="StationaryHarpoonButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList" instance=ExtResource("8_f3euy")]
+[node name="StationaryHarpoonButton" parent="MarginContainer/VBoxContainer/UpgradeContainers/HarpoonUpgradeList" unique_id=1984698616 instance=ExtResource("8_f3euy")]
 layout_mode = 2
 tooltip_text = "Shoots a heavier harpoon each attack, but pins you in place for a short duration for each attack. Attacks are no longer automatic."
 Type = 3
 UpgradeName = "Stationary Harpoon"
 Icon = ExtResource("11_1xa78")
 
-[node name="MoneyContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="MoneyContainer" type="HBoxContainer" parent="MarginContainer" unique_id=535136402]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
-[node name="Icon" type="TextureRect" parent="MarginContainer/MoneyContainer"]
+[node name="Icon" type="TextureRect" parent="MarginContainer/MoneyContainer" unique_id=1536317775]
 layout_mode = 2
 texture = ExtResource("8_thklw")
 
-[node name="MoneyLabel" type="Label" parent="MarginContainer/MoneyContainer"]
+[node name="MoneyLabel" type="Label" parent="MarginContainer/MoneyContainer" unique_id=186505334]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 metadata/_edit_use_anchors_ = true
 
-[node name="FinishButton" type="Button" parent="MarginContainer"]
+[node name="FinishButton" type="Button" parent="MarginContainer" unique_id=166159696]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
@@ -199,4 +199,4 @@ size_flags_vertical = 8
 text = "START NEXT WAVE"
 metadata/_edit_use_anchors_ = true
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1004866601]

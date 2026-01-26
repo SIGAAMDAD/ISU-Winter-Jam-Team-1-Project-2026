@@ -77,7 +77,7 @@ namespace Game.Systems {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();
@@ -87,13 +87,13 @@ namespace Game.Systems {
 			var serviceLocator = ( (Node)Engine.GetMainLoop().Get( SceneTree.PropertyName.Root ) ).GetNode<NomadBootstrapper>( "/root/NomadBootstrapper" ).ServiceLocator;
 
 			var eventFactory = serviceLocator.GetService<IGameEventRegistryService>();
-			_stateChanged = eventFactory.GetEvent<GameStateChangedEventArgs>( nameof( GameStateChanged ) );
+			_stateChanged = eventFactory.GetEvent<GameStateChangedEventArgs>( nameof( GameStateManager ), nameof( GameStateChanged ) );
 
 			_logger = serviceLocator.GetService<ILoggerService>();
 			_category = _logger.CreateCategory( nameof( GameStateManager ), LogLevel.Info, true );
 #if DEBUG
-			_gameState = Enum.GetName( typeof( GameState ), GameState );
-			_prevGameState = Enum.GetName( typeof( GameState ), GameState );
+			_gameState = GameState.ToString();
+			_prevGameState = GameState.ToString();
 #endif
 		}
 
@@ -266,8 +266,8 @@ namespace Game.Systems {
 			GameState = newState;
 
 #if DEBUG
-			_prevGameState = Enum.GetName( typeof( GameState ), oldState );
-			_gameState = Enum.GetName( typeof( GameState ), GameState );
+			_prevGameState = oldState.ToString();
+			_gameState = GameState.ToString();
 #endif
 
 			// notify the system now that we've established the new state

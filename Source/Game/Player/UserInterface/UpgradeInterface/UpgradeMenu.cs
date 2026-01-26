@@ -1,4 +1,4 @@
-using Godot;
+﻿using Godot;
 using Game.Player.Upgrades;
 using Game.Systems;
 using Nomad.Core.Events;
@@ -9,13 +9,13 @@ using Nomad.Core.Util;
 namespace Game.Player.UserInterface.UpgradeInterface {
 	/*
 	===================================================================================
-	
+
 	UpgradeMenu
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
 	public sealed class UpgradeMenu {
@@ -37,20 +37,23 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public UpgradeMenu( CanvasLayer node, IGameEventRegistryService eventFactory ) {
 			_node = node;
 			_manager = new UpgradeManager( eventFactory );
 
-			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
+			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats ), nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
-			var upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeManager.UpgradeBought ) );
+			var upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeManager ), nameof( UpgradeManager.UpgradeBought ) );
 			upgradeBought.Subscribe( this, OnUpgradeBought );
 
-			var upgradeBuyFailed = eventFactory.GetEvent<EmptyEventArgs>( nameof( UpgradeManager.BuyFailed ) );
+			var upgradeBuyFailed = eventFactory.GetEvent<EmptyEventArgs>( nameof( UpgradeManager ), nameof( UpgradeManager.BuyFailed ) );
 			upgradeBuyFailed.Subscribe( this, OnUpgradeBuyFailed );
+
+			var harpoonType = eventFactory.GetEvent<HarpoonTypeUpgradeBoughtEventArgs>( nameof( UpgradeManager ), nameof( UpgradeManager.HarpoonBought ) );
+			harpoonType.Subscribe( this, OnHarpoonBought );
 
 			_moneyLabel = _node.GetNode<Label>( "%MoneyLabel" );
 			_audioPlayer = _node.GetNode<AudioStreamPlayer>( nameof( AudioStreamPlayer ) );
@@ -69,10 +72,24 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnUpgradeBought( in UpgradeBoughtEventArgs args ) {
+			_audioPlayer.Stream = _buySound;
+			_audioPlayer.Play();
+		}
+
+		/*
+		===============
+		OnHarpoonBought
+		===============
+		*/
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="args"></param>
+		private void OnHarpoonBought( in HarpoonTypeUpgradeBoughtEventArgs args ) {
 			_audioPlayer.Stream = _buySound;
 			_audioPlayer.Play();
 		}
@@ -83,7 +100,7 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnUpgradeBuyFailed( in EmptyEventArgs args ) {
@@ -97,7 +114,7 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnStatChanged( in StatChangedEventArgs args ) {
@@ -112,7 +129,7 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnGameStateChanged( in GameStateChangedEventArgs args ) {
@@ -131,7 +148,7 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void OnFinished() {
 			if ( GameStateManager.Instance.GameState == GameState.UpgradeMenu ) {
@@ -145,7 +162,7 @@ namespace Game.Player.UserInterface.UpgradeInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		private void HookButtons() {
 			var statUpgradeList = _node.GetNode<VBoxContainer>( "%StatUpgradeList" );

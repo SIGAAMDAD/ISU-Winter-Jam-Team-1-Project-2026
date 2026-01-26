@@ -1,8 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://ci45mqkirclcs"]
+[gd_scene format=3 uid="uid://ci45mqkirclcs"]
 
 [ext_resource type="Script" uid="uid://c1oaidojbjp3t" path="res://Source/Game/Player/UserInterface/HeadsUpDisplay.cs" id="1_ggood"]
 [ext_resource type="PackedScene" uid="uid://bp7tu6bkhlxep" path="res://Source/Game/Player/UserInterface/UpgradeInterface/UpgradeMenu.tscn" id="2_qifin"]
-[ext_resource type="PackedScene" uid="uid://dl7rchk4o22yp" path="res://Source/Game/Player/UserInterface/StatValueContainer.tscn" id="3_qa41n"]
+[ext_resource type="PackedScene" uid="uid://dl7rchk4o22yp" path="res://Source/Game/Player/UserInterface/Components/StatValueContainer.tscn" id="3_xu540"]
 [ext_resource type="Texture2D" uid="uid://diro2587u143n" path="res://Assets/Textures/Icons/MaxHealthIcon.png" id="4_032hy"]
 [ext_resource type="Texture2D" uid="uid://dkcl0jyoc1itk" path="res://Assets/Textures/Icons/HealthRegenIcon.png" id="5_mamce"]
 [ext_resource type="Texture2D" uid="uid://dt7f7l3gi48kk" path="res://Assets/Textures/Icons/Armorcon.png" id="6_mamce"]
@@ -10,6 +10,13 @@
 [ext_resource type="Texture2D" uid="uid://ddf2uvfod1oef" path="res://Assets/Textures/Icons/AttackDamageIcon.png" id="8_xu540"]
 [ext_resource type="Texture2D" uid="uid://bsbi8hhbtvn07" path="res://Assets/Textures/Icons/AttackSpeedIcon.png" id="9_xu540"]
 [ext_resource type="Texture2D" uid="uid://3xf0730eaxae" path="res://Assets/Textures/Icons/Coin.png" id="10_mub6a"]
+[ext_resource type="PackedScene" uid="uid://cqklao5ornbvx" path="res://Source/Game/Player/UserInterface/Components/HarpoonSlotContainer.tscn" id="11_5k620"]
+[ext_resource type="Texture2D" uid="uid://5sc241m2gigr" path="res://Assets/Textures/Icons/IcyHarpoonIcon.png" id="12_0g2m0"]
+[ext_resource type="Resource" uid="uid://bkdfn86ebynxj" path="res://Assets/Prefabs/Weapons/Harpoon/Default/DefaultHarpoon.tres" id="12_ur5wn"]
+[ext_resource type="Texture2D" uid="uid://bqw0dw1jcx4ff" path="res://Assets/Textures/Icons/ExplosiveHarpoonIcon.png" id="13_le4sy"]
+[ext_resource type="Texture2D" uid="uid://btngl6pk040mf" path="res://Assets/Textures/Icons/StationaryHarpoonIcon.png" id="14_5q7kq"]
+[ext_resource type="Resource" uid="uid://cxdihagmv72p7" path="res://Assets/Prefabs/Weapons/Harpoon/Icy/IcyHarpoon.tres" id="14_npcwm"]
+[ext_resource type="Resource" uid="uid://1akyjrtujjkn" path="res://Assets/Prefabs/Weapons/Harpoon/Explosive/ExplosiveHarpoon.tres" id="16_5caf3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ggood"]
 bg_color = Color(1, 0, 0, 1)
@@ -27,29 +34,29 @@ colors = PackedColorArray(1, 0, 0, 0.019607844)
 gradient = SubResource("Gradient_mub6a")
 width = 1
 
-[node name="HeadsUpDisplay" type="CanvasLayer"]
+[node name="HeadsUpDisplay" type="CanvasLayer" unique_id=1781338477]
 script = ExtResource("1_ggood")
 
-[node name="WaveDataContainer" type="VBoxContainer" parent="."]
+[node name="WaveDataContainer" type="VBoxContainer" parent="." unique_id=1825434649]
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="WaveCounter" type="Label" parent="WaveDataContainer"]
+[node name="WaveCounter" type="Label" parent="WaveDataContainer" unique_id=1083330663]
 layout_mode = 2
 text = "WAVE 1"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="WaveTimer" type="Label" parent="WaveDataContainer"]
+[node name="WaveTimer" type="Label" parent="WaveDataContainer" unique_id=1055018503]
 layout_mode = 2
 horizontal_alignment = 1
 
-[node name="UpgradeMenu" parent="." instance=ExtResource("2_qifin")]
+[node name="UpgradeMenu" parent="." unique_id=2121306494 instance=ExtResource("2_qifin")]
 visible = false
 
-[node name="MainHUD" type="Control" parent="."]
+[node name="MainHUD" type="Control" parent="." unique_id=1502390019]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -58,7 +65,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="StatsContainer" type="MarginContainer" parent="MainHUD"]
+[node name="StatsContainer" type="MarginContainer" parent="MainHUD" unique_id=670220667]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -73,41 +80,46 @@ size_flags_vertical = 3
 theme_override_constants/margin_top = 40
 theme_override_constants/margin_bottom = 40
 
-[node name="StatsList" type="VBoxContainer" parent="MainHUD/StatsContainer"]
+[node name="StatsList" type="VBoxContainer" parent="MainHUD/StatsContainer" unique_id=1386186011]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="MaxHealth" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+[node name="MaxHealth" parent="MainHUD/StatsContainer/StatsList" unique_id=1631214618 instance=ExtResource("3_xu540")]
 layout_mode = 2
 _icon = ExtResource("4_032hy")
-_statName = "MaxHealth"
+_statName = "Max Health"
+_statType = 4
 
-[node name="HealthRegen" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+[node name="HealthRegen" parent="MainHUD/StatsContainer/StatsList" unique_id=1343334327 instance=ExtResource("3_xu540")]
 layout_mode = 2
 _icon = ExtResource("5_mamce")
-_statName = "HealthRegen"
+_statName = "Health Regen"
+_statType = 5
 
-[node name="Armor" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+[node name="Armor" parent="MainHUD/StatsContainer/StatsList" unique_id=1834952598 instance=ExtResource("3_xu540")]
 layout_mode = 2
 _icon = ExtResource("6_mamce")
 _statName = "Armor"
+_statType = 3
 
-[node name="Speed" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+[node name="Speed" parent="MainHUD/StatsContainer/StatsList" unique_id=982203812 instance=ExtResource("3_xu540")]
 layout_mode = 2
 _icon = ExtResource("7_ibbdo")
 _statName = "Speed"
 
-[node name="AttackDamage" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+[node name="AttackDamage" parent="MainHUD/StatsContainer/StatsList" unique_id=1366797459 instance=ExtResource("3_xu540")]
 layout_mode = 2
 _icon = ExtResource("8_xu540")
-_statName = "AttackDamage"
+_statName = "Attack Damage"
+_statType = 1
 
-[node name="AttackSpeed" parent="MainHUD/StatsContainer/StatsList" instance=ExtResource("3_qa41n")]
+[node name="AttackSpeed" parent="MainHUD/StatsContainer/StatsList" unique_id=341974256 instance=ExtResource("3_xu540")]
 layout_mode = 2
 _icon = ExtResource("9_xu540")
-_statName = "AttackSpeed"
+_statName = "Attack Speed"
+_statType = 2
 
-[node name="ValuesContainer" type="VBoxContainer" parent="MainHUD"]
+[node name="ValuesContainer" type="VBoxContainer" parent="MainHUD" unique_id=2110697441]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.27915627
@@ -116,7 +128,7 @@ offset_right = -0.32000732
 offset_bottom = 0.19999695
 metadata/_edit_use_anchors_ = true
 
-[node name="HealthBar" type="ProgressBar" parent="MainHUD/ValuesContainer"]
+[node name="HealthBar" type="ProgressBar" parent="MainHUD/ValuesContainer" unique_id=833662370]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 20)
 layout_mode = 2
@@ -127,7 +139,7 @@ value = 100.0
 show_percentage = false
 metadata/_edit_use_anchors_ = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainHUD/ValuesContainer/HealthBar"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainHUD/ValuesContainer/HealthBar" unique_id=1081526884]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.485
@@ -142,34 +154,61 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="CurrentHealth" type="Label" parent="MainHUD/ValuesContainer/HealthBar/HBoxContainer"]
+[node name="CurrentHealth" type="Label" parent="MainHUD/ValuesContainer/HealthBar/HBoxContainer" unique_id=2548642]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "100"
 horizontal_alignment = 1
 
-[node name="MaxHealth" type="Label" parent="MainHUD/ValuesContainer/HealthBar/HBoxContainer"]
+[node name="MaxHealth" type="Label" parent="MainHUD/ValuesContainer/HealthBar/HBoxContainer" unique_id=928775878]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "/100"
 horizontal_alignment = 1
 
-[node name="MoneyContainer" type="HBoxContainer" parent="MainHUD/ValuesContainer"]
+[node name="MoneyContainer" type="HBoxContainer" parent="MainHUD/ValuesContainer" unique_id=258619058]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="MainHUD/ValuesContainer/MoneyContainer"]
+[node name="TextureRect" type="TextureRect" parent="MainHUD/ValuesContainer/MoneyContainer" unique_id=912309443]
 layout_mode = 2
 texture = ExtResource("10_mub6a")
 
-[node name="MoneyLabel" type="Label" parent="MainHUD/ValuesContainer/MoneyContainer"]
+[node name="MoneyLabel" type="Label" parent="MainHUD/ValuesContainer/MoneyContainer" unique_id=746358701]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AnnouncementLabel" type="Label" parent="MainHUD"]
+[node name="WeaponSlotContainer" type="VBoxContainer" parent="MainHUD/ValuesContainer" unique_id=647141783]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StandardHarpoon" parent="MainHUD/ValuesContainer/WeaponSlotContainer" unique_id=865029587 instance=ExtResource("11_5k620")]
+layout_mode = 2
+_icon = ExtResource("8_xu540")
+_resource = ExtResource("12_ur5wn")
+
+[node name="IcyHarpoon" parent="MainHUD/ValuesContainer/WeaponSlotContainer" unique_id=1898792261 instance=ExtResource("11_5k620")]
+layout_mode = 2
+_icon = ExtResource("12_0g2m0")
+_type = 1
+_resource = ExtResource("14_npcwm")
+
+[node name="ExplosiveHarpoon" parent="MainHUD/ValuesContainer/WeaponSlotContainer" unique_id=2064622851 instance=ExtResource("11_5k620")]
+layout_mode = 2
+_icon = ExtResource("13_le4sy")
+_type = 2
+_resource = ExtResource("16_5caf3")
+
+[node name="StationaryHarpoon" parent="MainHUD/ValuesContainer/WeaponSlotContainer" unique_id=1978333745 instance=ExtResource("11_5k620")]
+layout_mode = 2
+_icon = ExtResource("14_5q7kq")
+_type = 3
+_resource = ExtResource("16_5caf3")
+
+[node name="AnnouncementLabel" type="Label" parent="MainHUD" unique_id=1611512861]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(560, 0)
 layout_mode = 1
@@ -187,7 +226,7 @@ grow_vertical = 2
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="QuitGameButton" type="Button" parent="MainHUD/AnnouncementLabel"]
+[node name="QuitGameButton" type="Button" parent="MainHUD/AnnouncementLabel" unique_id=695103149]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -204,7 +243,8 @@ grow_vertical = 2
 text = "QUIT GAME"
 metadata/_edit_use_anchors_ = true
 
-[node name="BossHealthBar" type="VBoxContainer" parent="MainHUD"]
+[node name="BossHealthBar" type="VBoxContainer" parent="MainHUD" unique_id=976356157]
+visible = false
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -214,16 +254,16 @@ grow_horizontal = 2
 grow_vertical = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="BossNameLabel" type="Label" parent="MainHUD/BossHealthBar"]
+[node name="BossNameLabel" type="Label" parent="MainHUD/BossHealthBar" unique_id=1710489215]
 layout_mode = 2
 horizontal_alignment = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="MainHUD/BossHealthBar"]
+[node name="ProgressBar" type="ProgressBar" parent="MainHUD/BossHealthBar" unique_id=332363812]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 show_percentage = false
 
-[node name="HurtBox" type="TextureRect" parent="MainHUD"]
+[node name="HurtBox" type="TextureRect" parent="MainHUD" unique_id=340856467]
 visible = false
 layout_mode = 1
 anchors_preset = 15

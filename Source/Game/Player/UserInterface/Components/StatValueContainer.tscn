@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dl7rchk4o22yp"]
+
+[ext_resource type="Script" uid="uid://dipan3f2c4osh" path="res://Source/Game/Player/UserInterface/Components/StatValueContainer.cs" id="1_6h62q"]
+[ext_resource type="Texture2D" uid="uid://bc5yt4a4v7okr" path="res://Assets/Textures/SpriteSheets/SpeedIcon.png" id="2_cxmub"]
+
+[node name="StatValueContainer" type="HBoxContainer" unique_id=341974256]
+anchors_preset = -1
+anchor_right = 0.061000004
+anchor_bottom = 0.089
+offset_right = -38.08
+offset_bottom = -24.080002
+size_flags_horizontal = 3
+script = ExtResource("1_6h62q")
+metadata/_edit_use_anchors_ = true
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1436056328]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_cxmub")
+
+[node name="ValueLabel" type="Label" parent="." unique_id=1053717241]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"

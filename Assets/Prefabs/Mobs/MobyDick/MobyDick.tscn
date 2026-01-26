@@ -1,6 +1,7 @@
-[gd_scene load_steps=26 format=3 uid="uid://cva0u7ipnqfff"]
+[gd_scene format=3 uid="uid://cva0u7ipnqfff"]
 
 [ext_resource type="Script" uid="uid://say5ulh20k6w" path="res://Assets/Prefabs/Mobs/MobyDick/MobyDick.cs" id="1_sfsc5"]
+[ext_resource type="Resource" uid="uid://bfaxt1i4x2s01" path="res://Assets/Prefabs/Mobs/MobyDick/MobyDick.tres" id="2_7gujq"]
 [ext_resource type="Texture2D" uid="uid://cjjud2o8mh4jc" path="res://Assets/Textures/SpriteSheets/MobyDick.png" id="2_iec0g"]
 [ext_resource type="Texture2D" uid="uid://cmw1mj5rf14r2" path="res://Assets/Textures/SpriteSheets/MobyDickChargeupHorizontal.png" id="2_xxilb"]
 [ext_resource type="Texture2D" uid="uid://b81m8l471u2to" path="res://Assets/Textures/SpriteSheets/MobyDickAttackVertical.png" id="3_sfsc5"]
@@ -177,7 +178,7 @@ bg_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iec0g"]
 bg_color = Color(1, 0, 0, 1)
 
-[node name="MobyDick" type="Area2D"]
+[node name="MobyDick" type="Area2D" unique_id=396270349]
 collision_layer = 0
 collision_mask = 3
 input_pickable = false
@@ -186,14 +187,15 @@ _xpKillAmount = 900.0
 _damageAmount = 120.0
 _health = 1600.0
 _speed = Vector2(0.5, 0.5)
+_tierData = ExtResource("2_7gujq")
 metadata/_custom_type_script = "uid://c5qpdmvd63ugb"
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=274988718]
 scale = Vector2(6, 6)
 sprite_frames = SubResource("SpriteFrames_gewak")
 autoplay = "default"
 
-[node name="ColorRect" type="ColorRect" parent="AnimatedSprite2D"]
+[node name="ColorRect" type="ColorRect" parent="AnimatedSprite2D" unique_id=935009276]
 visible = false
 offset_left = -18.0
 offset_top = 8.0
@@ -202,12 +204,12 @@ offset_bottom = 12.0
 color = Color(18.892157, 0, 0, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=824171955]
 position = Vector2(-2, -5.5)
 scale = Vector2(6, 6)
 shape = SubResource("RectangleShape2D_tw8sf")
 
-[node name="HealthBar" type="ProgressBar" parent="."]
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=1193761805]
 offset_left = -243.0
 offset_top = 206.0
 offset_right = 231.0
@@ -218,7 +220,7 @@ value = 100.0
 show_percentage = false
 metadata/_edit_use_anchors_ = true
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=806769649]
 path_desired_distance = 10.0
 path_max_distance = 1000.0
 avoidance_enabled = true
@@ -227,7 +229,7 @@ max_neighbors = 1000
 time_horizon_agents = 1.5
 max_speed = 1000.0
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1494484082]
 offset_left = -44.0
 offset_top = 176.0
 offset_right = 45.0

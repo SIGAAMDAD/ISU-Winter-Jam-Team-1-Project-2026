@@ -1,15 +1,15 @@
-using Godot;
+﻿using Godot;
 
 namespace Game.Player.UserInterface {
 	/*
 	===================================================================================
-	
+
 	DamageNumberLabel
-	
+
 	===================================================================================
 	*/
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 
 	public sealed partial class DamageNumberLabel : Label {
@@ -20,25 +20,21 @@ namespace Game.Player.UserInterface {
 			OneShot = true
 		};
 
-		public float Value { get; set; }
-
 		/*
 		===============
 		Show
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="value"></param>
 		/// <param name="position"></param>
 		public void Show( float value, Vector2 position ) {
-			Modulate = Colors.White;
-			if ( value > 50.0f ) {
+			Modulate = Colors.Red;
+			if ( value > 15.0f ) {
+				// crit
 				Modulate = Colors.Yellow;
-			}
-			if ( value > 100.0f ) {
-				Modulate = Colors.Red;
 			}
 
 			Text = value.ToString();
@@ -59,7 +55,7 @@ namespace Game.Player.UserInterface {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public override void _Ready() {
 			base._Ready();

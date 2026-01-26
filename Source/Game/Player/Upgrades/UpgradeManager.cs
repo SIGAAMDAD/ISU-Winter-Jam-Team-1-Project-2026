@@ -1,4 +1,4 @@
-using Godot;
+﻿using Godot;
 using Nomad.Core.Events;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -7,9 +7,9 @@ using System.Runtime.CompilerServices;
 namespace Game.Player.Upgrades {
 	/*
 	===================================================================================
-	
+
 	UpgradeManager
-	
+
 	===================================================================================
 	*/
 	/// <summary>
@@ -56,11 +56,11 @@ namespace Game.Player.Upgrades {
 		/// </summary>
 		/// <param name="eventFactory"></param>
 		public UpgradeManager( IGameEventRegistryService eventFactory ) {
-			_upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeBought ) );
-			_harpoonBought = eventFactory.GetEvent<HarpoonTypeUpgradeBoughtEventArgs>( nameof( HarpoonBought ) );
-			_buyFailed = eventFactory.GetEvent<EmptyEventArgs>( nameof( BuyFailed ) );
+			_upgradeBought = eventFactory.GetEvent<UpgradeBoughtEventArgs>( nameof( UpgradeManager ), nameof( UpgradeBought ) );
+			_harpoonBought = eventFactory.GetEvent<HarpoonTypeUpgradeBoughtEventArgs>( nameof( UpgradeManager ), nameof( HarpoonBought ) );
+			_buyFailed = eventFactory.GetEvent<EmptyEventArgs>( nameof( UpgradeManager ), nameof( BuyFailed ) );
 
-			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats.StatChanged ) );
+			var statChanged = eventFactory.GetEvent<StatChangedEventArgs>( nameof( PlayerStats ), nameof( PlayerStats.StatChanged ) );
 			statChanged.Subscribe( this, OnStatChanged );
 
 			_upgradeData = new Dictionary<UpgradeType, ImmutableArray<UpgradeData>> {
@@ -85,7 +85,7 @@ namespace Game.Player.Upgrades {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <returns></returns>
 		private ImmutableArray<UpgradeData> PopulateDefaultUpgradeData() {
@@ -95,7 +95,6 @@ namespace Game.Player.Upgrades {
 			float lastCost = UPGRADE_TIER1_COST;
 			for ( int i = 1; i < data.Length; i++ ) {
 				data[ i ] = new UpgradeData( lastCost, UPGRADE_TIER1_MULTIPLIER * i );
-				GD.Print( $"Added upgrade data: {lastCost}, {UPGRADE_TIER1_MULTIPLIER * i}" );
 				lastCost = data[ i ].Cost * 4.0f;
 			}
 			return [ ..data ];
@@ -107,7 +106,7 @@ namespace Game.Player.Upgrades {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="multipliers"></param>
 		/// <returns></returns>
@@ -159,7 +158,7 @@ namespace Game.Player.Upgrades {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="tier"></param>
@@ -175,7 +174,7 @@ namespace Game.Player.Upgrades {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
@@ -190,7 +189,7 @@ namespace Game.Player.Upgrades {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="tier"></param>
@@ -206,7 +205,7 @@ namespace Game.Player.Upgrades {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="tier"></param>
@@ -222,7 +221,7 @@ namespace Game.Player.Upgrades {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
@@ -269,7 +268,7 @@ namespace Game.Player.Upgrades {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
@@ -278,8 +277,7 @@ namespace Game.Player.Upgrades {
 				return false;
 			}
 
-			float cost = GetUpgradeCost( type );
-			if ( _moneyAmount - cost < 0.0f ) {
+			if ( !CanBuyUpgrade( type ) ) {
 				_buyFailed.Publish( new EmptyEventArgs() );
 				return false;
 			}
@@ -296,7 +294,7 @@ namespace Game.Player.Upgrades {
 		===============
 		*/
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="args"></param>
 		private void OnStatChanged( in StatChangedEventArgs args ) {
